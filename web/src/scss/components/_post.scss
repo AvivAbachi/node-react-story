@@ -1,0 +1,9 @@
+.post {
+	@apply max-w-2xl my-8 bg-white p-4 m-auto rounded-md shadow-md;
+	div {
+		@apply text-sm font-bold text-rose-300 tracking-wide;
+	}
+	h4 {
+		@apply text-lg font-bold text-rose-500;
+	}
+}

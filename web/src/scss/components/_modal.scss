@@ -1,0 +1,30 @@
+.modal {
+	@apply grid items-center justify-items-center p-0 fixed top-0 left-0 h-screen w-full z-10;
+	&-backdrop {
+		@apply w-full h-full absolute bg-black bg-opacity-10;
+	}
+	&-content {
+		@apply max-w-lg w-11/12 rounded-lg shadow-lg bg-white z-10;
+	}
+	&-header {
+		@apply flex justify-between border-b-2 border-gray-100 px-5 py-4 text-gray-700;
+	}
+	&-title {
+		@apply font-bold pt-1 text-2xl;
+	}
+	&-body {
+		@apply px-10 pb-4;
+	}
+	&-footer {
+		@apply py-4 px-5 flex justify-end;
+		.btn:first-of-type {
+			@apply mr-4;
+		}
+	}
+	.reset-password {
+		@apply text-center mt-4;
+		button {
+			@apply mx-auto py-2 px-4 font-medium text-gray-500 cursor-pointer hover:text-rose-500 ring-transparent ring-2 rounded-full focus:outline-none focus:ring-rose-500 focus:text-rose-500;
+		}
+	}
+}
