@@ -1,5 +1,5 @@
 const { checkSchema } = require('express-validator');
-const { post } = require('../models');
+// const { post } = require('../models');
 
 const postSchema = {
 	title: {

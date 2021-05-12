@@ -9,7 +9,7 @@ const username = {
 		required: 'Username is required.',
 		minLength: { value: 6, message: 'more6' },
 		maxLength: { value: 16, message: 'less16' },
-		pattern: { value: usernameRegex, message: 'Username fuckyou' },
+		pattern: { value: usernameRegex, message: 'Username not Valid' },
 	},
 };
 const password = {
@@ -20,7 +20,7 @@ const password = {
 		required: 'Password is required.',
 		minLength: { value: 8, message: 'more8' },
 		maxLength: { value: 16, message: 'less16' },
-		pattern: { value: passwordRegex, message: 'Password fuckyou' },
+		pattern: { value: passwordRegex, message: 'Password not Valid' },
 	},
 };
 const newPassword = {
@@ -41,7 +41,7 @@ const email = {
 	type: 'email',
 	rule: {
 		required: 'Email is required.',
-		validate: (value) => validator.isEmail(value) || 'Email fuckyou',
+		validate: (value) => validator.isEmail(value) || 'Email not Valid',
 	},
 };
 const emailOptimal = {
@@ -70,7 +70,7 @@ const body = {
 
 const ModalAction = {
 	HIDE: { type: null },
-	SINGUP: { type: 'SINGUP', title: 'Sing Up', inputs: [username, password, email, show] },
+	SIGNUP: { type: 'SIGNUP', title: 'Sing Up', inputs: [username, password, email, show] },
 	LOGIN: { type: 'LOGIN', title: 'Login', inputs: [username, password] },
 	RESET: { type: 'RESET', title: 'Reset Password', inputs: [username, email] },
 	RESET_SUCCESS: { type: 'RESET_SUCCESS', title: 'Reset password Success', inputs: [] },

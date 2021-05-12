@@ -7,7 +7,7 @@ const Dropdown = memo(function Dropdown({ children, title }) {
 	const menuRef = useRef();
 	const buttonRef = useRef();
 
-	const cheakClick = (e) => {
+	const checkClick = (e) => {
 		const isMenu = e.target.isSameNode(menuRef.current) || e.target.isSameNode(buttonRef.current);
 		if (!isMenu) {
 			setOpen(false);
@@ -15,9 +15,9 @@ const Dropdown = memo(function Dropdown({ children, title }) {
 	};
 
 	useEffect(() => {
-		document.addEventListener('click', cheakClick);
+		document.addEventListener('click', checkClick);
 		return () => {
-			document.removeEventListener('click', cheakClick);
+			document.removeEventListener('click', checkClick);
 		};
 	}, []);
 

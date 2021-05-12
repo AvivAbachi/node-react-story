@@ -43,7 +43,7 @@ exports.create = async (req, res) => {
 		const NewPost = await new Post({ title: req.body.title, body: req.body.body, userId: req.user.id });
 		const create = await NewPost.save();
 		if (!create) {
-			throw { status: 500, err: [{ msg: 'Erorr creating Post', param: 'server' }] };
+			throw { status: 500, err: [{ msg: 'Error creating Post', param: 'server' }] };
 		}
 		res.send(create);
 	} catch ({ status, ...err }) {

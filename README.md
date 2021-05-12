@@ -31,7 +31,7 @@ Runs the app on production mode form `build` folder.
 ### Server (Node.js & Express)
 
 - JSON Web Token
-- Postgres SQL
+- Postgre SQL
 - Sequelize
 
 ### Web (React)

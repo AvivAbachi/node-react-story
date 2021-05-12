@@ -52,7 +52,7 @@ const Modal = memo(function Modal() {
 		try {
 			setWait(true);
 			switch (modal.type) {
-				case ModalAction.SINGUP.type:
+				case ModalAction.SIGNUP.type:
 					await singup(data);
 					break;
 				case ModalAction.LOGIN.type:

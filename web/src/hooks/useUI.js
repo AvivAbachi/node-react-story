@@ -12,7 +12,7 @@ export const useUI = () => {
 		setModal(ModalAction.HIDE);
 	};
 	const signupModal = () => {
-		setModal(ModalAction.SINGUP);
+		setModal(ModalAction.SIGNUP);
 	};
 	const loginModal = () => {
 		setModal(ModalAction.LOGIN);

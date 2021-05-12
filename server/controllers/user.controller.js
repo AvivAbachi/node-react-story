@@ -10,7 +10,7 @@ exports.singup = async (req, res) => {
 		const passwordHash = await argon2.hash(password);
 		const user = await User.create({ username, show, email, password: passwordHash });
 		if (!user) {
-			throw { status: 500, err: [{ msg: 'Erorr creating new user', param: 'server' }] };
+			throw { status: 500, err: [{ msg: 'Error creating new user', param: 'server' }] };
 		}
 		const token = newToken(user.id);
 		return res.send({
