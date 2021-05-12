@@ -4,25 +4,25 @@
 
 ### Server
 
-#### `npm dev`
+### `npm dev`
 
 Runs the server on development mode.
 
-#### `npm start`
+### `npm start`
 
 Runs the server on production mode.
 
 ### Web
 
-#### `npm start`
+### `npm start`
 
 Runs the app on development mode.
 
-#### `npm build`
+### `npm build`
 
 Builds the app for production to the `build` folder.
 
-#### `serve`
+### `serve`
 
 Runs the app on production mode form `build` folder.
 
