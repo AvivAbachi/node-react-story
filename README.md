@@ -28,15 +28,15 @@ Runs the app on production mode form `build` folder.
 
 ## Languages & tools
 
-### Server (Node.js & Express)
-
-- JSON Web Token
-- Postgre SQL
-- Sequelize
-
 ### Web (React)
 
 - Axios
 - SCSS
 - React Hook Form
 - Tailwind CSS
+
+### Server (Node.js & Express)
+
+- JSON Web Token
+- Postgre SQL
+- Sequelize
