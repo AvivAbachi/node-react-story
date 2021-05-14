@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react';
+import React, { memo, useContext } from 'react';
 import useScreenType from 'react-screentype-hook';
 
 import { Btn, Dropdown } from '.';

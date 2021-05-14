@@ -2,15 +2,7 @@
 
 ## Project setup
 
-### Server
-
-### `npm dev`
-
-Runs the server on development mode.
-
-### `npm start`
-
-Runs the server on production mode.
+---
 
 ### Web
 
@@ -26,7 +18,19 @@ Builds the app for production to the `build` folder.
 
 Runs the app on production mode form `build` folder.
 
+### Server
+
+### `npm dev`
+
+Runs the server on development mode.
+
+### `npm start`
+
+Runs the server on production mode.
+
 ## Languages & tools
+
+---
 
 ### Web (React)
 

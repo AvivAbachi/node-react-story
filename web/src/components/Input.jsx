@@ -1,4 +1,4 @@
-import { forwardRef, memo } from 'react';
+import React, { forwardRef, memo } from 'react';
 import { ErrorIcon } from './Icons';
 
 const Input = ({ value, required, onChange, type, placeholder, label, name, error }, ref) => {

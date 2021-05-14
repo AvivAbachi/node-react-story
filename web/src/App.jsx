@@ -1,4 +1,4 @@
-import { createContext, memo } from 'react';
+import React, { createContext, memo } from 'react';
 import { Layout, List, Modal } from './components';
 
 import { useUser } from './hooks/useUser';

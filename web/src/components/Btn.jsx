@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import React, { memo } from 'react';
 
 const Btn = ({ active, icon, className, ...props }) => {
 	return <button {...props} className={`btn${className ? ' ' + className : ''}${active ? ' btn-active' : ''}${icon ? ' btn-icon' : ''}`} />;

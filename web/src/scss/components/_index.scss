@@ -1,7 +1,7 @@
-@import 'btn';
-@import 'dropdown';
-@import 'icons';
-@import 'input';
-@import 'list';
-@import 'modal';
-@import 'post';
+@forward 'btn';
+@forward 'dropdown';
+@forward 'icons';
+@forward 'input';
+@forward 'list';
+@forward 'modal';
+@forward 'post';

@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import { FaceIcon, MenuIcon } from './Icons';
 
 const Dropdown = memo(function Dropdown({ children, title }) {
