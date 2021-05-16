@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useRef } from 'react';
+import { memo, useMemo, useRef } from 'react';
 import dataFormat from '../utils/dataFormat';
 
 const Post = ({ title, body, show, createdAt, updatedAt }) => {

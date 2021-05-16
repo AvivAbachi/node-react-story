@@ -1,24 +1,15 @@
-import React, { forwardRef, memo } from 'react';
+import { forwardRef, memo } from 'react';
 import { ErrorIcon } from './Icons';
 
-const Input = ({ value, required, onChange, type, placeholder, label, name, error }, ref) => {
+const Input = forwardRef(({ onChange, onBlur, title, name, type, error }, ref) => {
 	return (
 		<>
-			<label className='input-label'>{label} </label>
-			<input
-				className='input'
-				type={type}
-				placeholder={placeholder}
-				name={name}
-				value={value}
-				required={required}
-				onChange={onChange}
-				ref={ref}
-			/>
+			<label className='input-label'>{title || name}</label>
+			<input className='input' type={type} name={name} ref={ref} onChange={onChange} onBlur={onBlur} />
 			{error && <InputError error={error} />}
 		</>
 	);
-};
+});
 
 export const InputError = memo(function InputError({ error }) {
 	return (
@@ -29,4 +20,4 @@ export const InputError = memo(function InputError({ error }) {
 	);
 });
 
-export default memo(forwardRef(Input));
+export default memo(Input);

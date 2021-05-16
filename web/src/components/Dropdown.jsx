@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { FaceIcon, MenuIcon } from './Icons';
 
 const Dropdown = memo(function Dropdown({ children, title }) {
@@ -44,7 +44,7 @@ const Dropdown = memo(function Dropdown({ children, title }) {
 
 Dropdown.Item = memo(function DropdownItem({ border, children, onClick }) {
 	return (
-		<button className={'dropdown-item' + (border ? ' dropdown-item-border' : '')} onClick={onClick}>
+		<button className={`dropdown-item${border ? ' dropdown-item-border' : ''}`} onClick={onClick}>
 			{children}
 		</button>
 	);

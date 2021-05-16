@@ -1,4 +1,4 @@
-import React, { memo, useContext, useMemo } from 'react';
+import { memo, useContext, useMemo } from 'react';
 import { Post } from '.';
 import { PostContext } from '../App';
 

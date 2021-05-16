@@ -1,12 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import useLocalStorage from '@d2k/react-localstorage';
 import axios from 'axios';
-import { UIContext } from '../App';
-
-const SERVER_URL = 'http://192.168.1.184:5000/';
+import { ModalContext } from '../App';
 
 export const useUser = () => {
-	const { closeModal, resetSuccessModal } = useContext(UIContext);
+	const { closeModal, resetSuccessModal } = useContext(ModalContext);
 	const [token, setToken, removeToken] = useLocalStorage('x-access-token');
 	const [user, setUser] = useState({
 		username: undefined,
@@ -15,12 +13,13 @@ export const useUser = () => {
 		show: undefined,
 		load: false,
 	});
+	const serverURL = import.meta.env.VITE_SERVER_URL;
 
 	axios.defaults.timeout = 3000;
 
 	const singup = async (data) => {
 		return await axios
-			.post(`${SERVER_URL}user/singup`, data)
+			.post(`${serverURL}user/singup`, data)
 			.then((res) => res.data)
 			.then(({ accessToken, user: { username, email, userId, show } }) => {
 				setToken(accessToken);
@@ -31,7 +30,7 @@ export const useUser = () => {
 
 	const login = async (data) => {
 		return await axios
-			.post(`${SERVER_URL}user/login`, data)
+			.post(`${serverURL}user/login`, data)
 			.then((res) => res.data)
 			.then(({ accessToken, user: { username, email, userId, show } }) => {
 				setToken(accessToken);
@@ -43,12 +42,12 @@ export const useUser = () => {
 	const logout = async () => {
 		setUser({ load: false });
 		removeToken();
-		return await axios.post(`${SERVER_URL}user/logout`);
+		return await axios.post(`${serverURL}user/logout`);
 	};
 
 	const getAccess = async () => {
 		return await axios
-			.post(`${SERVER_URL}user/access`)
+			.post(`${serverURL}user/access`)
 			.then((res) => res.data)
 			.then(({ accessToken, user: { username, email, userId, show } }) => {
 				setToken(accessToken);
@@ -63,7 +62,7 @@ export const useUser = () => {
 
 	const update = async (data) => {
 		return await axios
-			.put(`${SERVER_URL}user/update`, data)
+			.put(`${serverURL}user/update`, data)
 			.then((res) => res.data)
 			.then(({ accessToken, user: { username, email, userId, show } }) => {
 				setToken(accessToken);
@@ -73,7 +72,7 @@ export const useUser = () => {
 
 	const reset = async (data) => {
 		return await axios
-			.post(`${SERVER_URL}user/reset`, data)
+			.post(`${serverURL}user/reset`, data)
 			.then((res) => res.data)
 			.then(({ password }) => {
 				resetSuccessModal({ username: data.username, password });

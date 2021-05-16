@@ -1,38 +1,43 @@
-import React, { memo, useContext, useEffect, useState } from 'react';
+import { memo, useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useForm } from 'react-hook-form';
+// import { DevTool } from '@hookform/devtools';
 
-import ModalAction from '../hooks/ModalAction';
-
+import { PostContext, ModalContext, UserContext } from '../App';
 import { Btn, Input, InputError } from '.';
 import { CloseIcon } from './Icons';
-import { PostContext, UIContext, UserContext } from '../App';
 
-const ModalPortal = (Component) => {
-	return function ModalPortal() {
-		const { modal } = useContext(UIContext);
-		const el = document.getElementById('modal');
-		return modal.type ? createPortal(<Component />, el) : null;
-	};
-};
+const Portal = (Component, el) =>
+	memo(function PortalComponent() {
+		return createPortal(<Component />, el);
+	});
 
-const Modal = memo(function Modal() {
-	const { modal, closeModal, loginModal, resetModal } = useContext(UIContext);
+const Modal = () => {
+	const { modal, closeModal, loginModal, resetModal } = useContext(ModalContext);
 	const { singup, login, update, reset } = useContext(UserContext);
 	const { createPost } = useContext(PostContext);
-	const [wait, setWait] = useState(false);
+	const {
+		control,
+		clearErrors,
+		register,
+		handleSubmit,
+		formState: { errors },
+		unregister,
+		setError,
+		setValue,
+	} = useForm();
 
-	const { register, handleSubmit, errors, unregister, setError, setValue } = useForm();
+	const [wait, setWait] = useState(false);
 
 	useEffect(() => {
 		document.querySelector('body').style.overflow = 'hidden';
-		return () => {
-			document.querySelector('body').style.overflow = 'auto';
-		};
+		setTimeout(() => {
+			document.querySelector('.modal').style.opacity = 1;
+		}, 1);
 	}, []);
 
 	const resetPassword = () => {
-		if (modal.type === ModalAction.LOGIN.type) {
+		if (modal.type === 'LOGIN') {
 			resetModal();
 			unregister('password');
 		} else {
@@ -47,31 +52,38 @@ const Modal = memo(function Modal() {
 		setValue('username', username);
 		setValue('password', password);
 	};
+	const onClose = () => {
+		document.querySelector('.modal').style.opacity = 0;
+		setTimeout(() => {
+			document.querySelector('body').style.overflow = 'auto';
+			closeModal();
+		}, 300);
+	};
 
 	const onSubmit = async (data) => {
 		try {
 			setWait(true);
 			switch (modal.type) {
-				case ModalAction.SIGNUP.type:
+				case 'SIGNUP':
 					await singup(data);
 					break;
-				case ModalAction.LOGIN.type:
+				case 'LOGIN':
 					await login(data);
 					break;
-				case ModalAction.UPDATE.type:
+				case 'UPDATE':
 					await update(data);
 					break;
-				case ModalAction.RESET.type:
+				case 'RESET':
 					await reset(data);
 					break;
-				case ModalAction.CREATE_POST.type:
+				case 'CREATE_POST':
 					await createPost(data);
 					break;
-				case ModalAction.UPDATE_POST.type:
-					// await updatePost(data)
+				case 'UPDATE_POST':
+					await updatePost(data);
 					break;
 				default:
-					closeModal();
+					onClose();
 					break;
 			}
 			setWait(false);
@@ -80,47 +92,49 @@ const Modal = memo(function Modal() {
 			if (err.message === 'Network Error') {
 				setError('server', { type: 'response', message: 'Network error, please try again later' });
 			} else {
-				err.response?.data.forEach((err) => setError(err.param, { type: 'response', message: err.msg }));
+				err.response?.data?.forEach((err) => {
+					setError(err.param, { type: 'response', message: err.msg });
+				});
 			}
 		}
 	};
 
 	return (
-		<div className='modal'>
-			<div className='modal-backdrop' onClick={closeModal} />
+		<div className='modal' style={{ opacity: 0 }}>
+			<div className='modal-backdrop' onClick={onClose} />
 			<div className='modal-content'>
 				<div className='modal-header'>
 					<div className='modal-title'>{modal.title}</div>
-					<Btn icon onClick={closeModal}>
+					<Btn icon onClick={onClose}>
 						<CloseIcon />
 					</Btn>
 				</div>
 				<form onSubmit={handleSubmit(onSubmit)}>
 					{/* {wait ? 'pls wait' : 'ready'} */}
 					<div className='modal-body'>
-						{modal.inputs.map(({ rule, ...input }) => (
-							<Input key={input.name} ref={register({ ...rule })} {...input} error={errors[input.name]?.message} />
+						{modal.inputs.map(({ rule, name, ...input }) => (
+							<Input key={name} {...register(name, { ...rule })} {...input} error={errors[name]?.message} />
 						))}
-						{(modal.type === ModalAction.LOGIN.type || modal.type === ModalAction.RESET.type) && (
+						{(modal.type === 'LOGIN' || modal.type === 'RESET') && (
 							<div className='reset-password'>
 								<button type='button' onClick={resetPassword}>
-									{modal.type === ModalAction.LOGIN.type ? 'Reset password' : 'Back to login'}
+									{modal.type === 'LOGIN' ? 'Reset password' : 'Back to login'}
 								</button>
 							</div>
 						)}
 					</div>
-					{modal.type === ModalAction.RESET_SUCCESS.type && (
+					{modal.type === 'RESET_SUCCESS' && (
 						<div className='text-center'>
-							<h3 className='text-xl font-semibold text-gray-500 tracking-wide'>Your Name Password</h3>
+							<h3 className='text-xl font-semibold text-gray-500 tracking-wide'>Your new Password</h3>
 							<h2 className='text-3xl mt-2 mb-4 text-rose-500 font-semibold'>{modal.password}</h2>
 						</div>
 					)}
-					{errors.server && (
+					{errors?.server && (
 						<div className='mx-3'>
 							<InputError error={errors.server?.message} />
 						</div>
 					)}
-					{modal.type === ModalAction.RESET_SUCCESS.type ? (
+					{modal.type === 'RESET_SUCCESS' ? (
 						<div className='modal-footer'>
 							<Btn active onClick={loginFromReset}>
 								Login
@@ -128,10 +142,10 @@ const Modal = memo(function Modal() {
 						</div>
 					) : (
 						<div className='modal-footer'>
-							<Btn type='button' onClick={closeModal}>
+							<Btn type='button' onClick={onClose}>
 								Cancel
 							</Btn>
-							<Btn type='submit' active disabled={wait}>
+							<Btn type='submit' active disabled={wait} onClick={() => clearErrors('server')}>
 								Submit
 							</Btn>
 						</div>
@@ -141,6 +155,6 @@ const Modal = memo(function Modal() {
 			</div>
 		</div>
 	);
-});
+};
 
-export default ModalPortal(Modal);
+export default Portal(memo(Modal), document.querySelector('#modal'));

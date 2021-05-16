@@ -1,13 +1,14 @@
-import React, { memo, useContext } from 'react';
+import { memo, useContext } from 'react';
 import useScreenType from 'react-screentype-hook';
 
 import { Btn, Dropdown } from '.';
-import { UIContext, UserContext } from '../App';
+import { ModalContext, UserContext, PostContext } from '../App';
 import { PlusIcon } from './Icons';
 
 const Layout = ({ children }) => {
 	const { user, logout } = useContext(UserContext);
-	const { signupModal, loginModal, updateUserModal, createPostModal, isUserPost, toggleUserPost } = useContext(UIContext);
+	const { signupModal, loginModal, updateUserModal, createPostModal } = useContext(ModalContext);
+	const { isUserPost, toggleUserPost } = useContext(PostContext);
 
 	const screenType = useScreenType();
 

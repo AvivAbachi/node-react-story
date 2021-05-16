@@ -1,29 +1,29 @@
-import React, { createContext, memo } from 'react';
+import { createContext, memo } from 'react';
 import { Layout, List, Modal } from './components';
 
 import { useUser } from './hooks/useUser';
 import { usePost } from './hooks/usePost';
-import { useUI } from './hooks/useUI';
+import { useModal } from './hooks/useModal';
 
-export const UIContext = createContext(useUI);
+export const ModalContext = createContext(useModal);
 export const UserContext = createContext(useUser);
 export const PostContext = createContext(usePost);
 
 const App = () => {
-	const ui = useUI();
+	const modal = useModal();
 	const user = useUser();
 	const post = usePost();
 	return (
-		<UIContext.Provider value={ui}>
+		<ModalContext.Provider value={modal}>
 			<UserContext.Provider value={user}>
 				<PostContext.Provider value={post}>
 					<Layout>
 						<List />
 					</Layout>
-					<Modal />
+					{modal.modal.type && <Modal />}
 				</PostContext.Provider>
 			</UserContext.Provider>
-		</UIContext.Provider>
+		</ModalContext.Provider>
 	);
 };
 

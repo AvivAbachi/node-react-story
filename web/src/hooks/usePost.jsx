@@ -1,25 +1,30 @@
 import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { UIContext, UserContext } from '../App';
-
-const SERVER_URL = 'http://192.168.1.184:5000/';
+import { ModalContext, UserContext } from '../App';
 
 export const usePost = () => {
 	const { user } = useContext(UserContext);
-	const { isUserPost, closeModal } = useContext(UIContext);
+	const { closeModal } = useContext(ModalContext);
 	const [post, setPost] = useState([]);
+	const [isUserPost, setIsUserPost] = useState(false);
+	const serverURL = import.meta.env.VITE_SERVER_URL;
+
 	// const [page, setPage] = useState(0);
 
 	axios.defaults.timeout = 3000;
 
+	const toggleUserPost = () => {
+		setIsUserPost((userPost) => !userPost);
+	};
+
 	const getPost = async () => {
-		return await axios.get(`${SERVER_URL}`).then((res) => {
+		return await axios.get(`${serverURL}`).then((res) => {
 			setPost(res.data);
 		});
 	};
 
 	const getUserPost = async () => {
-		return await axios.get(`${SERVER_URL}user/${user.userId}`).then((res) => {
+		return await axios.get(`${serverURL}user/${user.userId}`).then((res) => {
 			setPost(res.data);
 		});
 	};
@@ -36,20 +41,20 @@ export const usePost = () => {
 	// setPage((page) => page + 1);[...post, ...newPost]
 
 	const createPost = async (data) => {
-		return await axios.post(`${SERVER_URL}`, data).then(() => {
+		return await axios.post(`${serverURL}`, data).then(() => {
 			closeModal();
 			getPost();
 		});
 	};
 
 	const updatePost = async (data) => {
-		return await axios.put(`${SERVER_URL}`, data).then(() => {
+		return await axios.put(`${serverURL}`, data).then(() => {
 			closeModal();
 		});
 	};
 
 	const deletePost = async (data) => {
-		return await axios.delete(`${SERVER_URL}`, data).then(() => {});
+		return await axios.delete(`${serverURL}`, data).then(() => {});
 	};
 
 	return {
@@ -59,5 +64,7 @@ export const usePost = () => {
 		createPost,
 		updatePost,
 		deletePost,
+		isUserPost,
+		toggleUserPost,
 	};
 };
