@@ -1,8 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
+import { createContext, memo, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { ModalContext, UserContext } from '../App';
+import { ModalContext, UserContext } from '.';
 
-export const usePost = () => {
+const usePost = () => {
 	const { user } = useContext(UserContext);
 	const { closeModal } = useContext(ModalContext);
 	const [post, setPost] = useState([]);
@@ -68,3 +68,12 @@ export const usePost = () => {
 		toggleUserPost,
 	};
 };
+
+export const PostContext = createContext(usePost);
+
+const PostProvider = ({ children }) => {
+	const post = usePost();
+	return <PostContext.Provider value={post}>{children}</PostContext.Provider>;
+};
+
+export default memo(PostProvider);

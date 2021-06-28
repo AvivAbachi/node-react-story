@@ -2,7 +2,7 @@ import { memo, useContext } from 'react';
 import useScreenType from 'react-screentype-hook';
 
 import { Btn, Dropdown } from '.';
-import { ModalContext, UserContext, PostContext } from '../App';
+import { ModalContext, PostContext, UserContext } from '../hooks';
 import { PlusIcon } from './Icons';
 
 const Layout = ({ children }) => {

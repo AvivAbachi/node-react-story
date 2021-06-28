@@ -1,9 +1,12 @@
-import { useContext, useEffect, useState } from 'react';
+import { createContext, memo, useContext, useEffect, useState } from 'react';
 import useLocalStorage from '@d2k/react-localstorage';
 import axios from 'axios';
-import { ModalContext } from '../App';
+import { ModalContext } from '.';
 
-export const useUser = () => {
+const serverURL = import.meta.env.VITE_SERVER_URL;
+axios.defaults.timeout = 3000;
+
+const useUser = () => {
 	const { closeModal, resetSuccessModal } = useContext(ModalContext);
 	const [token, setToken, removeToken] = useLocalStorage('x-access-token');
 	const [user, setUser] = useState({
@@ -13,9 +16,6 @@ export const useUser = () => {
 		show: undefined,
 		load: false,
 	});
-	const serverURL = import.meta.env.VITE_SERVER_URL;
-
-	axios.defaults.timeout = 3000;
 
 	const singup = async (data) => {
 		return await axios
@@ -95,3 +95,12 @@ export const useUser = () => {
 		reset,
 	};
 };
+
+export const UserContext = createContext(useUser);
+
+const UserProvider = ({ children }) => {
+	const user = useUser();
+	return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+};
+
+export default memo(UserProvider);

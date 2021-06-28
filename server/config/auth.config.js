@@ -4,5 +4,5 @@ module.exports = {
 		algorithm: 'HS512',
 		expiresIn: '1d',
 	},
-	// salt: 'story-salt',
+	salt: 'story-salt',
 };

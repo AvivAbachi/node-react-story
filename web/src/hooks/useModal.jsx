@@ -1,46 +1,37 @@
-import { useState } from 'react';
+import { createContext, memo, useState } from 'react';
 import { username, password, newPassword, email, show, title, body } from '../utils/inputs-validator';
 
-export const ModalAction = {
-	HIDE: { type: null },
-	SIGNUP: { type: 'SIGNUP', title: 'Sing Up', inputs: [username, password, email, show] },
-	LOGIN: { type: 'LOGIN', title: 'Login', inputs: [username, password] },
-	RESET: { type: 'RESET', title: 'Reset Password', inputs: [username, email] },
-	RESET_SUCCESS: { type: 'RESET_SUCCESS', title: 'Reset password Success', inputs: [] },
-	UPDATE: { type: 'UPDATE', title: 'Update User', inputs: [password, newPassword, email, show] },
-	CREATE_POST: { type: 'CREATE_POST', title: 'Create New Post', inputs: [title, body] },
-	UPDATE_POST: { type: 'UPDATE_POST', title: 'Change Post', inputs: [title, body] },
-};
+const useModal = () => {
+	const [modal, setModal] = useState({ type: null });
 
-export const useModal = () => {
-	const [modal, setModal] = useState(ModalAction.HIDE);
-
+	// UI
 	const closeModal = () => {
-		setModal(ModalAction.HIDE);
+		setModal({ type: null });
 	};
 	const signupModal = () => {
-		setModal(ModalAction.SIGNUP);
+		setModal({ type: 'SIGNUP', title: 'Sing Up', inputs: [username, password, email, show] });
 	};
 	const loginModal = () => {
-		setModal(ModalAction.LOGIN);
+		setModal({ type: 'LOGIN', title: 'Login', inputs: [username, password] });
 	};
 	const resetModal = () => {
-		setModal(ModalAction.RESET);
+		setModal({ type: 'RESET', title: 'Reset Password', inputs: [username, email] });
 	};
 	const resetSuccessModal = async ({ username, password }) => {
-		const successModal = { ...ModalAction.RESET_SUCCESS, username, password };
-		setModal(successModal);
+		setModal({ type: 'RESET_SUCCESS', title: 'Reset password Success', inputs: [], username, password });
 	};
 	const updateUserModal = () => {
-		setModal(ModalAction.UPDATE);
+		setModal({ type: 'UPDATE', title: 'Update User', inputs: [password, newPassword, email, show] });
 	};
 	const createPostModal = () => {
-		setModal(ModalAction.CREATE_POST);
+		setModal({ type: 'CREATE_POST', title: 'Create New Post', inputs: [title, body] });
+	};
+	const updatePostModal = () => {
+		setModal({ type: 'UPDATE_POST', title: 'Change Post', inputs: [title, body] });
 	};
 
 	return {
 		modal,
-		setModal,
 		closeModal,
 		signupModal,
 		loginModal,
@@ -48,5 +39,15 @@ export const useModal = () => {
 		resetSuccessModal,
 		updateUserModal,
 		createPostModal,
+		updatePostModal,
 	};
 };
+
+export const ModalContext = createContext(useModal);
+
+const ModalProvider = ({ children }) => {
+	const modal = useModal();
+	return <ModalContext.Provider value={modal}>{children}</ModalContext.Provider>;
+};
+
+export default memo(ModalProvider);

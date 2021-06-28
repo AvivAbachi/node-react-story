@@ -1,24 +1,22 @@
-import { memo, useContext, useEffect, useState } from 'react';
+import { forwardRef, memo, useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useForm } from 'react-hook-form';
-// import { DevTool } from '@hookform/devtools';
+import { DevTool } from '@hookform/devtools';
 
-import { PostContext, ModalContext, UserContext } from '../App';
 import { Btn, Input, InputError } from '.';
 import { CloseIcon } from './Icons';
+import { ModalContext, UserContext, PostContext } from '../hooks';
 
-const Portal = (Component, el) =>
-	memo(function PortalComponent() {
-		return createPortal(<Component />, el);
-	});
+const Portal = (Component, el) => () => createPortal(<Component />, el);
 
 const Modal = () => {
 	const { modal, closeModal, loginModal, resetModal } = useContext(ModalContext);
 	const { singup, login, update, reset } = useContext(UserContext);
 	const { createPost } = useContext(PostContext);
+
 	const {
-		control,
 		clearErrors,
+		control,
 		register,
 		handleSubmit,
 		formState: { errors },
@@ -46,12 +44,13 @@ const Modal = () => {
 		}
 	};
 
-	const loginFromReset = async () => {
+	const resetSuccess = async () => {
 		const { username, password } = modal;
 		await loginModal();
 		setValue('username', username);
 		setValue('password', password);
 	};
+
 	const onClose = () => {
 		document.querySelector('.modal').style.opacity = 0;
 		setTimeout(() => {
@@ -59,7 +58,6 @@ const Modal = () => {
 			closeModal();
 		}, 300);
 	};
-
 	const onSubmit = async (data) => {
 		try {
 			setWait(true);
@@ -110,9 +108,9 @@ const Modal = () => {
 					</Btn>
 				</div>
 				<form onSubmit={handleSubmit(onSubmit)}>
-					{/* {wait ? 'pls wait' : 'ready'} */}
+					{wait ? 'pls wait' : 'ready'}
 					<div className='modal-body'>
-						{modal.inputs.map(({ rule, name, ...input }) => (
+						{modal.inputs?.map(({ rule, name, ...input }) => (
 							<Input key={name} {...register(name, { ...rule })} {...input} error={errors[name]?.message} />
 						))}
 						{(modal.type === 'LOGIN' || modal.type === 'RESET') && (
@@ -136,7 +134,7 @@ const Modal = () => {
 					)}
 					{modal.type === 'RESET_SUCCESS' ? (
 						<div className='modal-footer'>
-							<Btn active onClick={loginFromReset}>
+							<Btn active onClick={resetSuccess}>
 								Login
 							</Btn>
 						</div>
@@ -151,10 +149,10 @@ const Modal = () => {
 						</div>
 					)}
 				</form>
-				{/* <DevTool control={control} /> */}
+				<DevTool control={control} />
 			</div>
 		</div>
 	);
 };
 
-export default Portal(memo(Modal), document.querySelector('#modal'));
+export default Modal;
