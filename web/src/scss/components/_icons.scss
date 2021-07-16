@@ -1,0 +1,23 @@
+.menu-icon {
+	fill: none;
+	stroke-linecap: round;
+	@apply inline-block h-7 w-7 ml-2 pr-2 stroke-3 pointer-events-none stroke-current;
+}
+.face-icon {
+	@apply inline-block h-7 w-7 pointer-events-none fill-current;
+}
+.pluses-icon {
+	@apply fill-current h-6 w-6 p-1;
+}
+.close-icon {
+	@apply fill-current h-7 w-7 p-1;
+}
+.error-icon {
+	@apply h-6 w-6 fill-current inline pb-1;
+}
+.trash-icon {
+	@apply h-5 w-5 fill-current stroke-current p-0.5;
+}
+.edit-icon {
+	@apply trash-icon;
+}

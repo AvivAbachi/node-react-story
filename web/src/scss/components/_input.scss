@@ -1,0 +1,15 @@
+.input {
+	@apply w-full mt-2 px-4 py-2 bg-rose-50 rounded-full block focus:outline-none focus:ring-2 focus:ring-rose-300 focus:bg-rose-50;
+	&:-webkit-autofill,
+	&:-webkit-autofill:hover,
+	&:-webkit-autofill:focus &:-webkit-autofill {
+		box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000), 0 0 0px 1000px theme('colors.rose.50') inset !important;
+	}
+	&-label {
+		@apply mt-4 font-medium block;
+	}
+	&-error {
+		border-radius: 1.25rem;
+		@apply mt-2 mx-2 px-2 bg-rose-500 py-1 shadow-md text-white capitalize font-semibold text-sm leading-7 truncate;
+	}
+}

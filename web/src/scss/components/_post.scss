@@ -1,0 +1,27 @@
+.post {
+	@apply max-w-2xl my-8 bg-white   m-auto  shadow-lg rounded-3xl;
+	&-username {
+		@apply text-sm font-semibold text-gray-500 tracking-wide;
+	}
+	&-title {
+		width: calc(100% - 64px);
+		@apply text-lg font-bold inline-block;
+	}
+	&-date {
+		@apply text-xs font-semibold text-gray-400  text-right;
+	}
+	&-header {
+		@apply bg-rose-500 rounded-3xl px-4 py-2 text-white flex items-end;
+	}
+	&-body {
+		@apply p-4 pb-0;
+	}
+	&-footer {
+		@apply p-4 flex items-end justify-between;
+	}
+	.btn {
+		width: 28px;
+		height: 28px;
+		@apply inline-block p-1 ml-1;
+	}
+}

@@ -1,0 +1,18 @@
+header {
+	@apply bg-white w-full shadow-lg px-6 fixed top-0 left-0 z-10;
+	nav {
+		@apply flex justify-between items-center w-full h-20 max-w-7xl mx-auto;
+		.nav-title {
+			@apply text-3xl font-bold text-rose-500;
+		}
+		.nav-buttons {
+			@apply flex items-center max-w-2xl;
+			.btn:first-of-type {
+				@apply mr-6;
+			}
+		}
+		.nav-hello {
+			@apply font-semibold mr-6 text-gray-600;
+		}
+	}
+}

@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+
+body {
+	@apply bg-rose-50 text-gray-900 relative z-10;
+}
+
+.btn,
+.dropdown-btn,
+.dropdown-item,
+.input input,
+.reset-password button {
+	transition-property: background-color, border-color, color, fill, stroke, box-shadow, opacity;
+	transition-delay: 0;
+	@apply duration-200 ease-linear;
+}
+
+@tailwind utilities;
