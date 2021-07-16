@@ -1,5 +1,5 @@
 .input {
-	@apply w-full mt-2 px-4 py-2 bg-rose-50 rounded-full block focus:outline-none focus:ring-2 focus:ring-rose-300 focus:bg-rose-50;
+	@apply w-full mt-2 px-4 py-1.5 bg-rose-50 rounded-2xl block focus:outline-none focus:ring-2 focus:ring-rose-300 focus:bg-rose-50 resize-none;
 	&:-webkit-autofill,
 	&:-webkit-autofill:hover,
 	&:-webkit-autofill:focus &:-webkit-autofill {
@@ -11,5 +11,17 @@
 	&-error {
 		border-radius: 1.25rem;
 		@apply mt-2 mx-2 px-2 bg-rose-500 py-1 shadow-md text-white capitalize font-semibold text-sm leading-7 truncate;
+	}
+}
+
+textarea.input {
+	&::-webkit-scrollbar {
+		@apply w-2.5;
+	}
+	&::-webkit-scrollbar-track {
+		@apply my-3;
+	}
+	&::-webkit-scrollbar-thumb {
+		@apply rounded-xl bg-gray-400 hover:bg-rose-500;
 	}
 }

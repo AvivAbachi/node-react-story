@@ -66,5 +66,6 @@ export const title = {
 export const body = {
 	name: 'body',
 	title: 'Post Text',
+	textarea:true,
 	rule: { maxLength: { value: 500, message: 'less500' } },
 };
