@@ -69,7 +69,6 @@ exports.delete = async (req, res) => {
 	try {
 		const id = req.body.id;
 		const del = await Post.destroy({ where: { id, userId: req.user.id } });
-		console.log({ id, userId: req.user.id, del });
 		if (!del) {
 			throw [{ msg: 'No post to update Post.', param: 'server' }];
 		}
