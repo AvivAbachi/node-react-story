@@ -97,7 +97,6 @@ const Modal = () => {
 						{modal.inputs?.map(({ rule, name, ...input }) => (
 							<Input key={name} {...register(name, { ...rule })} {...input} error={errors[name]?.message} />
 						))}
-						{modal.type==='CREATE_POST'||modal.type==='UPDATE_POST'}
 						{(modal.type === 'LOGIN' || modal.type === 'RESET') && (
 							<div className='reset-password'>
 								<button type='button' onClick={resetPassword}>

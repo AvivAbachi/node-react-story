@@ -15,13 +15,7 @@ const usePost = () => {
 	// setPage((page) => page + 1);[...post, ...newPost]
 
 	const getPost = async () => {
-		return await axios.get(`${serverURL}`).then((res) => {
-			setPost(res.data);
-		});
-	};
-
-	const getUserPost = async () => {
-		return await axios.get(`${serverURL}user/${user.userId}`).then((res) => {
+		await axios.get(`${serverURL}${userPost ? `user/${user.userId}` : ``}`).then((res) => {
 			setPost(res.data);
 		});
 	};
@@ -31,31 +25,29 @@ const usePost = () => {
 	};
 
 	useEffect(() => {
-		userPost ? getUserPost() : getPost();
+		getPost();
 	}, [userPost]);
 
 	const createPost = async (data) => {
-		return await axios.post(`${serverURL}`, data).then(() => {
+		await axios.post(`${serverURL}`, data).then(() => {
 			getPost();
 		});
 	};
 
 	const updatePost = async (data) => {
-		return await axios.put(`${serverURL}`, data).then(() => {
+		await axios.put(`${serverURL}`, data).then(() => {
 			getPost();
 		});
 	};
 
 	const deletePost = async (data) => {
-		return await axios.delete(`${serverURL}`, { data }).then(() => {
+		await axios.delete(`${serverURL}`, { data }).then(() => {
 			getPost();
 		});
 	};
 
 	return {
 		post,
-		getPost,
-		getUserPost,
 		createPost,
 		updatePost,
 		deletePost,

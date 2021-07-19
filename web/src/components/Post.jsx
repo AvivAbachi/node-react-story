@@ -13,7 +13,7 @@ const Post = ({ id, userId, title, body, show, createdAt, updatedAt, userPost })
 				<h4 className='post-title'>{title}</h4>
 				{userPost && (
 					<>
-						<Btn ghost onClick={() => handelModal('UPDATE_POST', { id })}>
+						<Btn ghost onClick={() => handelModal('UPDATE_POST', { id, title, body })}>
 							<Icons.EditIcon />
 						</Btn>
 						<Btn ghost onClick={() => handelModal('DELETE_POST', { id })}>

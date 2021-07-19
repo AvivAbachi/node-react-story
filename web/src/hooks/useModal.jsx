@@ -35,7 +35,7 @@ const useModal = () => {
 				setModal({ type: 'RESET', title: 'Reset Password', inputs: [username, email] });
 				break;
 			case 'RESET_SUCCESS':
-				setModal({ type: 'RESET_SUCCESS', title: 'Reset password Success', ...data });
+				setModal({ type: 'RESET_SUCCESS', title: 'Reset password Success', username: data.username, password: data.password });
 				break;
 			case 'UPDATE':
 				setModal({ type: 'UPDATE', title: 'Update User', inputs: [password, newPassword, email, show] });
@@ -44,10 +44,12 @@ const useModal = () => {
 				setModal({ type: 'CREATE_POST', title: 'Create New Post', inputs: [title, body] });
 				break;
 			case 'UPDATE_POST':
-				setModal({ type: 'UPDATE_POST', title: 'Change Post', inputs: [title, body], ...data });
+				setModal({ type: 'UPDATE_POST', title: 'Change Post', inputs: [title, body], id: data.id });
+				form.setValue('title', data.title);
+				form.setValue('body', data.body);
 				break;
 			case 'DELETE_POST':
-				setModal({ type: 'DELETE_POST', title: 'Delete Post', ...data });
+				setModal({ type: 'DELETE_POST', title: 'Delete Post', id: data.id });
 				break;
 			default:
 				setModal({ type: null });

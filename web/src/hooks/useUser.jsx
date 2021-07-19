@@ -18,7 +18,7 @@ const useUser = () => {
 	});
 
 	const singup = async (data) => {
-		return await axios
+		await axios
 			.post(`${serverURL}user/singup`, data)
 			.then((res) => res.data)
 			.then(({ accessToken, user: { username, email, userId, show } }) => {
@@ -28,7 +28,7 @@ const useUser = () => {
 	};
 
 	const login = async (data) => {
-		return await axios
+		await axios
 			.post(`${serverURL}user/login`, data)
 			.then((res) => res.data)
 			.then(({ accessToken, user: { username, email, userId, show } }) => {
@@ -40,11 +40,11 @@ const useUser = () => {
 	const logout = async () => {
 		setUser({ load: false });
 		removeToken();
-		return await axios.post(`${serverURL}user/logout`);
+		await axios.post(`${serverURL}user/logout`);
 	};
 
 	const getAccess = async () => {
-		return await axios
+		await axios
 			.post(`${serverURL}user/access`)
 			.then((res) => res.data)
 			.then(({ accessToken, user: { username, email, userId, show } }) => {
@@ -52,13 +52,15 @@ const useUser = () => {
 				setUser({ username, email, userId, show, load: true });
 			})
 			.catch((err) => {
-				setUser({ load: false });
-				removeToken();
+				if (err.response.status === 401 || err.response.status === 403) {
+					setUser({ load: false });
+					removeToken();
+				}
 			});
 	};
 
 	const update = async (data) => {
-		return await axios
+		await axios
 			.put(`${serverURL}user/update`, data)
 			.then((res) => res.data)
 			.then(({ accessToken, user: { username, email, userId, show } }) => {
@@ -69,10 +71,7 @@ const useUser = () => {
 
 	const reset = async (data) => {
 		return await axios.post(`${serverURL}user/reset`, data).then((res) => {
-			return {
-				username: data.username,
-				password: res.data.password,
-			};
+			return { username: data.username, password: res.data.password };
 		});
 	};
 
