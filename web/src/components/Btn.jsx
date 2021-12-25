@@ -1,5 +1,3 @@
-import { memo } from 'react';
-
 const Btn = ({ active, icon, ghost, className, ...props }) => {
 	return (
 		<button
@@ -9,4 +7,4 @@ const Btn = ({ active, icon, ghost, className, ...props }) => {
 	);
 };
 
-export default memo(Btn);
+export default Btn;

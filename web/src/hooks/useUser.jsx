@@ -1,4 +1,4 @@
-import { createContext, memo, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import useLocalStorage from '@d2k/react-localstorage';
 import axios from 'axios';
 import { ModalContext } from '.';
@@ -99,4 +99,4 @@ const UserProvider = ({ children }) => {
 	return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 };
 
-export default memo(UserProvider);
+export default UserProvider;

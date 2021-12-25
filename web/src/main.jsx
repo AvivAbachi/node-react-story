@@ -3,9 +3,10 @@ import App from './App';
 import './scss/style.scss';
 import { AppContextProvider } from './hooks';
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = ReactDOM.createRoot(container);
+root.render(
 	<AppContextProvider>
 		<App />
-	</AppContextProvider>,
-	document.getElementById('root')
+	</AppContextProvider>
 );

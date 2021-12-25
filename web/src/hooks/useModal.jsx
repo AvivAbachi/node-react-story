@@ -1,4 +1,4 @@
-import { createContext, memo, useState } from 'react';
+import { createContext, useState } from 'react';
 import { username, password, newPassword, email, show, title, body } from '../utils/inputs-validator';
 import { useForm } from 'react-hook-form';
 
@@ -74,4 +74,4 @@ const ModalProvider = ({ children }) => {
 	return <ModalContext.Provider value={modal}>{children}</ModalContext.Provider>;
 };
 
-export default memo(ModalProvider);
+export default ModalProvider;

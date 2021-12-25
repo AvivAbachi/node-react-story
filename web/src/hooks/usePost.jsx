@@ -1,4 +1,4 @@
-import { createContext, memo, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { UserContext } from '.';
 
@@ -73,4 +73,4 @@ const PostProvider = ({ children }) => {
 	return <PostContext.Provider value={post}>{children}</PostContext.Provider>;
 };
 
-export default memo(PostProvider);
+export default PostProvider;

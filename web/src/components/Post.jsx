@@ -1,4 +1,4 @@
-import { memo, useContext, useMemo, useRef } from 'react';
+import { useContext, useMemo, useRef } from 'react';
 import dataFormat from '../utils/dataFormat';
 import { Btn, Icons } from '.';
 import { ModalContext } from '../hooks';
@@ -10,7 +10,7 @@ const Post = ({ id, userId, title, body, show, createdAt, updatedAt, userPost })
 	return (
 		<li className='post'>
 			<div className='post-header'>
-				<h4 className='post-title'>{title}</h4>
+				<h4 className='post-title'>{title}</h4>{' '}
 				{userPost && (
 					<>
 						<Btn ghost onClick={() => handelModal('UPDATE_POST', { id, title, body })}>
@@ -30,4 +30,4 @@ const Post = ({ id, userId, title, body, show, createdAt, updatedAt, userPost })
 		</li>
 	);
 };
-export default memo(Post);
+export default Post;

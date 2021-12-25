@@ -1,13 +1,14 @@
 const colors = require('tailwindcss/colors');
 
 module.exports = {
-	purge: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
 	theme: {
+		content: ['./public/**/*.html', './src/**/*.{js,jsx}'],
 		extend: {
 			strokeWidth: { 3: '3' },
 		},
 		colors: {
 			transparent: 'transparent',
+			current: 'currentColor',
 			black: '#000',
 			white: '#fff',
 			gray: colors.blueGray,

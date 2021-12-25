@@ -1,7 +1,7 @@
 import UserProvider from './useUser';
 import PostProvider from './usePost';
 import ModalProvider from './useModal';
-import { memo } from 'react';
+import {} from 'react';
 
 const AppContext = (...components) => {
 	return components.reduce(
@@ -21,4 +21,4 @@ const AppContext = (...components) => {
 const providers = [UserProvider, ModalProvider, PostProvider];
 const AppContextProvider = AppContext(...providers);
 
-export default memo(AppContextProvider);
+export default AppContextProvider;

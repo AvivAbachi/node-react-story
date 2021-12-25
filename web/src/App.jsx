@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react';
+import { useContext } from 'react';
 import { Layout, List, Modal } from './components';
 import { ModalContext } from './hooks';
 
@@ -13,4 +13,4 @@ const App = () => {
 	);
 };
 
-export default memo(App);
+export default App;

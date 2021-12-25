@@ -1,4 +1,4 @@
-import { forwardRef, memo, useContext, useEffect, useState } from 'react';
+import { forwardRef, useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 // import { DevTool } from '@hookform/devtools';
 
@@ -6,9 +6,9 @@ import { Btn, Icons, Input, InputError } from '.';
 import { ModalContext, UserContext, PostContext } from '../hooks';
 
 const Portal = (Component, el) =>
-	memo(function Portal() {
+	function Portal() {
 		return createPortal(<Component />, el);
-	});
+	};
 
 const Modal = () => {
 	const { modal, form, handelModal, resetSuccess, resetPassword } = useContext(ModalContext);
@@ -135,4 +135,4 @@ const Modal = () => {
 	);
 };
 
-export default Portal(memo(Modal), document.querySelector('#modal'));
+export default Portal(Modal, document.querySelector('#modal'));

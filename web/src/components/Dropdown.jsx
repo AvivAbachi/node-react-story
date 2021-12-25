@@ -1,7 +1,7 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Icons } from '.';
 
-const Dropdown = memo(function Dropdown({ children, title }) {
+const Dropdown = function Dropdown({ children, title }) {
 	const [open, setOpen] = useState(false);
 
 	const menuRef = useRef();
@@ -40,14 +40,14 @@ const Dropdown = memo(function Dropdown({ children, title }) {
 			)}
 		</div>
 	);
-});
+};
 
-Dropdown.Item = memo(function DropdownItem({ border, children, onClick }) {
+Dropdown.Item = function DropdownItem({ border, children, onClick }) {
 	return (
 		<button className={`dropdown-item${border ? ' dropdown-item-border' : ''}`} onClick={onClick}>
 			{children}
 		</button>
 	);
-});
+};
 
 export default Dropdown;

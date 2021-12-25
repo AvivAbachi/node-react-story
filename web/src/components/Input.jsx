@@ -1,4 +1,4 @@
-import { forwardRef, memo } from 'react';
+import { forwardRef } from 'react';
 import { Icons } from '.';
 
 const Input = forwardRef(({ onChange, onBlur, title, name, type, error, textarea }, ref) => {
@@ -15,13 +15,13 @@ const Input = forwardRef(({ onChange, onBlur, title, name, type, error, textarea
 	);
 });
 
-export const InputError = memo(function InputError({ error }) {
+export const InputError = function InputError({ error }) {
 	return (
 		<div className='input-error' title={error}>
 			<Icons.ErrorIcon />
 			{error}
 		</div>
 	);
-});
+};
 
-export default memo(Input);
+export default Input;

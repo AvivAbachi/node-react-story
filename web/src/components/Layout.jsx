@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react';
+import { useContext } from 'react';
 import useScreenType from 'react-screentype-hook';
 
 import { Btn, Dropdown, Icons } from '.';
@@ -48,4 +48,4 @@ const Layout = ({ children }) => {
 	);
 };
 
-export default memo(Layout);
+export default Layout;
