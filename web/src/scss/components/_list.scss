@@ -1,3 +1,16 @@
 .list {
 	@apply px-6 pt-20 pb-14;
+
+	&-error {
+		@apply mx-auto text-center mt-16 w-96;
+		&-title {
+			@apply text-4xl font-bold text-gray-700;
+		}
+		&-text {
+			@apply text-gray-500 inline-block mt-1 mb-5;
+		}
+		.btn {
+			@apply m-auto;
+		}
+	}
 }

@@ -1,14 +1,13 @@
 import { memo, useContext } from 'react';
 import { Layout, List, Modal } from './components';
-import { PostContext, ModalContext } from './hooks';
+import { ModalContext } from './hooks';
 
 const App = () => {
 	const { modal } = useContext(ModalContext);
-	const { post, userPost } = useContext(PostContext);
 
 	return (
 		<Layout>
-			<List posts={post} userPost={userPost} />
+			<List />
 			{modal?.type && <Modal />}
 		</Layout>
 	);

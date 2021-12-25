@@ -52,7 +52,7 @@ const useUser = () => {
 				setUser({ username, email, userId, show, load: true });
 			})
 			.catch((err) => {
-				if (err.response.status === 401 || err.response.status === 403) {
+				if (err?.response?.status === 401 || err?.response?.status === 403) {
 					setUser({ load: false });
 					removeToken();
 				}

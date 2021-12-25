@@ -9,15 +9,23 @@ const usePost = () => {
 	const { user } = useContext(UserContext);
 	const [post, setPost] = useState([]);
 	const [userPost, setIsUserPost] = useState(false);
+	const [serverError, setServerError] = useState(false);
 
 	// const [page, setPage] = useState(0);
 	//?page=${page}
 	// setPage((page) => page + 1);[...post, ...newPost]
 
 	const getPost = async () => {
-		await axios.get(`${serverURL}${userPost ? `user/${user.userId}` : ``}`).then((res) => {
-			setPost(res.data);
-		});
+		await axios
+			.get(`${serverURL}${userPost ? `user/${user.userId}` : ``}`)
+			.then((res) => {
+				setPost(res.data);
+				setServerError(false);
+			})
+			.catch((err) => {
+				console.error(err);
+				setServerError(true);
+			});
 	};
 
 	const toggleUserPost = () => {
@@ -53,6 +61,8 @@ const usePost = () => {
 		deletePost,
 		userPost,
 		toggleUserPost,
+		serverError,
+		getPost,
 	};
 };
 
