@@ -1,8 +1,13 @@
-const login = require('./verifyLogin');
-const reset = require('./verifyReset');
-const signUp = require('./verifySignUp');
-const token = require('./verifyToken');
+const { validationResult } = require('express-validator');
 
-exports.errorResult = require('./errorResult');
 exports.verifyPost = require('./verifyPost');
-exports.verify = { login, reset, signUp, token };
+exports.verifyUser = require('./verifyUser');
+exports.token = require('./verifyToken');
+
+exports.errorHandel = (req, res, next) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		return res.status(400).json(errors.array());
+	}
+	next();
+};

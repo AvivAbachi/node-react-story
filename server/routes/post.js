@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const post = require('../controllers/post.controller');
-const { errorResult, verifyPost, verify } = require('../middleware/index');
+const { token, errorHandel, verifyPost } = require('../middleware/');
 
 router.get('/', post.getAll);
 router.get('/post/:id', post.getByPostId);
 router.get('/user/:id', post.getByUserId);
-router.post('/', verify.token, verifyPost.create, errorResult, post.create);
-router.put('/', verify.token, verifyPost.update, errorResult, post.update);
-router.delete('/', verify.token, verifyPost.delete, errorResult, post.delete);
+router.post('/', token, verifyPost.create, errorHandel, post.create);
+router.put('/', token, verifyPost.update, errorHandel, post.update);
+router.delete('/', token, verifyPost.delete, errorHandel, post.delete);
 
 module.exports = router;

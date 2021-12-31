@@ -1,79 +1,94 @@
-const db = require('../models');
+const { PrismaClient } = require('@prisma/client');
 const { namedPost } = require('../utils');
-const Post = db.post;
+const prisma = new PrismaClient();
 
 exports.getAll = async (req, res) => {
 	try {
-		const limit = req.query.limit || 10;
-		const page = req.query.page || 0;
-		const offset = limit * page;
-		const post = await Post.findAll({ order: [['createdAt', 'DESC']] }); //, limit, offset
+		// const limit = req.query.limit || 10;
+		// const page = req.query.page || 0;
+		// const offset = limit * page;
+		const post = await prisma.post.findMany({ orderBy: [{ createdAt: 'desc' }] });
 		res.send(await namedPost(post));
-	} catch ({ status, ...err }) {
-		return res.status(status || 500).send(err);
+	} catch (err) {
+		res.status(err.status || 500).send(err);
 	}
 };
 
 exports.getByUserId = async (req, res) => {
 	try {
-		const post = (await Post.findAll({ where: { userId: req.params.id }, order: [['createdAt', 'DESC']] })) || undefined;
+		const userId = parseInt(req.params.id) || -1;
+		if (userId < 0) {
+			throw { status: 404, err: [{ msg: 'Invalid user id', param: 'id', value: req.params.id }] };
+		}
+		const post = await prisma.user.findUnique({ where: { id: userId } }).posts();
 		if (!post.length) {
 			throw { status: 404, err: [{ msg: 'User post Not found', param: 'id', value: req.params.id }] };
 		}
-		return res.send(await namedPost(post));
-	} catch ({ status, ...err }) {
-		return res.status(status || 500).send(err);
+		res.send(post);
+	} catch (err) {
+		res.status(err.status || 500).send(err);
 	}
 };
 
 exports.getByPostId = async (req, res) => {
 	try {
-		const post = await Post.findByPk(req.params.id);
+		const id = parseInt(req.params.id) || -1;
+		if (id < 0) {
+			throw { status: 404, err: [{ msg: 'Invalid post id', param: 'id', value: id }] };
+		}
+		const post = await prisma.post.findUnique({ where: { id } });
 		if (!post) {
 			throw { status: 404, err: [{ msg: 'Post Not found', param: 'id', value: req.params.id }] };
 		}
 		res.send(await namedPost(post));
-	} catch ({ status, ...err }) {
-		return res.status(status || 500).send(err);
+	} catch (err) {
+		res.status(err.status || 500).send(err);
 	}
 };
 
 exports.create = async (req, res) => {
 	try {
-		const NewPost = await new Post({ title: req.body.title, body: req.body.body, userId: req.user.id });
-		const create = await NewPost.save();
+		const { title, body } = req.body;
+		const userId = req.user.id;
+		const create = await prisma.post.create({ data: { title, body, userId } });
 		if (!create) {
 			throw { status: 500, err: [{ msg: 'Error creating Post', param: 'server' }] };
 		}
 		res.send(create);
-	} catch ({ status, ...err }) {
-		const dsa = err;
-		return res.status(status || 500).send(dsa);
+	} catch (err) {
+		res.status(err.status || 500).send(err);
 	}
 };
 
 exports.update = async (req, res) => {
 	try {
 		const { id, title, body } = req.body;
-		const update = await Post.update({ title, body }, { where: { id, userId: req.user.id } });
+		const userId = req.user;
+
+		const update = await prisma.post.update({ where: { id }, data: { title, body } });
+
 		if (!update) {
 			throw { status: 500, err: [{ msg: 'No post to update Post.', param: 'server' }] };
 		}
 		res.send({ msg: 'Post was updated successfully' });
-	} catch ({ status, ...err }) {
-		return res.status(status || 500).send(err);
+	} catch (err) {
+		res.status(err.status || 500).send(err);
 	}
 };
 
 exports.delete = async (req, res) => {
 	try {
-		const id = req.body.id;
-		const del = await Post.destroy({ where: { id, userId: req.user.id } });
+		const id = parseInt(req.params.id) || -1;
+		if (id < 0) {
+			throw { status: 404, err: [{ msg: 'Invalid post id', param: 'id', value: id }] };
+		}
+		const userId = req.user.id;
+		const del = await prisma.post.delete({ where: { id, userId } });
 		if (!del) {
 			throw [{ msg: 'No post to update Post.', param: 'server' }];
 		}
 		res.send({ msg: `Post was deleted successfully.` });
-	} catch ({ status, ...err }) {
-		return res.status(500).send(err);
+	} catch (err) {
+		res.status(err.status || 500).send(err);
 	}
 };

@@ -1,7 +1,7 @@
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 const jwt = require('jsonwebtoken');
 const config = require('../config/auth.config.js');
-const db = require('../models');
-const User = db.user;
 
 module.exports = async (req, res, next) => {
 	try {
@@ -15,7 +15,7 @@ module.exports = async (req, res, next) => {
 			}
 			return decoded.id;
 		});
-		const user = await User.findByPk(id);
+		const user = await prisma.user.findUnique({ where: { id } });
 		if (!user) {
 			throw { status: 404, msg: 'Username not exist', value: id, param: 'username' };
 		}
