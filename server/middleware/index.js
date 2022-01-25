@@ -3,6 +3,7 @@ const { validationResult } = require('express-validator');
 exports.verifyPost = require('./verifyPost');
 exports.verifyUser = require('./verifyUser');
 exports.token = require('./verifyToken');
+exports.namePost = require('./namePost');
 
 exports.errorHandel = (req, res, next) => {
 	const errors = validationResult(req);

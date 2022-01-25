@@ -21,7 +21,7 @@ module.exports = async (req, res, next) => {
 		}
 		req.user = user;
 		next();
-	} catch ({ status, ...err }) {
-		return res.status(status ?? 500).send(err);
+	} catch (err) {
+		return res.status(err.status ?? 500).send(err);
 	}
 };

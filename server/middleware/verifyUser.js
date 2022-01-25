@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 const { checkSchema } = require('express-validator');
 const argon2 = require('argon2');
 
-const singupSchema = {
+const signupSchema = {
 	username: {
 		trim: [' '],
 		toUpperCase: true,
@@ -128,6 +128,6 @@ const resetSchema = {
 	},
 };
 
-exports.signup = checkSchema(singupSchema);
+exports.signup = checkSchema(signupSchema);
 exports.login = checkSchema(loginSchema);
 exports.reset = checkSchema(resetSchema);

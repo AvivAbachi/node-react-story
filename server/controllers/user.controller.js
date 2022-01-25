@@ -1,10 +1,13 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const argon2 = require('argon2');
+const jwt = require('jsonwebtoken');
 const { generate } = require('generate-password');
-const { newToken } = require('../utils');
+const config = require('../config/auth.config');
 
-exports.singup = async (req, res) => {
+const newToken = (id) => jwt.sign({ id }, config.secret, config.options);
+
+exports.signup = async (req, res) => {
 	try {
 		const { username, email, show, password } = req.body;
 		const passwordHash = await argon2.hash(password);
@@ -48,7 +51,7 @@ exports.update = async (req, res) => {
 			throw { status: 400, err: [{ msg: 'Email address already taken', param: 'email' }] };
 		}
 		const password = newPassword ? await argon2.hash(newPassword) : undefined;
-		const update = await prisma.user.update({ data: { email, show, password }, where: { id } });
+		const update = await prisma.user.update({ where: { id }, data: { email, show, password } });
 		if (!update) {
 			throw { status: 500, err: [{ msg: 'Error updating User', param: 'server' }] };
 		}
