@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { Icons } from '.';
 
-const Dropdown = function Dropdown({ children, title }) {
+const _Dropdown = memo(function Dropdown({ children, title }) {
 	const [open, setOpen] = useState(false);
-
 	const menuRef = useRef();
 	const buttonRef = useRef();
 
@@ -40,14 +39,14 @@ const Dropdown = function Dropdown({ children, title }) {
 			)}
 		</div>
 	);
-};
+});
 
-Dropdown.Item = function DropdownItem({ border, children, onClick }) {
+_Dropdown.Item = memo(function DropdownItem({ border, children, onClick }) {
 	return (
 		<button className={`dropdown-item${border ? ' dropdown-item-border' : ''}`} onClick={onClick}>
 			{children}
 		</button>
 	);
-};
+});
 
-export default Dropdown;
+export default _Dropdown;

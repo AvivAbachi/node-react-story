@@ -1,6 +1,5 @@
-import AppContextProvider from './AppContext';
-import { UserContext } from './useUser';
-import { ModalContext } from './useModal';
-import { PostContext } from './usePost';
+import UserProvider, { UserContext } from './useUser';
+import ModalProvider, { ModalContext } from './useModal';
+import PostProvider, { PostContext } from './usePost';
 
-export { AppContextProvider, UserContext, ModalContext, PostContext };
+export { UserProvider, PostProvider, ModalProvider, UserContext, ModalContext, PostContext };

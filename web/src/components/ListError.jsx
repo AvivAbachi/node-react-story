@@ -1,13 +1,14 @@
-import { useContext } from 'react';
+import { memo } from 'react';
 import { Btn } from '.';
-import { PostContext, UserContext } from '../hooks';
+import useStore from '../store';
 
 const ListError = () => {
-	const { getPost } = useContext(PostContext);
-	const { getAccess } = useContext(UserContext);
+	const reloadPost = useStore.getState().reloadPost;
+	const getAccess = useStore.getState().getAccess;
+
 	const handelTryAgain = () => {
 		getAccess();
-		getPost();
+		reloadPost();
 	};
 
 	return (
@@ -21,4 +22,4 @@ const ListError = () => {
 	);
 };
 
-export default ListError;
+export default memo(ListError);

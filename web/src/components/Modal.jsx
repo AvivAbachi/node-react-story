@@ -1,9 +1,10 @@
-import { forwardRef, useContext, useEffect, useState } from 'react';
+import { memo, useEffect, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-// import { DevTool } from '@hookform/devtools';
-
+import { useForm } from 'react-hook-form';
 import { Btn, Icons, Input, InputError } from '.';
-import { ModalContext, UserContext, PostContext } from '../hooks';
+import useStore, { selector } from '../store';
+import inputsValidator from '../utils/inputsValidator';
+// import { DevTool } from '@hookform/devtools';
 
 const Portal = (Component, el) =>
 	function Portal() {
@@ -11,22 +12,48 @@ const Portal = (Component, el) =>
 	};
 
 const Modal = () => {
-	const { modal, form, handelModal, resetSuccess, resetPassword } = useContext(ModalContext);
-	const useUser = useContext(UserContext);
-	const usePost = useContext(PostContext);
+	const [wait, setWait] = useState(false);
+	const modal = useStore(selector.modal);
+
+	const signup = useStore.getState().signup;
+	const login = useStore.getState().login;
+	const update = useStore.getState().update;
+	const reset = useStore.getState().reset;
+	const createPost = useStore.getState().createPost;
+	const updatePost = useStore.getState().updatePost;
+	const deletePost = useStore.getState().deletePost;
+	const handelModal = useStore.getState().handelModal;
+	const resetSuccess = useStore.getState().resetSuccess;
+	const resetPassword = useStore.getState().resetPassword;
 
 	const {
 		clearErrors,
-		control,
 		register,
 		handleSubmit,
 		formState: { errors },
 		setError,
-	} = form;
-
-	const [wait, setWait] = useState(false);
+		setValue,
+		unregister,
+	} = useForm();
 
 	useEffect(() => {
+		switch (modal.type) {
+			case 'UPDATE_POST':
+				setValue('title', modal.title);
+				setValue('body', modal.body);
+				break;
+			case 'RESET':
+				unregister('password');
+				break;
+			case 'LOGIN':
+				setValue('username', modal.username);
+				setValue('password', modal.password);
+				unregister('email');
+				break;
+			default:
+				break;
+		}
+
 		document.querySelector('body').style.overflow = 'hidden';
 		setTimeout(() => {
 			document.querySelector('.modal').style.opacity = 1;
@@ -36,7 +63,7 @@ const Modal = () => {
 	const onClose = async () => {
 		document.querySelector('.modal').style.opacity = 0;
 		setTimeout(() => {
-			document.querySelector('body').style.overflow = 'auto';
+			document.querySelector('body').style.overflow = null;
 			handelModal();
 		}, 300);
 	};
@@ -46,25 +73,25 @@ const Modal = () => {
 		try {
 			switch (modal.type) {
 				case 'SIGNUP':
-					await useUser.singup(data).then(() => onClose());
+					await signup(data).then(() => onClose());
 					break;
 				case 'LOGIN':
-					await useUser.login(data).then(() => onClose());
+					await login(data).then(() => onClose());
 					break;
 				case 'UPDATE':
-					await useUser.update(data).then(() => onClose());
+					await update(data).then(() => onClose());
 					break;
 				case 'RESET':
-					await useUser.reset(data).then((user) => handelModal('RESET_SUCCESS', user));
+					await reset(data).then((user) => handelModal('RESET_SUCCESS', user));
 					break;
 				case 'CREATE_POST':
-					await usePost.createPost(data).then(() => onClose());
+					await createPost(data).then(() => onClose());
 					break;
 				case 'UPDATE_POST':
-					await usePost.updatePost({ id: modal.id, ...data }).then(() => onClose());
+					await updatePost({ id: modal.id, ...data }).then(() => onClose());
 					break;
 				case 'DELETE_POST':
-					await usePost.deletePost({ id: modal.id }).then(() => onClose());
+					await deletePost({ id: modal.id }).then(() => onClose());
 					break;
 			}
 		} catch (err) {
@@ -80,6 +107,15 @@ const Modal = () => {
 		}
 	};
 
+	const inputs = useCallback(() => {
+		return modal.inputs?.map((type) => {
+			if (inputsValidator[type]) {
+				const { rule, name, ...input } = inputsValidator[type];
+				return <Input key={name} {...register(name, { ...rule })} {...input} error={errors[name]?.message} />;
+			}
+		});
+	}, [modal.inputs, errors]);
+
 	return (
 		<div className='modal' style={{ opacity: 0 }}>
 			<div className='modal-backdrop' onClick={onClose} />
@@ -92,11 +128,9 @@ const Modal = () => {
 				</div>
 				<form onSubmit={handleSubmit(onSubmit)}>
 					{/* {wait ? 'pls wait' : 'ready'} */}
-					{/* <DevTool control={control} /> */}
 					<div className='modal-body'>
-						{modal.inputs?.map(({ rule, name, ...input }) => (
-							<Input key={name} {...register(name, { ...rule })} {...input} error={errors[name]?.message} />
-						))}
+						{/* <DevTool control={control} /> */}
+						{inputs()}
 						{(modal.type === 'LOGIN' || modal.type === 'RESET') && (
 							<div className='reset-password'>
 								<button type='button' onClick={resetPassword}>
@@ -113,7 +147,7 @@ const Modal = () => {
 					)}
 					{modal.type === 'DELETE_POST' && (
 						<div className='text-center'>
-							<p>Deleteing this post will be permanently!</p>
+							<p>Deleting this post will be permanently!</p>
 						</div>
 					)}
 					{errors?.server && (
@@ -135,4 +169,4 @@ const Modal = () => {
 	);
 };
 
-export default Portal(Modal, document.querySelector('#modal'));
+export default memo(Portal(memo(Modal), document.querySelector('#modal')));

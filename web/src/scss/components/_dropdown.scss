@@ -5,7 +5,7 @@
 	}
 	&-open &-btn {
 		@apply bg-rose-500 text-white border-rose-500 shadow-lg hover:bg-rose-300 hover:border-rose-300 focus:ring-rose-300 focus:text-white;
-		&:focus:hover {
+		&:active {
 			@apply ring-rose-500;
 		}
 	}
@@ -18,7 +18,7 @@
 	&-item {
 		@apply block px-2 py-1 mb-2 text-sm font-semibold bg-transparent rounded-full w-full text-center select-none hover:bg-rose-500 focus:outline-none 
 	 focus:ring-2 focus:ring-rose-500 last:mb-0;
-		&:focus:hover {
+		&:active {
 			@apply ring-rose-300;
 		}
 		&-border {

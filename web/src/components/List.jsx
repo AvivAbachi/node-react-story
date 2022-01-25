@@ -1,13 +1,13 @@
-import { useContext } from 'react';
-import { PostContext } from '../hooks';
+import { memo } from 'react';
 import { Post, ListError } from '.';
+import useStore, { selector } from '../store';
 
 const List = () => {
-	const { post: posts, userPost, serverError } = useContext(PostContext);
+	const post = useStore(selector.post);
+	const userPost = useStore(selector.userPost);
+	const serverError = useStore(selector.serverError);
 
-	return (
-		<ul className='list'>{serverError ? <ListError /> : posts?.map((post) => <Post {...post} key={post.id} userPost={userPost} />)}</ul>
-	);
+	return <ul className='list'>{serverError ? <ListError /> : post?.map((post) => <Post {...post} key={post.id} userPost={userPost} />)}</ul>;
 };
 
-export default List;
+export default memo(List);

@@ -1,13 +1,11 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, memo, useEffect, useRef, useState } from 'react';
 import useLocalStorage from '@d2k/react-localstorage';
 import axios from 'axios';
-import { ModalContext } from '.';
 
 const serverURL = import.meta.env.VITE_SERVER_URL;
 axios.defaults.timeout = 3000;
 
 const useUser = () => {
-	const { handelModal } = useContext(ModalContext);
 	const [token, setToken, removeToken] = useLocalStorage('x-access-token');
 	const [user, setUser] = useState({
 		username: undefined,
@@ -78,17 +76,25 @@ const useUser = () => {
 	useEffect(() => {
 		if (token) {
 			axios.defaults.headers['x-access-token'] = token;
-			getAccess();
+			getAccess().then();
 		}
 	}, [token]);
 
+	const _singup = useRef(singup);
+	const _login = useRef(login);
+	const _logout = useRef(logout);
+	const _update = useRef(update);
+	const _reset = useRef(reset);
+	const _getAccess = useRef(getAccess);
+
 	return {
 		user,
-		singup,
-		login,
-		logout,
-		update,
-		reset,
+		singup: _singup.current,
+		login: _login.current,
+		logout: _logout.current,
+		update: _update.current,
+		reset: _reset.current,
+		getAccess: _getAccess.current,
 	};
 };
 
@@ -96,7 +102,7 @@ export const UserContext = createContext(useUser);
 
 const UserProvider = ({ children }) => {
 	const user = useUser();
-	return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+	return <UserContext.Provider value={user} children={children} />;
 };
 
-export default UserProvider;
+export default memo(UserProvider);

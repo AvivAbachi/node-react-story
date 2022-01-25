@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, memo, useRef, useState } from 'react';
 import { username, password, newPassword, email, show, title, body } from '../utils/inputs-validator';
 import { useForm } from 'react-hook-form';
 
@@ -57,13 +57,18 @@ const useModal = () => {
 		}
 	};
 
+	const _setModal = useRef(setModal);
+	const _handelModal = useRef(handelModal);
+	const _resetPassword = useRef(resetPassword);
+	const _resetSuccess = useRef(resetSuccess);
+
 	return {
 		modal,
 		form,
-		setModal,
-		handelModal,
-		resetPassword,
-		resetSuccess,
+		setModal: _setModal.current,
+		handelModal: _handelModal.current,
+		resetPassword: _resetPassword.current,
+		resetSuccess: _resetSuccess.current,
 	};
 };
 
@@ -71,7 +76,7 @@ export const ModalContext = createContext(useModal);
 
 const ModalProvider = ({ children }) => {
 	const modal = useModal();
-	return <ModalContext.Provider value={modal}>{children}</ModalContext.Provider>;
+	return <ModalContext.Provider value={modal} children={children} />;
 };
 
-export default ModalProvider;
+export default memo(ModalProvider);

@@ -1,9 +1,9 @@
-import validator from './validator';
+import validator from 'validator';
 // { name: '', title: '', type: '', rule: {} }
 const passwordRegex = /^(?:(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*)$/;
 const usernameRegex = /^\w+$/;
 
-export const username = {
+const username = {
 	name: 'username',
 	title: 'Username',
 	rule: {
@@ -13,10 +13,11 @@ export const username = {
 		pattern: { value: usernameRegex, message: 'Username not Valid!' },
 	},
 };
-export const password = {
+const password = {
 	name: 'password',
 	title: 'Password',
 	type: 'password',
+	autoComplete: 'off',
 	rule: {
 		required: 'Password is required!',
 		minLength: { value: 8, message: 'more8' },
@@ -24,19 +25,20 @@ export const password = {
 		pattern: { value: passwordRegex, message: 'Password not Valid!' },
 	},
 };
-export const newPassword = {
+const newPassword = {
 	name: 'newPassword',
 	title: 'New Password',
+	autoComplete: 'off',
 	type: password.type,
 	rule: { ...password.rule, required: undefined },
 };
-export const confirmPassword = {
+const confirmPassword = {
 	name: 'confirmPassword',
 	title: 'Confirm Password',
 	type: password.type,
 	rule: password.rule,
 };
-export const email = {
+const email = {
 	name: 'email',
 	title: 'Email',
 	type: 'email',
@@ -45,16 +47,16 @@ export const email = {
 		validate: (value) => validator.isEmail(value) || 'Email not Valid!',
 	},
 };
-export const emailOptimal = {
+const emailOptimal = {
 	...email,
 	rule: { ...email.rule, required: undefined },
 };
-export const show = {
+const show = {
 	name: 'show',
 	title: 'Display Name',
 	rule: { maxLength: { value: 40, message: 'less40' } },
 };
-export const title = {
+const title = {
 	name: 'title',
 	title: 'Post Title',
 	rule: {
@@ -63,9 +65,11 @@ export const title = {
 		maxLength: { value: 64, message: 'less64' },
 	},
 };
-export const body = {
+const body = {
 	name: 'body',
 	title: 'Post Text',
-	textarea:true,
+	textarea: true,
 	rule: { maxLength: { value: 500, message: 'less500' } },
 };
+
+export default { username, password, newPassword, confirmPassword, email, emailOptimal, show, title, body };

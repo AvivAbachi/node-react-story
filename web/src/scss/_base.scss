@@ -10,8 +10,7 @@ body {
 .dropdown-item,
 .input input,
 .reset-password button {
-	transition-property: background-color, border-color, color, fill, stroke, box-shadow, opacity;
-	transition-delay: 0;
+	transition-property: color, background-color, border-color, fill, stroke, box-shadow, opacity;
 	@apply duration-200 ease-linear;
 }
 

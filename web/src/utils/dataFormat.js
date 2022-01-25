@@ -1,9 +1,10 @@
-const dataFormat = (createdAt, updatedAt) => {
-	const notEdit = createdAt === updatedAt ? 'Create at ' : 'Edit at ';
-	const fullDate = updatedAt.split(/T|:/g);
-	const date = fullDate[0].split('-').reverse().join('/');
-	const time = fullDate[1] + ':' + fullDate[2];
-	return notEdit + time + ' - ' + date;
-};
-
-export default dataFormat;
+export default function dataFormat(createdAt, updatedAt) {
+	createdAt = createdAt.slice(0, -5);
+	updatedAt = updatedAt.slice(0, -5);
+	if (createdAt === updatedAt) {
+		createdAt = createdAt.split('T');
+		return `Create at ${createdAt[1]} ${createdAt[0].split('-').reverse().join('/')}`;
+	}
+	updatedAt = updatedAt.split('T');
+	return `Edit at ${updatedAt[1]} ${updatedAt[0].split('-').reverse().join('/')}`;
+}
