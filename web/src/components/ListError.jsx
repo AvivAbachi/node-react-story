@@ -1,14 +1,16 @@
-import { memo } from 'react';
+import { memo, useRef } from 'react';
 import { Btn } from '.';
 import useStore from '../store';
 
 const ListError = () => {
-	const reloadPost = useStore.getState().reloadPost;
-	const getAccess = useStore.getState().getAccess;
+	const start = useRef(useStore.getState().start);
+	const stop = useRef(useStore.getState().stop);
+	const getAccess = useRef(useStore.getState().getAccess);
 
 	const handelTryAgain = () => {
-		getAccess();
-		reloadPost();
+		getAccess.current();
+		start.current();
+		stop.current();
 	};
 
 	return (

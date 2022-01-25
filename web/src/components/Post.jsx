@@ -1,11 +1,11 @@
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo, useRef } from 'react';
 import { Btn, Icons } from '.';
-import useStore, { selector } from '../store';
+import useStore from '../store';
 
 const Post = ({ id, title, body, name, data, userPost }) => {
-	const handelModal = useStore.getState().handelModal;
-	const updatePost = useCallback(() => handelModal('UPDATE_POST', { id, title, body }), [handelModal, id, title, body]);
-	const deltePost = useCallback(() => handelModal('DELETE_POST', { id }), [handelModal, id]);
+	const handelModal = useRef(useStore.getState().handelModal);
+	const updatePost = useCallback(() => handelModal.current('UPDATE_POST', { id, title, body }), [handelModal, id, title, body]);
+	const deltePost = useCallback(() => handelModal.current('DELETE_POST', { id }), [handelModal, id]);
 	const buildBody = useMemo(() => body.split(/(?:\r\n|\r|\n)/gm).map((text, i) => <p key={i}>{text}</p>), [body]);
 	return (
 		<li className='post'>

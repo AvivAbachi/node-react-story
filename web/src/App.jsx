@@ -1,21 +1,25 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { Header, List, Modal } from './components';
-import useStore, { selector } from './store';
+import useStore from './store';
 import { useInterval } from 'react-interval-hook';
-import useLocalStorage from '@d2k/react-localstorage';
+import axios from 'axios';
 
 const App = () => {
-	const { start, stop } = useInterval(() => getPost(), 25000000, { autoStart: true, immediate: true });
-	const [token, setToken, removeToken] = useLocalStorage('x-access-token');
+	const { start, stop } = useInterval(() => getPost.current(), 2500, { autoStart: true, immediate: true });
 
-	const getAccess = useStore.getState().getAccess;
-	const getPost = useStore.getState().getPost;
-	const modal = useStore(selector.type);
+	const getAccess = useRef(useStore.getState().getAccess);
+	const getPost = useRef(useStore.getState().getPost);
+	const modal = useStore((state) => state.modal.type);
+	const token = useStore((state) => state.token);
 	useEffect(() => {
-		useStore.setState({ start, stop, token, setToken, removeToken });
-		start();
-		getAccess();
+		useStore.setState({ start, stop });
+		axios.defaults.headers['x-access-token'] = token;
+		getAccess.current();
 	}, []);
+
+	useEffect(() => {
+		axios.defaults.headers['x-access-token'] = token;
+	}, [token]);
 
 	return (
 		<>
