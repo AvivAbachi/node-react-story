@@ -1,7 +1,7 @@
 .modal {
-	@apply grid items-center justify-items-center p-0 fixed top-0 left-0 h-screen w-full z-10 duration-300 ease-linear;
+	@apply grid items-center justify-items-center p-0 fixed top-0 left-0 h-screen w-full z-20 duration-300 ease-linear;
 	&-backdrop {
-		@apply w-full h-full absolute bg-black bg-opacity-10;
+		@apply w-screen h-screen absolute top-0 left-0 bg-black bg-opacity-30 z-10;
 	}
 	&-content {
 		@apply max-w-lg w-11/12 rounded-lg shadow-lg bg-white z-10;
@@ -21,6 +21,7 @@
 			@apply mr-4;
 		}
 	}
+
 	.reset-password {
 		@apply text-center mt-4;
 		button {

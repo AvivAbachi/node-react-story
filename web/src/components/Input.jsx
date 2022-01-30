@@ -1,21 +1,23 @@
 import { forwardRef, memo } from 'react';
 import { Icons } from '.';
 
-const Input = forwardRef(({ onChange, onBlur, title, name, type, error, textarea, autoComplete }, ref) => {
-	return (
-		<>
-			<label className='input-label'>{title || name}</label>
-			{textarea ? (
-				<textarea className='input' name={name} ref={ref} onChange={onChange} onBlur={onBlur} rows={4} />
-			) : (
-				<input className='input' type={type} name={name} ref={ref} onChange={onChange} onBlur={onBlur} autoComplete={autoComplete} />
-			)}
-			{error && <InputError error={error} />}
-		</>
-	);
-});
+const _Input = memo(
+	forwardRef(function Input({ title, name, type, error, textarea, required, ...props }, ref) {
+		return (
+			<label className='input-label'>
+				{required && <span className='text-rose-500'>*</span>} {title || name}
+				{textarea ? (
+					<textarea ref={ref} className='input' name={name} required={required} {...props} rows={4} />
+				) : (
+					<input ref={ref} className='input' name={name} required={required} {...props} />
+				)}
+				{error && <_InputError error={error} />}
+			</label>
+		);
+	})
+);
 
-export const InputError = memo(function InputError({ error }) {
+const _InputError = memo(function InputError({ error }) {
 	return (
 		<div className='input-error' title={error}>
 			<Icons.ErrorIcon />
@@ -24,4 +26,6 @@ export const InputError = memo(function InputError({ error }) {
 	);
 });
 
-export default memo(Input);
+_Input.InputError = _InputError;
+
+export default _Input;

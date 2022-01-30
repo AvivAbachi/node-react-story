@@ -1,27 +1,39 @@
 import create from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-import { mountStoreDevtool } from 'simple-zustand-devtools';
-
-import userSlice from './user';
-import postSlice from './post';
-import modalSlice from './modal';
+import { devtools, persist, subscribeWithSelector } from 'zustand/middleware';
+import axios from 'axios';
 
 export const useStore = create(
 	devtools(
-		persist(
-			(set, get) => ({
-				...userSlice(set, get),
-				...postSlice(set, get),
-				...modalSlice(set, get),
-			}),
-			{
-				name: 'setting',
-				partialize: (store) => ({ token: store.token }),
-				getStorage: () => sessionStorage,
-			}
+		subscribeWithSelector(
+			persist(
+				(set, get) => ({
+					token: undefined,
+					userPost: false,
+					serverError: false,
+					page: 0,
+					limit: 4,
+					total: 0,
+					pages: () => Math.floor(get().total / get().limit),
+					user: { username: undefined, show: undefined, userId: undefined, email: undefined },
+					modal: { type: undefined, title: undefined, inputs: undefined, data: undefined },
+					interval: { start: undefined, stop: undefined },
+					post: [],
+				}),
+				{ name: 'setting', partialize: (state) => ({ token: state.token }), getStorage: () => sessionStorage }
+			)
 		),
-		{ serialize: { options: true } }
+		{ name: 'Story', serialize: { options: true } }
 	)
 );
 
+axios.defaults.timeout = 3000;
+useStore.subscribe(
+	(state) => state.token,
+	(token) => (axios.defaults.headers['x-access-token'] = token),
+	{ fireImmediately: true }
+);
+
+export { getAccess, login, logout, reset, signup, update } from './user';
+export { getPost, createPost, deletePost, toggleUserPost, updatePost } from './post';
+export { handelModal } from './modal';
 export default useStore;

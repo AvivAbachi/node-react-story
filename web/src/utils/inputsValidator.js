@@ -1,7 +1,8 @@
-import validator from 'validator';
-// { name: '', title: '', type: '', rule: {} }
-const passwordRegex = /^(?:(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*)$/;
+// import validator from 'validator';
+
 const usernameRegex = /^\w+$/;
+const emailRegex = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
+const passwordRegex = /^(?:(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*)$/;
 
 const username = {
 	name: 'username',
@@ -13,6 +14,7 @@ const username = {
 		pattern: { value: usernameRegex, message: 'Username not Valid!' },
 	},
 };
+
 const password = {
 	name: 'password',
 	title: 'Password',
@@ -25,6 +27,7 @@ const password = {
 		pattern: { value: passwordRegex, message: 'Password not Valid!' },
 	},
 };
+
 const newPassword = {
 	name: 'newPassword',
 	title: 'New Password',
@@ -32,25 +35,30 @@ const newPassword = {
 	type: password.type,
 	rule: { ...password.rule, required: undefined },
 };
+
 const confirmPassword = {
 	name: 'confirmPassword',
 	title: 'Confirm Password',
 	type: password.type,
 	rule: password.rule,
 };
+
 const email = {
 	name: 'email',
 	title: 'Email',
 	type: 'email',
 	rule: {
 		required: 'Email is required!',
-		validate: (value) => validator.isEmail(value) || 'Email not Valid!',
+		pattern: { value: emailRegex, message: 'Email not Valid!' },
+		// validate: (value) => validator.isEmail(value) || 'Email not Valid!',
 	},
 };
+
 const emailOptimal = {
 	...email,
 	rule: { ...email.rule, required: undefined },
 };
+
 const show = {
 	name: 'show',
 	title: 'Display Name',
@@ -65,6 +73,7 @@ const title = {
 		maxLength: { value: 64, message: 'less64' },
 	},
 };
+
 const body = {
 	name: 'body',
 	title: 'Post Text',

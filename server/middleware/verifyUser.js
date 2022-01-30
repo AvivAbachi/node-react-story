@@ -2,25 +2,21 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const { checkSchema } = require('express-validator');
 const argon2 = require('argon2');
+const config = require('../config/auth.config');
 
 const signupSchema = {
 	username: {
 		trim: [' '],
-		toUpperCase: true,
+		toLowerCase: true,
 		isLength: {
 			options: { min: 6, max: 16 },
 			errorMessage: 'Username must be between 6 to 16 chars long',
 		},
 		custom: {
-			options: (username) => {
-				if (!username.match(/^\w+$/)) {
-					return Promise.reject('Username is not allowed');
-				}
-				return prisma.user.findUnique({ where: { username } }).then((user) => {
-					if (user) {
-						return Promise.reject('Username already in use');
-					}
-				});
+			options: async (username) => {
+				if (username.match(/^\w+$/)) return Promise.reject('Username is not allowed');
+				const user = await prisma.user.findUnique({ where: { username } });
+				if (user) return Promise.reject('Username already in use');
 			},
 		},
 	},
@@ -32,9 +28,7 @@ const signupSchema = {
 		},
 		custom: {
 			options: (username) => {
-				if (!username.match(/^\w+$/)) {
-					return Promise.reject('Password is not allowed');
-				}
+				if (!username.match(/^\w+$/)) return Promise.reject('Password is not allowed');
 				return true;
 			},
 		},
@@ -51,14 +45,12 @@ const signupSchema = {
 	email: {
 		trim: [' '],
 		isEmail: { errorMessage: 'Email is not allowed' },
-		toUpperCase: true,
+		toLowerCase: true,
 		custom: {
-			options: (email) =>
-				prisma.user.findUnique({ where: { email } }).then((user) => {
-					if (user) {
-						return Promise.reject('Username already in use');
-					}
-				}),
+			options: async (email) => {
+				const user = await prisma.user.findUnique({ where: { email } });
+				if (user) return Promise.reject('Email already in use');
+			},
 		},
 	},
 	show: {
@@ -73,15 +65,13 @@ const signupSchema = {
 const loginSchema = {
 	username: {
 		trim: [' '],
-		toUpperCase: true,
+		toLowerCase: true,
 		custom: {
-			options: (username, { req }) =>
-				prisma.user.findUnique({ where: { username } }).then((user) => {
-					if (!user) {
-						return Promise.reject('Username not exist');
-					}
-					req.user = user;
-				}),
+			options: async (username, { req }) => {
+				const user = await prisma.user.findUnique({ where: { username } });
+				if (!user) return Promise.reject('Username not exist');
+				req.user = user;
+			},
 		},
 	},
 	password: {
@@ -89,7 +79,7 @@ const loginSchema = {
 		custom: {
 			options: async (password, { req }) => {
 				if (req.user) {
-					const passwordIsValid = await argon2.verify(req.user.password, password);
+					const passwordIsValid = await argon2.verify(req.user.password, password, { salt: config.salt });
 					if (!passwordIsValid) {
 						return Promise.reject('Invalid Password');
 					}
@@ -102,27 +92,22 @@ const loginSchema = {
 const resetSchema = {
 	username: {
 		trim: [' '],
-		toUpperCase: true,
+		toLowerCase: true,
 		custom: {
-			options: (username, { req }) =>
-				prisma.user.findUnique({ where: { username } }).then((user) => {
-					if (!user) {
-						return Promise.reject('Username not exist');
-					}
-					req.user = user;
-				}),
+			options: async (username, { req }) => {
+				const user = await prisma.user.findUnique({ where: { username } });
+				if (!user) return Promise.reject('Username not exist');
+				req.user = user;
+			},
 		},
 	},
 	email: {
 		trim: [' '],
 		isEmail: { bail: true },
-		toUpperCase: true,
+		toLowerCase: true,
 		custom: {
 			options: (email, { req }) => {
-				if (email !== req.user.email) {
-					return Promise.reject('Email not match');
-				}
-				return true;
+				if (email !== req.user.email) return Promise.reject('Email not match');
 			},
 		},
 	},

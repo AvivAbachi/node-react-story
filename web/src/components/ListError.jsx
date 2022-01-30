@@ -1,16 +1,12 @@
-import { memo, useRef } from 'react';
+import { memo } from 'react';
 import { Btn } from '.';
-import useStore from '../store';
+import useStore, { getAccess } from '../store';
 
 const ListError = () => {
-	const start = useRef(useStore.getState().start);
-	const stop = useRef(useStore.getState().stop);
-	const getAccess = useRef(useStore.getState().getAccess);
-
 	const handelTryAgain = () => {
-		getAccess.current();
-		start.current();
-		stop.current();
+		getAccess();
+		useStore.getState().interval.stop();
+		useStore.getState().interval.start();
 	};
 
 	return (

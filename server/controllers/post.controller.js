@@ -1,23 +1,28 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// const limit = req.query.limit || 10;
-// const page = req.query.page || 0;
-// const offset = limit * page;
+const formatPost = (createdAt, updatedAt, { show, username }, post) => {
+	createdAt = createdAt.getTime();
+	updatedAt = updatedAt.getTime();
+	if (createdAt === updatedAt - 1) updatedAt--;
+	return { ...post, name: show || username, createdAt, updatedAt };
+};
+
 exports.getAll = async (req, res, next) => {
 	try {
+		const limit = parseInt(req.query.limit) || 100;
+		const pages = parseInt(req.query.limit) * parseInt(req.query.page) || undefined;
 		req.post = await prisma.post.findMany({
+			take: limit,
+			skip: pages,
 			orderBy: [{ createdAt: 'desc' }],
-			select: {
-				id: true,
-				title: true,
-				body: true,
-				createdAt: true,
-				updatedAt: true,
-				author: { select: { username: true, show: true } },
-			},
+			include: { author: { select: { username: true, show: true } } },
 		});
-		next();
+		req.post = req.post.map(({ createdAt, updatedAt, author, ...post }) => {
+			return formatPost(createdAt, updatedAt, author, post);
+		});
+		req.total = await prisma.post.count();
+		res.send({ post: req.post, total: req.total });
 	} catch (err) {
 		res.status(err.status || 500).send(err);
 	}
@@ -25,60 +30,36 @@ exports.getAll = async (req, res, next) => {
 
 exports.getByUserId = async (req, res, next) => {
 	try {
-		const userId = parseInt(req.params.id) || -1;
+		const userId = parseInt(req.params.userId) || -1;
 		if (userId < 0) {
-			throw { status: 404, err: [{ msg: 'Invalid user id', param: 'id', value: req.params.id }] };
+			throw { status: 400, err: [{ msg: 'Invalid user id', param: 'id', value: req.params.id }] };
 		}
-
-		req.post = (
-			await prisma.user.findUnique({
-				where: { id: userId },
-				select: {
-					posts: {
-						orderBy: [{ createdAt: 'desc' }],
-						select: {
-							id: true,
-							title: true,
-							body: true,
-							createdAt: true,
-							updatedAt: true,
-							author: { select: { username: true, show: true } },
-						},
-					},
-				},
-			})
-		)?.posts;
-		if (!req.post) {
+		req.user = await prisma.user.findUnique({ where: { id: userId }, include: { posts: true, _count: true } });
+		if (!req.user) {
 			throw { status: 404, err: [{ msg: 'User post Not found', param: 'id', value: req.params.id }] };
 		}
-		next();
+		req.post = req.user.posts.map(({ createdAt, updatedAt, ...post }) => {
+			return formatPost(createdAt, updatedAt, { show: req.user?.show, username: req.user.username }, post);
+		});
+		req.total = req.user._count.posts;
+		res.send({ post: req.post, total: req.total });
 	} catch (err) {
 		res.status(err.status || 500).send(err);
 	}
 };
 
-exports.getByPostId = async (req, res, next) => {
+exports.getByPostId = async (req, res) => {
 	try {
 		const id = parseInt(req.params.id) || -1;
 		if (id < 0) {
-			throw { status: 404, err: [{ msg: 'Invalid post id', param: 'id', value: id }] };
+			throw { status: 400, err: [{ msg: 'Invalid post id', param: 'id', value: id }] };
 		}
-		req.post = await prisma.post.findUnique({
-			where: { id },
-			select: {
-				id: true,
-				title: true,
-				body: true,
-				createdAt: true,
-				updatedAt: true,
-				author: { select: { username: true, show: true } },
-			},
-		});
+		req.post = await prisma.post.findUnique({ where: { id }, include: { author: { select: { username: true, show: true } } } });
 		if (!req.post) {
 			throw { status: 404, err: [{ msg: 'Post Not found', param: 'id', value: req.params.id }] };
 		}
-		req.post = [req.post];
-		next();
+		const { createdAt, updatedAt, author, ...post } = req.post;
+		res.send(formatPost(createdAt, updatedAt, author, post));
 	} catch (err) {
 		res.status(err.status || 500).send(err);
 	}
@@ -114,11 +95,8 @@ exports.update = async (req, res) => {
 
 exports.delete = async (req, res) => {
 	try {
-		const id = parseInt(req.body.id) || -1;
+		const id = req.body.id;
 		const userId = req.user.id;
-		if (id < 0) {
-			throw { status: 404, err: [{ msg: 'Invalid post id', param: 'id', value: id }] };
-		}
 		const del = await prisma.post.deleteMany({ where: { AND: { id, author: { id: userId } } } });
 		if (!del?.count) {
 			throw { msg: 'Post not delete.', param: 'server' };
