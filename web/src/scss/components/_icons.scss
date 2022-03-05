@@ -1,10 +1,13 @@
 .menu-icon {
-	fill: none;
 	stroke-linecap: round;
-	@apply inline-block h-7 w-7 ml-2 pr-2 stroke-3 pointer-events-none stroke-current;
+	@apply fill-transparent inline-block h-7 w-7 ml-2 pr-2 stroke-3 pointer-events-none stroke-current;
 }
 .face-icon {
-	@apply inline-block h-7 w-7 pointer-events-none fill-current;
+	@apply inline-block h-7 w-7 pointer-events-none fill-current relative;
+	// &::after {
+	// 	background: red;
+	// 	@apply content-['']  block h-full w-full z-50 absolute;
+	// }
 }
 .pluses-icon {
 	@apply fill-current h-6 w-6 p-1;

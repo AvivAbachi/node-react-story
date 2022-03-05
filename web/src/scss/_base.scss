@@ -1,17 +1,25 @@
 @tailwind base;
 @tailwind components;
 
+:root {
+	--primary-darkest: 17 94 89;
+	--primary-dark: 15 118 110;
+	--primary: 20 184 166;
+	--primary-light: 94 234 212;
+	--primary-lightest: 240 253 250;
+}
+
 body {
-	@apply bg-rose-50 text-gray-900 relative z-10;
+	@apply bg-primary-lightest  dark:bg-gray-800 text-gray-900 dark:text-white;
 }
-
-.btn,
-.dropdown-btn,
-.dropdown-item,
-.input input,
-.reset-password button {
-	transition-property: color, background-color, border-color, fill, stroke, box-shadow, opacity;
-	@apply duration-200 ease-linear;
+.dark {
 }
-
+// .btn,
+// .dropdown-btn,
+// .dropdown-item,
+// .input input,
+// .reset-password button {
+// 	transition-property: color, background-color, border-color, fill, stroke, box-shadow, opacity;
+// 	@apply duration-200 ease-linear;
+// }
 @tailwind utilities;

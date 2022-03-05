@@ -1,11 +1,30 @@
-const { validationResult } = require('express-validator');
+const {
+	username,
+	password,
+	email,
+	displayName,
+	cheakUsername,
+	cheakPassword,
+	cheakEmail,
+	token,
+	pages,
+	id,
+	postTitle,
+	postBody,
+	postId,
+	errors,
+} = require('./validator');
 
-exports.verifyPost = require('./verifyPost');
-exports.verifyUser = require('./verifyUser');
-exports.token = require('./verifyToken');
-
-exports.errorHandel = (req, res, next) => {
-	const errors = validationResult(req);
-	if (!errors.isEmpty()) return res.status(400).json(errors.array());
-	next();
+exports.validator = {
+	signup: [username, password, email, displayName, errors],
+	login: [cheakUsername, cheakPassword, errors],
+	reset: [cheakUsername, cheakEmail, errors],
+	update: [token, email, errors],
+	token: [token, errors],
+	postAll: [pages, errors],
+	postId: [id, errors],
+	postUserId: [id, pages, errors],
+	createPost: [token, postTitle, postBody, errors],
+	updatePost: [token, postTitle, postBody, postId, errors],
+	deletePost: [token, postId, errors],
 };

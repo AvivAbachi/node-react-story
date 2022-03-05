@@ -1,6 +1,5 @@
 .list {
-	@apply px-6 pt-20 pb-14 min-h-screen bg-gray-200;
-
+	@apply px-6 pt-20 pb-28;
 	&-error {
 		@apply mx-auto text-center mt-16 w-96;
 		&-title {

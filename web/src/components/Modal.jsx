@@ -1,8 +1,8 @@
-import { memo, useEffect, useState, useCallback } from 'react';
-import { createPortal } from 'react-dom';
-import { useForm } from 'react-hook-form';
-import { Btn, Icons, Input } from '.';
-import useStore, { handelModal, createPost, deletePost, updatePost, signup, login, update, reset } from '../store';
+import {memo, useEffect, useState, useCallback} from 'react';
+import {createPortal} from 'react-dom';
+import {useForm} from 'react-hook-form';
+import {Btn, Icons, Input} from '.';
+import useStore, {handelModal, createPost, deletePost, updatePost, signup, login, update, reset, themeSelector} from '../store';
 import inputsValidator from '../utils/inputsValidator';
 
 const _Portal = (Component, el) =>
@@ -13,11 +13,11 @@ const _Portal = (Component, el) =>
 
 const Modal = () => {
 	const [wait, setWait] = useState(false);
-	const { type, title, inputs, data } = useStore((state) => state.modal);
-	const { clearErrors, register, handleSubmit, setError, setValue, unregister, formState } = useForm();
+	const {type, title, inputs, data} = useStore((state) => state.modal);
+	const {clearErrors, register, handleSubmit, setError, setValue, unregister, formState} = useForm();
 
 	useEffect(() => {
-		document.querySelector('body').style.overflow = 'hidden';
+		//document.querySelector('body').style.overflow = 'hidden';
 		if (type === 'UPDATE_POST') {
 			setValue('title', data?.title);
 			setValue('body', data?.body);
@@ -29,18 +29,22 @@ const Modal = () => {
 	}, []);
 
 	const onClose = async () => {
-		document.querySelector('body').style.overflow = null;
+		//document.querySelector('body').style.overflow = null;
 		setTimeout(() => handelModal(), 0);
 	};
 
 	const inputsList = useCallback(() => {
 		return inputs?.map((type) => {
-			const { rule, name, ...input } = inputsValidator[type];
-			return (
-				<Input key={name} required={!!rule.required} error={formState.errors[name]?.message} {...register(name, { ...rule })} {...input} />
-			);
+			const {rule, name, ...input} = inputsValidator[type];
+			return <Input key={name} required={!!rule.required} error={formState.errors[name]?.message} {...register(name, {...rule})} {...input} />;
 		});
 	}, [inputs, formState.errors]);
+
+	const themeList = useCallback(() => {
+		return Object.entries(themeSelector).map(([name, color]) => (
+			<Btn key={name} icon active onClick={() => useStore.setState({theme: name})} className={`w-10 h-10 ${color}`}></Btn>
+		));
+	}, [themeSelector]);
 
 	const onSubmit = async (form) => {
 		setWait(true);
@@ -50,17 +54,17 @@ const Modal = () => {
 			else if (type === 'UPDATE') await update(form);
 			else if (type === 'RESET') await reset(form).then((user) => handelModal('RESET_SUCCESS', user));
 			else if (type === 'CREATE_POST') await createPost(form);
-			else if (type === 'UPDATE_POST') await updatePost({ ...form, id: data.id });
-			else if (type === 'DELETE_POST') await deletePost({ id: data.id });
+			else if (type === 'UPDATE_POST') await updatePost({...form, id: data.id});
+			else if (type === 'DELETE_POST') await deletePost({id: data.id});
 			if (type !== 'RESET') await onClose();
 		} catch (err) {
 			if (err.message === 'Network Error') {
-				setError('server', { type: 'response', message: 'Network error, please try again later' });
+				setError('server', {type: 'response', message: 'Network error, please try again later'});
 			} else if (type == 'DELETE_POST') {
-				setError('server', { type: 'response', message: 'Post Id is not allowed' });
+				setError('server', {type: 'response', message: 'Post Id is not allowed'});
 			} else {
-				err.response?.data?.forEach((err) => {
-					setError(err.param, { type: 'response', message: err.msg });
+				err?.response?.data?.forEach((err) => {
+					setError(err.param, {type: 'response', message: err.msg});
 				});
 			}
 		}
@@ -77,6 +81,14 @@ const Modal = () => {
 						<Icons.CloseIcon />
 					</Btn>
 				</div>
+
+				{type === 'UPDATE' && (
+					<div>
+						<label className='input-label'>Color Themes</label>
+						{themeList()}
+					</div>
+				)}
+
 				<form onSubmit={handleSubmit(onSubmit)}>
 					{/* {wait ? 'pls wait' : 'ready'} */}
 					<div className='modal-body'>
@@ -92,7 +104,7 @@ const Modal = () => {
 					{type === 'RESET_SUCCESS' && (
 						<div className='text-center'>
 							<h3 className='text-xl font-semibold text-gray-500 tracking-wide'>Your new Password</h3>
-							<h2 className='text-3xl mt-2 mb-4 text-rose-500 font-semibold'>{data?.password}</h2>
+							<h2 className='text-3xl mt-2 mb-4 text-primary font-semibold'>{data?.password}</h2>
 						</div>
 					)}
 					{type === 'DELETE_POST' && (

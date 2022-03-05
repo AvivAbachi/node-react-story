@@ -1,16 +1,14 @@
 .input {
-	@apply w-full mt-2 px-4 py-1.5 bg-rose-50 rounded-2xl block focus:outline-none focus:ring-2 focus:ring-rose-300 focus:bg-rose-50 resize-none;
-	&:-webkit-autofill,
-	&:-webkit-autofill:hover,
-	&:-webkit-autofill:focus &:-webkit-autofill {
-		box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000), 0 0 0px 1000px theme('colors.rose.50') inset !important;
-	}
+	@apply w-full mt-2 px-4 py-1.5 bg-primary-lightest rounded-2xl block focus:outline-none focus:ring-2 focus:ring-primary-light focus:bg-primary-lightest resize-none;
 	&-label {
 		@apply mt-4 font-medium block;
+		span {
+			@apply text-primary;
+		}
 	}
 	&-error {
 		border-radius: 1.25rem;
-		@apply mt-2 mx-2 px-2 bg-rose-500 py-1 shadow-md text-white capitalize font-semibold text-sm leading-7 truncate;
+		@apply mt-2 mx-2 px-2 bg-primary py-1 shadow-md text-white capitalize font-semibold text-sm leading-7 truncate;
 	}
 }
 
@@ -22,6 +20,6 @@ textarea.input {
 		@apply my-3;
 	}
 	&::-webkit-scrollbar-thumb {
-		@apply rounded-xl bg-gray-400 hover:bg-rose-500;
+		@apply rounded-lg bg-gray-400 hover:bg-primary;
 	}
 }

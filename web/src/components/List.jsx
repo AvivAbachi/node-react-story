@@ -1,6 +1,6 @@
-import { memo, useCallback } from 'react';
-import { Post, ListError, Pagination } from '.';
-import useStore, { handelModal } from '../store';
+import {memo, useCallback} from 'react';
+import {Post, ListError} from '.';
+import useStore, {handelModal} from '../store';
 
 const List = () => {
 	const post = useStore((state) => state.post);
@@ -8,14 +8,14 @@ const List = () => {
 	const serverError = useStore((state) => state.serverError);
 
 	const listPost = useCallback(() => {
-		return post?.map(({ userId, id, ...post }) => {
+		return post?.map(({userId, id, ...post}) => {
 			if (user == userId) {
 				return (
 					<Post
 						key={id}
 						{...post}
-						onUpdate={() => handelModal('UPDATE_POST', { id, title: post.title, body: post.body })}
-						onDelete={() => handelModal('DELETE_POST', { id })}
+						onUpdate={() => handelModal('UPDATE_POST', {id, title: post.title, body: post.body})}
+						onDelete={() => handelModal('DELETE_POST', {id})}
 					/>
 				);
 			}
@@ -23,12 +23,7 @@ const List = () => {
 		});
 	}, [post, user]);
 
-	return (
-		<ul className='list'>
-			{serverError ? <ListError /> : listPost()}
-			<Pagination />
-		</ul>
-	);
+	return <ul className='list'>{serverError ? <ListError /> : listPost()}</ul>;
 };
 
 export default memo(List);

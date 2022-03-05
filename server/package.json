@@ -8,11 +8,11 @@
 		"prisma studio": "npx prisma studio",
 		"db:create": "npx prisma migrate dev --name init",
 		"db:seed": "node prisma/seed.js",
-		"db:reset": "prisma migrate reset"
+		"db:clear": "prisma migrate reset"
 	},
 	"dependencies": {
-		"@prisma/client": "^3.8.1",
-		"argon2": "^0.28.3",
+		"@prisma/client": "^3.9.1",
+		"argon2": "^0.28.4",
 		"cors": "^2.8.5",
 		"express": "^4.17.2",
 		"express-rate-limit": "^6.2.0",
@@ -23,6 +23,6 @@
 	},
 	"devDependencies": {
 		"nodemon": "^2.0.15",
-		"prisma": "^3.8.1"
+		"prisma": "^3.9.1"
 	}
 }

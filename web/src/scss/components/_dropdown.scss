@@ -1,33 +1,23 @@
 .dropdown {
 	@apply relative;
 	&-btn {
-		@apply bg-transparent whitespace-nowrap p-1 leading-4 border-2 text-gray-700 border-gray-700 rounded-full select-none hover:text-gray-300 hover:border-gray-300 focus:outline-none focus:ring-gray-500 focus:ring-2;
+		@apply whitespace-nowrap p-1 text-primary border-2 border-primary rounded-full select-none hover:opacity-50 outline-none focus:ring-primary-light focus:ring-4 dark:text-primary dark:border-gray-500/10;
 	}
 	&-open &-btn {
-		@apply bg-rose-500 text-white border-rose-500 shadow-lg hover:bg-rose-300 hover:border-rose-300 focus:ring-rose-300 focus:text-white;
-		&:active {
-			@apply ring-rose-500;
-		}
+		@apply bg-primary text-white border-primary shadow-lg shadow-primary/25;
 	}
 	&-title {
 		@apply font-bold p-2 leading-3 pointer-events-none;
 	}
 	&-menu {
-		@apply z-10 absolute p-2 bg-gray-800 text-white rounded-2xl shadow-lg right-0 w-32 mt-2 select-none;
+		@apply z-10 absolute p-2 bg-white dark:bg-gray-800 border border-gray-500/10 rounded-2xl shadow-xl right-0 w-32 mt-2 select-none;
 	}
 	&-item {
-		@apply block px-2 py-1 mb-2 text-sm font-semibold bg-transparent rounded-full w-full text-center select-none hover:bg-rose-500 focus:outline-none 
-	 focus:ring-2 focus:ring-rose-500 last:mb-0;
-		&:active {
-			@apply ring-rose-300;
-		}
+		@apply block px-2 py-1 mb-2 text-sm font-semibold bg-transparent rounded-full w-full text-center select-none hover:bg-primary/25 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary-light last:mb-0;
 		&-border {
 			@apply relative mt-4;
 			&::before {
-				content: '';
-				height: 2px;
-				top: -9px;
-				@apply w-full pointer-events-none bg-white bg-opacity-20 absolute right-0 rounded-full;
+				@apply content-[''] h-px top-[-9px] w-full pointer-events-none bg-gray-500/20 dark:bg-primary/20 absolute right-0 rounded-full;
 			}
 		}
 	}
