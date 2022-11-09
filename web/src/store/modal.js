@@ -1,35 +1,58 @@
 import useStore from '.';
 
-export const handelModal = (type, data) => {
-	useStore.setState(() => ({
-		modal:
-			type === 'SIGNUP'
-				? {type: 'SIGNUP', title: 'Sing Up', inputs: ['username', 'password', 'email', 'name']}
-				: type === 'LOGIN'
-				? {type: 'LOGIN', title: 'Login', inputs: ['username', 'password']}
-				: type === 'RESET'
-				? {type: 'RESET', title: 'Reset Password', inputs: ['username', 'email']}
-				: type === 'RESET_SUCCESS'
-				? {type: 'RESET_SUCCESS', title: 'Reset password Success', data}
-				: type === 'UPDATE'
-				? {type: 'UPDATE', title: 'Update User', inputs: ['password', 'newPassword', 'email', 'name']}
-				: type === 'CREATE_POST'
-				? {type: 'CREATE_POST', title: 'Create New Post', inputs: ['title', 'body']}
-				: type === 'UPDATE_POST'
-				? {type: 'UPDATE_POST', title: 'Change Post', inputs: ['title', 'body'], data}
-				: type === 'DELETE_POST'
-				? {type: 'DELETE_POST', title: 'Delete Post', data}
-				: type === 'COLORS'
-				? {type: 'COLORS', title: 'Theme Colors'}
-				: {type: undefined, title: undefined, inputs: undefined, data: undefined},
-	}));
+export const setModal = (type, data) => {
+	useStore.setState({ modal: { type: type, data } });
 };
 
-export const themeSelector = {
+export const modalData = {
+	SIGNUP: {
+		title: 'Sing Up',
+		action: 'Sing Up',
+		inputs: ['username', 'password', 'email', 'name'],
+	},
+	LOGIN: {
+		title: 'Login',
+		action: 'Login',
+		inputs: ['username', 'password'],
+	},
+	RESET: {
+		title: 'Reset Password',
+		action: 'Reset Password',
+		inputs: ['username', 'email'],
+	},
+	RESET_SUCCESS: {
+		title: 'Reset Password Success',
+		action: 'Loging',
+	},
+	UPDATE: {
+		title: 'Update User',
+		action: 'Update User',
+		inputs: ['password', 'newPassword', 'email', 'name'],
+	},
+	CREATE_POST: {
+		title: 'Create New Post',
+		action: 'Create Post',
+		inputs: ['title', 'body'],
+	},
+	UPDATE_POST: {
+		title: 'Update Post',
+		action: 'Update Post',
+		inputs: ['title', 'body'],
+	},
+	DELETE_POST: {
+		title: 'Delete Post',
+		action: 'Delete Post',
+	},
+	THEME: {
+		title: 'Theme Colors',
+	},
+};
+
+export const themeData = {
 	red: 'bg-[rgb(239,68,68)]',
 	orange: 'bg-[rgb(249,115,22)]',
-	amber: 'bg-[rgb(252,211,77)]',
-	yellow: 'bg-[rgb(234,179,8)]',
+	amber: 'bg-[rgb(234,179,8)]',
+	yellow: 'bg-[rgb(252,211,77)]',
 	lime: 'bg-[rgb(132,204,22)]',
 	green: 'bg-[rgb(34,197,94)]',
 	emerald: 'bg-[rgb(16,185,129)]',

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const post = require('../controllers/post.controller');
-const {validator} = require('../middleware/');
+const { validator } = require('../middleware/');
 
 router.get('/', validator.postAll, post.getAll);
 router.get('/:id', validator.postId, post.getByPostId);

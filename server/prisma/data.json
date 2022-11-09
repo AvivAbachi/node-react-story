@@ -1,15 +1,55 @@
 {
 	"users": [
-		{"name": "Leanne Graham", "username": "BretGraham", "email": "Sincere@april.biz"},
-		{"name": "Ervin Howell", "username": "Antonette", "email": "Shanna@melissa.tv"},
-		{"name": "Clementine Bauch", "username": "Samantha", "email": "Nathan@yesenia.net"},
-		{"name": "Patricia Lebsack", "username": "Karianne", "email": "Julianne.OConner@kory.org"},
-		{"name": "Chelsey Dietrich", "username": "Kamren", "email": "Lucio_Hettinger@annie.ca"},
-		{"name": "Mrs. Dennis Schulist", "username": "Leopoldo_Corkery", "email": "Karley_Dach@jasper.info"},
-		{"name": "Kurtis Weissnat", "username": "Elwyn.Skiles", "email": "Telly.Hoeger@billy.biz"},
-		{"name": "Nicholas Runolfsdottir V", "username": "Maxime_Nienow", "email": "Sherwood@rosamond.me"},
-		{"name": "Glenna Reichert", "username": "Delphine", "email": "Chaim_McDermott@dana.io"},
-		{"name": "Clementina DuBuque", "username": "Moriah.Stanton", "email": "Rey.Padberg@karina.biz"}
+		{
+			"username": "bret_graham",
+			"name": "Leanne Graham",
+			"email": "Sincere@april.biz"
+		},
+		{
+			"username": "antonette",
+			"name": "Ervin Howell",
+			"email": "Shanna@melissa.tv"
+		},
+		{
+			"username": "samantha",
+			"name": "Clementine Bauch",
+			"email": "Nathan@yesenia.net"
+		},
+		{
+			"username": "karianne",
+			"name": "Patricia Lebsack",
+			"email": "Julianne.OConner@kory.org"
+		},
+		{
+			"username": "kamren",
+			"name": "Chelsey Dietrich",
+			"email": "Lucio_Hettinger@annie.ca"
+		},
+		{
+			"username": "leopoldo_corkery",
+			"name": "Mrs. Dennis Schulist",
+			"email": "Karley_Dach@jasper.info"
+		},
+		{
+			"username": "elwyn_skiles",
+			"name": "Kurtis Weissnat",
+			"email": "Telly.Hoeger@billy.biz"
+		},
+		{
+			"username": "maxime_nienow",
+			"name": "Nicholas Runolfsdottir V",
+			"email": "Sherwood@rosamond.me"
+		},
+		{
+			"username": "delphine",
+			"name": "Glenna Reichert",
+			"email": "Chaim_McDermott@dana.io"
+		},
+		{
+			"username": "moriah_stanton",
+			"name": "Clementina DuBuque",
+			"email": "Rey.Padberg@karina.biz"
+		}
 	],
 	"posts": [
 		{

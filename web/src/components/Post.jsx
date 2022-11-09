@@ -1,19 +1,26 @@
-import {memo, useCallback} from 'react';
-import {Btn, Icons} from '.';
+import { memo, useCallback } from 'react';
+import { Btn, Icons } from '.';
 
-const Post = ({title, body, name, date, onUpdate, onDelete}) => {
-	const buildBody = useCallback(() => body.split(/\n/gm).map((text, i) => <p key={i}>{text}</p>), [body]);
+const Post = ({ title, body, name, date, onUpdate, onDelete }) => {
+	// const buildBody = useCallback(
+	// 	() => body.split(/\n/gm).map((text, i) => <p key={i}>{text}</p>),
+	// 	[body]
+	// );
 	return (
 		<li className='post'>
 			<div className='post-header'>
 				<h4 className='post-title' title={title}>
 					{title}
 				</h4>
-				{onUpdate && <Btn ghost onClick={onUpdate} children={<Icons.EditIcon />} />}
-				{onDelete && <Btn ghost onClick={onDelete} children={<Icons.TrashIcon />} />}
+				{onUpdate && (
+					<Btn ghost onClick={onUpdate} children={<Icons.EditIcon />} />
+				)}
+				{onDelete && (
+					<Btn ghost onClick={onDelete} children={<Icons.TrashIcon />} />
+				)}
 			</div>
 			<div className='post-body'>
-				{buildBody()}
+				{body}
 				<div className='post-footer'>
 					<p className='post-username'>{name}</p>
 					<p className='post-date'>{date}</p>

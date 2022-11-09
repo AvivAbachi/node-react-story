@@ -1,15 +1,15 @@
-import {memo} from 'react';
-import {useMediaQuery} from 'react-responsive';
-import {Btn, Dropdown, Icons, Pagination} from '.';
-import useStore, {handelModal, toggleUserPost, logout, setPage} from '../store';
+import { memo } from 'react';
+import { useMediaQuery } from 'react-responsive';
+import { Btn, Dropdown, Icons, Pagination } from '.';
+import useStore, { setModal, toggleUserPost, logout, setPage } from '../store';
 
 const goToFirst = () => {
 	toggleUserPost(false);
-	setPage({page: 0});
+	setPage({ page: 0 });
 };
 
-const Layout = ({children}) => {
-	const isMobile = useMediaQuery({query: '(max-width: 768px)'});
+const Layout = ({ children }) => {
+	const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 	const username = useStore((state) => state.user.username);
 	const name = useStore((state) => state.user.name);
 	const userPost = useStore((state) => state.userPost);
@@ -21,7 +21,13 @@ const Layout = ({children}) => {
 					<button onClick={goToFirst}>
 						<h1 className='nav-title'>
 							{'Story '}
-							<svg xmlns='http://www.w3.org/2000/svg' className='h-8 w-8 inline' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+							<svg
+								xmlns='http://www.w3.org/2000/svg'
+								className='h-8 w-8 inline'
+								fill='none'
+								viewBox='0 0 24 24'
+								stroke='currentColor'
+							>
 								<path
 									strokeLinecap='round'
 									strokeLinejoin='round'
@@ -32,35 +38,58 @@ const Layout = ({children}) => {
 							{userPost ? ' My Post' : ''}
 						</h1>
 					</button>
-					{!username ? (
-						<div className='nav-buttons'>
-							<Btn active onClick={() => handelModal('SIGNUP')}>
-								Sign up
-							</Btn>
-							<Btn onClick={() => handelModal('LOGIN')}>Log In</Btn>
-						</div>
-					) : (
-						<div className='nav-buttons'>
-							{!isMobile && <p className='nav-hello'>Hello, {name || username}!</p>}
-							<Btn icon={isMobile} active onClick={() => handelModal('CREATE_POST')}>
-								{isMobile ? <Icons.PlusIcon /> : 'New Post'}
-							</Btn>
-							<Dropdown>
-								<Dropdown.Item onClick={toggleUserPost}>{userPost ? 'All Post' : 'My Post'}</Dropdown.Item>
-								<Dropdown.Item onClick={() => handelModal('UPDATE')}>Account</Dropdown.Item>
-								<Dropdown.Item onClick={() => useStore.setState((state) => ({dark: !state.dark}))}>Dark mode</Dropdown.Item>
-								<Dropdown.Item border onClick={logout}>
-									Logout
-								</Dropdown.Item>
-							</Dropdown>
-						</div>
-					)}
+					<div className='nav-buttons'>
+						<Btn icon active onClick={() => setModal('THEME')}>
+							<Icons.FaceIcon />
+						</Btn>
+						{!username ? (
+							<>
+								<Btn active onClick={() => setModal('SIGNUP')}>
+									Sign up
+								</Btn>
+								<Btn onClick={() => setModal('LOGIN')}>Log In</Btn>
+							</>
+						) : (
+							<>
+								{!isMobile && (
+									<p className='nav-hello'>Hello, {name || username}!</p>
+								)}
+								<Btn
+									icon={isMobile}
+									active
+									onClick={() => setModal('CREATE_POST')}
+								>
+									{isMobile ? <Icons.PlusIcon /> : 'New Post'}
+								</Btn>
+								<Dropdown
+									Btn={
+										<>
+											<Icons.FaceIcon />
+											<Icons.MenuIcon />
+										</>
+									}
+								>
+									<Dropdown.Item onClick={toggleUserPost}>
+										{userPost ? 'All Post' : 'My Post'}
+									</Dropdown.Item>
+									<Dropdown.Item onClick={() => setModal('UPDATE')}>
+										Account
+									</Dropdown.Item>
+									<Dropdown.Item border onClick={logout}>
+										Logout
+									</Dropdown.Item>
+								</Dropdown>
+							</>
+						)}
+					</div>
 				</nav>
 			</header>
 			{children}
 			<footer>
 				<Pagination />
-				<div className='mt-4'>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+				<div className='mt-4'>
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+				</div>
 			</footer>
 		</>
 	);
