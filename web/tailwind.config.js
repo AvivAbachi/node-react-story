@@ -1,7 +1,7 @@
 const colors = require('tailwindcss/colors');
 
 function withOpacityValue(variable) {
-	return ({opacityValue}) => {
+	return ({ opacityValue }) => {
 		if (opacityValue === undefined) {
 			return `rgb(var(${variable}))`;
 		}
@@ -14,7 +14,7 @@ module.exports = {
 	darkMode: 'class',
 	theme: {
 		extend: {
-			strokeWidth: {3: '3'},
+			strokeWidth: { 3: '3' },
 		},
 		colors: {
 			transparent: 'transparent',

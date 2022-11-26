@@ -1,13 +1,15 @@
-import {memo, useEffect, useRef, useState} from 'react';
-import {Icons} from '.';
+import { memo, useEffect, useRef, useState } from 'react';
+import { Icons } from '.';
 
-const _Dropdown = memo(function Dropdown({children, title}) {
+const _Dropdown = memo(function Dropdown({ children, Btn }) {
 	const [open, setOpen] = useState(false);
 	const menuRef = useRef();
 	const buttonRef = useRef();
 
 	const checkClick = (e) => {
-		const isMenu = e.target.isSameNode(menuRef.current) || e.target.isSameNode(buttonRef.current);
+		const isMenu =
+			e.target.isSameNode(menuRef.current) ||
+			e.target.isSameNode(buttonRef.current);
 		if (!isMenu) {
 			setOpen(false);
 		}
@@ -22,15 +24,12 @@ const _Dropdown = memo(function Dropdown({children, title}) {
 
 	return (
 		<div className={`dropdown${open ? ' dropdown-open' : ''}`}>
-			<button ref={buttonRef} className='dropdown-btn' onClick={() => setOpen(!open)}>
-				{title ? (
-					<div className='dropdown-title'>{title}</div>
-				) : (
-					<>
-						<Icons.FaceIcon />
-						<Icons.MenuIcon />
-					</>
-				)}
+			<button
+				ref={buttonRef}
+				className='dropdown-btn'
+				onClick={() => setOpen(!open)}
+			>
+				{Btn}
 			</button>
 			{open && (
 				<div ref={menuRef} className='dropdown-menu'>
@@ -41,9 +40,12 @@ const _Dropdown = memo(function Dropdown({children, title}) {
 	);
 });
 
-_Dropdown.Item = memo(function DropdownItem({border, children, onClick}) {
+_Dropdown.Item = memo(function DropdownItem({ border, children, onClick }) {
 	return (
-		<button className={`dropdown-item${border ? ' dropdown-item-border' : ''}`} onClick={onClick}>
+		<button
+			className={`dropdown-item${border ? ' dropdown-item-border' : ''}`}
+			onClick={onClick}
+		>
 			{children}
 		</button>
 	);

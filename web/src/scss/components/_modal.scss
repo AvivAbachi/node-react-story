@@ -1,13 +1,13 @@
 .modal {
-	@apply grid items-center justify-items-center p-0 fixed top-0 left-0 h-screen w-full z-20 duration-300 ease-linear;
+	@apply fixed top-0 left-0 w-screen h-screen z-10 duration-300 ease-linear flex justify-center items-center;
 	&-backdrop {
 		@apply w-screen h-screen absolute top-0 left-0 bg-black/30 z-10;
 	}
 	&-content {
-		@apply max-w-lg w-11/12 rounded-lg shadow-lg bg-white dark:bg-gray-700 z-10;
+		@apply max-w-lg w-11/12 rounded-lg shadow-lg relative bg-white dark:bg-gray-700 z-20;
 	}
 	&-header {
-		@apply flex justify-between border-b-2 border-gray-100 px-5 py-4 text-gray-700;
+		@apply flex justify-between border-b-2 border-gray-100 px-5 py-4 text-gray-700 dark:text-white;
 	}
 	&-title {
 		@apply font-bold pt-1 text-2xl;

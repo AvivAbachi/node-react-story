@@ -1,23 +1,127 @@
-import {memo, useEffect, useState, useCallback} from 'react';
-import {createPortal} from 'react-dom';
-import {useForm} from 'react-hook-form';
-import {Btn, Icons, Input} from '.';
-import useStore, {handelModal, createPost, deletePost, updatePost, signup, login, update, reset, themeSelector} from '../store';
+import { memo, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { useForm } from 'react-hook-form';
+import { Btn, Icons, Input } from '.';
+import useStore, {
+	setModal,
+	createPost,
+	deletePost,
+	updatePost,
+	signup,
+	login,
+	update,
+	reset,
+	themeData,
+	modalData,
+} from '../store';
 import inputsValidator from '../utils/inputsValidator';
 
-const _Portal = (Component, el) =>
-	function Portal() {
-		const type = useStore((state) => state.modal.type);
-		return type ? createPortal(<Component />, el) : null;
-	};
+// Form
+// 	SIGNUP
+// 	LOGIN
+// 	RESET
+// 	UPDATE
+// 	CREATE_POST
+// 	UPDATE_POST
+// Action
+// 	THEME
+// 	DELETE_POST
+// 	RESET_SUCCESS
 
-const Modal = () => {
-	const [wait, setWait] = useState(false);
-	const {type, title, inputs, data} = useStore((state) => state.modal);
-	const {clearErrors, register, handleSubmit, setError, setValue, unregister, formState} = useForm();
+const _Portal = (Component, el) => {
+	return function Portal() {
+		const modal = useStore((state) => state.modal);
+		return modal.type ? createPortal(<Component {...modal} />, el) : null;
+	};
+};
+
+const ModalSelector = ({ type, data }) => {
+	if (
+		type === 'SIGNUP' ||
+		type === 'LOGIN' ||
+		type === 'RESET' ||
+		type === 'UPDATE' ||
+		type === 'CREATE_POST' ||
+		type === 'UPDATE_POST'
+	)
+		return <FormModal type={type} data={data} />;
+	else if (type === 'RESET_SUCCESS')
+		return <ResetSuccessModal password={data?.password} />;
+	else if (type === 'DELETE_POST') return <DeletePostModal />;
+	else if (type === 'THEME') return <ThemeModal />;
+};
+
+const Modal = ({
+	children,
+	title,
+	action,
+	form,
+	onAction,
+	disabel,
+	close,
+	closeState,
+}) => {
+	useEffect(() => {
+		document.querySelector('body').style.overflow = 'hidden';
+		return async () => {
+			document.querySelector('body').style.overflow = null;
+		};
+	}, []);
 
 	useEffect(() => {
-		//document.querySelector('body').style.overflow = 'hidden';
+		if (closeState) closeModal();
+	}, [closeState]);
+
+	const closeModal = async () => {
+		setTimeout(() => setModal(), 110);
+	};
+
+	return (
+		<div className='modal'>
+			<div className='modal-content'>
+				<div className='modal-header'>
+					<div className='modal-title'>{title}</div>
+					<Btn icon onClick={closeModal} type={form ? 'button' : undefined}>
+						<Icons.CloseIcon />
+					</Btn>
+				</div>
+				{children}
+				<div className='modal-footer'>
+					<Btn onClick={closeModal} type={form ? 'button' : undefined}>
+						{close || 'Close'}
+					</Btn>
+					{onAction && (
+						<Btn
+							type={form ? 'submit' : undefined}
+							active
+							disabled={disabel}
+							onClick={onAction}
+						>
+							{action}
+						</Btn>
+					)}
+				</div>
+			</div>
+			<div className='modal-backdrop' onClick={closeModal} />
+		</div>
+	);
+};
+
+const FormModal = ({ type, data }) => {
+	const {
+		clearErrors,
+		register,
+		handleSubmit,
+		setError,
+		setValue,
+		unregister,
+		formState,
+	} = useForm();
+	const [wait, setWait] = useState(false);
+	const [done, setDone] = useState(false);
+	const { title, action, inputs } = modalData[type];
+
+	useEffect(() => {
 		if (type === 'UPDATE_POST') {
 			setValue('title', data?.title);
 			setValue('body', data?.body);
@@ -28,43 +132,27 @@ const Modal = () => {
 		} else if (type === 'RESET') unregister('password');
 	}, []);
 
-	const onClose = async () => {
-		//document.querySelector('body').style.overflow = null;
-		setTimeout(() => handelModal(), 0);
-	};
-
-	const inputsList = useCallback(() => {
-		return inputs?.map((type) => {
-			const {rule, name, ...input} = inputsValidator[type];
-			return <Input key={name} required={!!rule.required} error={formState.errors[name]?.message} {...register(name, {...rule})} {...input} />;
-		});
-	}, [inputs, formState.errors]);
-
-	const themeList = useCallback(() => {
-		return Object.entries(themeSelector).map(([name, color]) => (
-			<Btn key={name} icon active onClick={() => useStore.setState({theme: name})} className={`w-10 h-10 ${color}`}></Btn>
-		));
-	}, [themeSelector]);
-
 	const onSubmit = async (form) => {
 		setWait(true);
 		try {
 			if (type === 'SIGNUP') await signup(form);
 			else if (type === 'LOGIN') await login(form);
 			else if (type === 'UPDATE') await update(form);
-			else if (type === 'RESET') await reset(form).then((user) => handelModal('RESET_SUCCESS', user));
+			else if (type === 'RESET')
+				await reset(form).then((user) => setModal('RESET_SUCCESS', user));
 			else if (type === 'CREATE_POST') await createPost(form);
-			else if (type === 'UPDATE_POST') await updatePost({...form, id: data.id});
-			else if (type === 'DELETE_POST') await deletePost({id: data.id});
-			if (type !== 'RESET') await onClose();
+			else if (type === 'UPDATE_POST')
+				await updatePost({ ...form, id: data.id });
+			if (type !== 'RESET') setDone(true);
 		} catch (err) {
 			if (err.message === 'Network Error') {
-				setError('server', {type: 'response', message: 'Network error, please try again later'});
-			} else if (type == 'DELETE_POST') {
-				setError('server', {type: 'response', message: 'Post Id is not allowed'});
+				setError('server', {
+					type: 'response',
+					message: 'Network error, please try again later',
+				});
 			} else {
 				err?.response?.data?.forEach((err) => {
-					setError(err.param, {type: 'response', message: err.msg});
+					setError(err.param, { type: 'response', message: err.msg });
 				});
 			}
 		}
@@ -72,63 +160,143 @@ const Modal = () => {
 	};
 
 	return (
-		<div className='modal'>
-			<div className='modal-backdrop' onClick={onClose} />
-			<div className='modal-content'>
-				<div className='modal-header'>
-					<div className='modal-title'>{title}</div>
-					<Btn icon onClick={onClose}>
-						<Icons.CloseIcon />
-					</Btn>
+		<form onSubmit={handleSubmit(onSubmit)}>
+			<Modal
+				closeState={done}
+				title={title}
+				action={action}
+				form
+				disabled={wait}
+				onAction={() => clearErrors('server')}
+				close='Cancel'
+			>
+				<div className='modal-body'>
+					{inputs?.map((type) => {
+						const { rule, name, ...input } = inputsValidator[type];
+						return (
+							<Input
+								key={name}
+								required={!!rule.required}
+								error={formState.errors[name]?.message}
+								{...register(name, { ...rule })}
+								{...input}
+							/>
+						);
+					})}
+					{type === 'LOGIN' ? (
+						<ResetBtn
+							title='Reset Password'
+							onClick={() => setModal('RESET')}
+						/>
+					) : type === 'RESET' ? (
+						<ResetBtn title='Back to login' onClick={() => setModal('LOGIN')} />
+					) : null}
 				</div>
-
-				{type === 'UPDATE' && (
-					<div>
-						<label className='input-label'>Color Themes</label>
-						{themeList()}
+				{formState.errors?.server && (
+					<div className='mx-3'>
+						<Input.InputError error={formState.errors.server?.message} />
 					</div>
 				)}
-
-				<form onSubmit={handleSubmit(onSubmit)}>
-					{/* {wait ? 'pls wait' : 'ready'} */}
-					<div className='modal-body'>
-						{inputsList()}
-						{(type === 'LOGIN' || type === 'RESET') && (
-							<div className='reset-password'>
-								<button type='button' onClick={() => handelModal(type === 'LOGIN' ? 'RESET' : 'LOGIN')}>
-									{type === 'LOGIN' ? 'Reset password' : 'Back to login'}
-								</button>
-							</div>
-						)}
-					</div>
-					{type === 'RESET_SUCCESS' && (
-						<div className='text-center'>
-							<h3 className='text-xl font-semibold text-gray-500 tracking-wide'>Your new Password</h3>
-							<h2 className='text-3xl mt-2 mb-4 text-primary font-semibold'>{data?.password}</h2>
-						</div>
-					)}
-					{type === 'DELETE_POST' && (
-						<div className='text-center'>
-							<p>Deleting this post will be permanently!</p>
-						</div>
-					)}
-					{formState.errors?.server && (
-						<div className='mx-3'>
-							<Input.InputError error={formState.errors.server?.message} />
-						</div>
-					)}
-					<div className='modal-footer'>
-						<Btn type='button' onClick={onClose}>
-							Cancel
-						</Btn>
-						<Btn type='submit' active disabled={wait} onClick={() => (type === 'RESET_SUCCESS' ? handelModal('LOGIN') : clearErrors('server'))}>
-							{type === 'RESET_SUCCESS' ? 'Login' : type === 'DELETE_POST' ? 'Delete' : 'Submit'}
-						</Btn>
-					</div>
-				</form>
-			</div>
-		</div>
+			</Modal>
+		</form>
 	);
 };
 
-export default memo(_Portal(memo(Modal), document.querySelector('#modal')));
+const ResetBtn = ({ title, onClick }) => (
+	<div className='reset-password'>
+		<button type='button' onClick={onClick}>
+			{title}
+		</button>
+	</div>
+);
+
+const ResetSuccessModal = ({ password }) => (
+	<Modal
+		title='Reset Password Success'
+		action='Login'
+		onAction={() => setModal('LOGIN')}
+		close='Cancel'
+	>
+		<div className='text-center'>
+			<h3 className='text-xl font-semibold text-gray-500 tracking-wide'>
+				Your new Password
+			</h3>
+			<h2 className='text-3xl mt-2 mb-4 text-primary font-semibold'>
+				{password}
+			</h2>
+		</div>
+	</Modal>
+);
+
+const DeletePostModal = () => {
+	const [wait, setWait] = useState(false);
+	const [done, setDone] = useState(false);
+	const [error, setError] = useState();
+
+	const handelDelete = async () => {
+		setWait(true);
+		setError();
+		try {
+			await deletePost({ id: data.id });
+			setDone(true);
+		} catch (err) {
+			setError('Post id is not allowed');
+		}
+		setWait(false);
+	};
+
+	return (
+		<Modal
+			closeState={done}
+			title='Delete Post'
+			action='Delete Post'
+			onAction={handelDelete}
+			disabled={wait}
+			close='Cancel'
+		>
+			<div className='text-center'>
+				<p>Deleting this post will be permanently!</p>
+			</div>
+			{error && (
+				<div className='mx-3'>
+					<Input.InputError error={error} />
+				</div>
+			)}
+		</Modal>
+	);
+};
+
+const ThemeModal = () => {
+	const dark = useStore((state) => state.dark);
+	const theme = useStore((state) => state.theme);
+	return (
+		<Modal title='Theme Colors'>
+			<div className='modal-body'>
+				<label htmlFor='dark' className='input-label'>
+					Dark Theme
+				</label>
+				<input
+					type='checkbox'
+					name='dark'
+					checked={dark}
+					onChange={() => useStore.setState({ dark: !dark })}
+				/>
+				<label htmlFor='colors' className='input-label'>
+					Color Themes
+				</label>
+				{Object.entries(themeData).map(([name, color]) => (
+					<input
+						key={name}
+						type='radio'
+						name='colors'
+						className={color}
+						checked={theme === name}
+						onChange={() => useStore.setState({ theme: name })}
+					/>
+				))}
+			</div>
+		</Modal>
+	);
+};
+
+export default memo(_Portal(ModalSelector, document.querySelector('#modal')));

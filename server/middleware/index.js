@@ -13,7 +13,7 @@ const {
 	postBody,
 	postId,
 	errors,
-} = require('./validator');
+} = require('./validators');
 
 exports.validator = {
 	signup: [username, password, email, displayName, errors],

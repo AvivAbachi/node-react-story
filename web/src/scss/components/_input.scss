@@ -23,3 +23,40 @@ textarea.input {
 		@apply rounded-lg bg-gray-400 hover:bg-primary;
 	}
 }
+
+input[type='radio'] {
+	-webkit-appearance: none;
+	-ms-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	@apply h-8 w-8 m-2 relative inline-block cursor-pointer rounded-full ring-0 ring-gray-700/50 dark:ring-gray-100/50 dark:ring-offset-gray-700;
+	&:checked {
+		@apply ring-2 ring-offset-2;
+	}
+	&:focus {
+		@apply outline-none ring-gray-700 dark:ring-gray-100;
+	}
+	&::after {
+		content: '';
+		@apply block absolute rounded-full h-full w-full bg-gradient-to-tr from-gray-100/50 to-white/0;
+	}
+}
+
+// Whitout Appearance (Need to Add Label and Span)
+
+// .radio {
+// 	@apply w-8 h-8 m-1.5 relative inline-block cursor-pointer;
+// 	span {
+// 		@apply w-full h-full rounded-full block;
+// 		&::after {
+// 			content: '';
+// 			@apply absolute top-0 left-0 w-full h-full rounded-full bg-gradient-to-tr from-gray-100/50 to-black/0;
+// 		}
+// 	}
+// 	input[type='radio'] {
+// 		@apply w-full h-full hidden;
+// 		&:checked + span {
+// 			@apply ring-2 ring-gray-700 ring-offset-2 dark:ring-offset-gray-700 dark:ring-gray-100;
+// 		}
+// 	}
+// }
