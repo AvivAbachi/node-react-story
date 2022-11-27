@@ -1,10 +1,7 @@
 import { forwardRef } from 'react';
-import { Icons } from '.';
+import { Icons } from './index';
 
-const _Input = forwardRef(function Input(
-	{ error, textarea, required, ...props },
-	ref
-) {
+function Input({ error, textarea, required, ...props }, ref) {
 	return (
 		<label className='input-label'>
 			{required && <span>{'* '}</span>}
@@ -14,12 +11,12 @@ const _Input = forwardRef(function Input(
 			) : (
 				<input ref={ref} className='input' {...props} />
 			)}
-			{error && <_InputError error={error} />}
+			{error && <InputError error={error} />}
 		</label>
 	);
-});
+}
 
-function _InputError({ error }) {
+function InputError({ error }) {
 	return (
 		<div className='input-error' title={error}>
 			<Icons.ErrorIcon />
@@ -28,6 +25,4 @@ function _InputError({ error }) {
 	);
 }
 
-_Input.InputError = _InputError;
-
-export default _Input;
+export default forwardRef(Input);

@@ -12,7 +12,7 @@ const App = () => {
 	useEffect(() => {
 		useStore.setState({ interval: { start, stop } });
 		getAccess();
-	}, []);
+	}, [start, stop]);
 
 	return (
 		<Layout>

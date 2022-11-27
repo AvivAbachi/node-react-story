@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import useStore, { setPage } from '../store';
-import { Icons } from '.';
+import { Icons } from './index';
 
 function Pagination() {
 	const isMobile = useMediaQuery({ maxWidth: 768 });
@@ -25,8 +25,9 @@ function Pagination() {
 					title={'Page ' + (i + 1)}
 					active={page === i}
 					onClick={() => setPage({ page: i })}
-					children={i + 1}
-				/>
+				>
+					{i + 1}
+				</PageBtn>
 			);
 		}
 		return pageBtns;
@@ -55,7 +56,7 @@ function Pagination() {
 	}
 }
 
-function PageBtn({ children, active, title, page, ...props }) {
+function PageBtn({ children, active, title, ...props }) {
 	return (
 		<button
 			className={`pagination-btn${active ? ' pagination-btn-active' : ''}`}

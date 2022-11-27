@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { useForm } from 'react-hook-form';
-import { Btn, Icons, Input } from '.';
+import { Input, ModalBase, ModalPortal } from './index';
 import useStore, {
 	setModal,
 	createPost,
@@ -16,95 +15,11 @@ import useStore, {
 } from '../store';
 import inputsValidator from '../utils/inputsValidator';
 
-// Form
-// 	SIGNUP
-// 	LOGIN
-// 	RESET
-// 	UPDATE
-// 	CREATE_POST
-// 	UPDATE_POST
-// Action
-// 	THEME
-// 	DELETE_POST
-// 	RESET_SUCCESS
-
-function _Portal(Component, el) {
-	return function Portal() {
-		const modal = useStore((state) => state.modal);
-		return modal.type ? createPortal(<Component {...modal} />, el) : null;
-	};
-}
-
-function ModalSelector({ type, data }) {
-	if (
-		type === 'SIGNUP' ||
-		type === 'LOGIN' ||
-		type === 'RESET' ||
-		type === 'UPDATE' ||
-		type === 'CREATE_POST' ||
-		type === 'UPDATE_POST'
-	)
-		return <FormModal type={type} data={data} />;
-	else if (type === 'RESET_SUCCESS')
-		return <ResetSuccessModal password={data?.password} />;
+function ModalLayout({ type, data }) {
+	if (type === 'RESET_SUCCESS') return <ResetSuccessModal password={data?.password} />;
 	else if (type === 'DELETE_POST') return <DeletePostModal />;
 	else if (type === 'THEME') return <ThemeModal />;
-}
-
-function Modal({
-	children,
-	title,
-	action,
-	form,
-	onAction,
-	disabel,
-	close,
-	closeState,
-}) {
-	useEffect(() => {
-		document.querySelector('body').style.overflow = 'hidden';
-		return async () => {
-			document.querySelector('body').style.overflow = null;
-		};
-	}, []);
-
-	useEffect(() => {
-		if (closeState) closeModal();
-	}, [closeState]);
-
-	const closeModal = async () => {
-		setTimeout(() => setModal(), 110);
-	};
-
-	return (
-		<div className='modal'>
-			<div className='modal-content'>
-				<div className='modal-header'>
-					<div className='modal-title'>{title}</div>
-					<Btn icon onClick={closeModal} type={form ? 'button' : undefined}>
-						<Icons.CloseIcon />
-					</Btn>
-				</div>
-				{children}
-				<div className='modal-footer'>
-					<Btn onClick={closeModal} type={form ? 'button' : undefined}>
-						{close || 'Close'}
-					</Btn>
-					{onAction && (
-						<Btn
-							type={form ? 'submit' : undefined}
-							active
-							disabled={disabel}
-							onClick={onAction}
-						>
-							{action}
-						</Btn>
-					)}
-				</div>
-			</div>
-			<div className='modal-backdrop' onClick={closeModal} />
-		</div>
-	);
+	else return <FormModal type={type} data={data} />;
 }
 
 function FormModal({ type, data }) {
@@ -141,8 +56,7 @@ function FormModal({ type, data }) {
 			else if (type === 'RESET')
 				await reset(form).then((user) => setModal('RESET_SUCCESS', user));
 			else if (type === 'CREATE_POST') await createPost(form);
-			else if (type === 'UPDATE_POST')
-				await updatePost({ ...form, id: data.id });
+			else if (type === 'UPDATE_POST') await updatePost({ ...form, id: data.id });
 			if (type !== 'RESET') setDone(true);
 		} catch (err) {
 			if (err.message === 'Network Error') {
@@ -161,7 +75,7 @@ function FormModal({ type, data }) {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
-			<Modal
+			<ModalBase
 				closeState={done}
 				title={title}
 				action={action}
@@ -183,21 +97,19 @@ function FormModal({ type, data }) {
 							/>
 						);
 					})}
-					{type === 'LOGIN' ? (
-						<ResetBtn
-							title='Reset Password'
-							onClick={() => setModal('RESET')}
-						/>
-					) : type === 'RESET' ? (
+					{type === 'LOGIN' && (
+						<ResetBtn title='Reset Password' onClick={() => setModal('RESET')} />
+					)}
+					{type === 'RESET' && (
 						<ResetBtn title='Back to login' onClick={() => setModal('LOGIN')} />
-					) : null}
+					)}
 				</div>
 				{formState.errors?.server && (
 					<div className='mx-3'>
 						<Input.InputError error={formState.errors.server?.message} />
 					</div>
 				)}
-			</Modal>
+			</ModalBase>
 		</form>
 	);
 }
@@ -214,21 +126,19 @@ function ResetBtn({ title, onClick }) {
 
 function ResetSuccessModal({ password }) {
 	return (
-		<Modal
+		<ModalBase
 			title='Reset Password Success'
 			action='Login'
 			onAction={() => setModal('LOGIN')}
 			close='Cancel'
 		>
 			<div className='text-center'>
-				<h3 className='text-xl font-semibold text-gray-500 tracking-wide'>
+				<h3 className='text-xl font-semibold tracking-wide text-gray-500'>
 					Your new Password
 				</h3>
-				<h2 className='text-3xl mt-2 mb-4 text-primary font-semibold'>
-					{password}
-				</h2>
+				<h2 className='mt-2 mb-4 text-3xl font-semibold text-primary'>{password}</h2>
 			</div>
-		</Modal>
+		</ModalBase>
 	);
 }
 
@@ -250,7 +160,7 @@ function DeletePostModal() {
 	};
 
 	return (
-		<Modal
+		<ModalBase
 			closeState={done}
 			title='Delete Post'
 			action='Delete Post'
@@ -266,7 +176,7 @@ function DeletePostModal() {
 					<Input.InputError error={error} />
 				</div>
 			)}
-		</Modal>
+		</ModalBase>
 	);
 }
 
@@ -274,7 +184,7 @@ function ThemeModal() {
 	const dark = useStore((state) => state.dark);
 	const theme = useStore((state) => state.theme);
 	return (
-		<Modal title='Theme Colors'>
+		<ModalBase title='Theme Colors'>
 			<div className='modal-body'>
 				<label htmlFor='dark' className='input-label'>
 					Dark Theme
@@ -285,10 +195,7 @@ function ThemeModal() {
 					checked={dark}
 					onChange={() => useStore.setState({ dark: !dark })}
 				/>
-				<div
-					className='toggle'
-					onClick={() => useStore.setState({ dark: !dark })}
-				></div>
+				<div className='toggle' onClick={() => useStore.setState({ dark: !dark })}></div>
 				<label htmlFor='colors' className='input-label'>
 					Color Themes
 				</label>
@@ -303,8 +210,8 @@ function ThemeModal() {
 					/>
 				))}
 			</div>
-		</Modal>
+		</ModalBase>
 	);
 }
 
-export default _Portal(ModalSelector, document.querySelector('#modal'));
+export default ModalPortal(ModalLayout, document.querySelector('#modal'));

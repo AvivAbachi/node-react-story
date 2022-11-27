@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Post, ListError } from '.';
+import { Post, ListError } from './index';
 import useStore, { setModal } from '../store';
 
 function List() {
@@ -15,11 +15,7 @@ function List() {
 						key={id}
 						{...post}
 						onUpdate={() =>
-							setModal('UPDATE_POST', {
-								id,
-								title: post.title,
-								body: post.body,
-							})
+							setModal('UPDATE_POST', { id, title: post.title, body: post.body })
 						}
 						onDelete={() => setModal('DELETE_POST', { id })}
 					/>

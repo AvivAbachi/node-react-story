@@ -7,8 +7,7 @@ function Dropdown({ children, Btn }) {
 
 	const checkClick = (e) => {
 		const isMenu =
-			e.target.isSameNode(menuRef.current) ||
-			e.target.isSameNode(buttonRef.current);
+			e.target.isSameNode(menuRef.current) || e.target.isSameNode(buttonRef.current);
 		if (!isMenu) {
 			setOpen(false);
 		}
@@ -23,11 +22,7 @@ function Dropdown({ children, Btn }) {
 
 	return (
 		<div className={`dropdown${open ? ' dropdown-open' : ''}`}>
-			<button
-				ref={buttonRef}
-				className='dropdown-btn'
-				onClick={() => setOpen(!open)}
-			>
+			<button ref={buttonRef} className='dropdown-btn' onClick={() => setOpen(!open)}>
 				{Btn}
 			</button>
 			{open && (

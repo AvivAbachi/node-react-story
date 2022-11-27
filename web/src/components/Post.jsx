@@ -1,4 +1,4 @@
-import { Btn, Icons } from '.';
+import { Btn, Icons } from './index';
 
 function Post({ title, body, name, date, onUpdate, onDelete }) {
 	return (
@@ -8,10 +8,14 @@ function Post({ title, body, name, date, onUpdate, onDelete }) {
 					{title}
 				</h4>
 				{onUpdate && (
-					<Btn ghost onClick={onUpdate} children={<Icons.EditIcon />} />
+					<Btn ghost onClick={onUpdate}>
+						<Icons.EditIcon />
+					</Btn>
 				)}
 				{onDelete && (
-					<Btn ghost onClick={onDelete} children={<Icons.TrashIcon />} />
+					<Btn ghost onClick={onDelete}>
+						<Icons.TrashIcon />
+					</Btn>
 				)}
 			</div>
 			<div className='post-body'>
