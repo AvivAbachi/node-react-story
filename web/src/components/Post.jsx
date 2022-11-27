@@ -1,11 +1,6 @@
-import { memo, useCallback } from 'react';
 import { Btn, Icons } from '.';
 
-const Post = ({ title, body, name, date, onUpdate, onDelete }) => {
-	// const buildBody = useCallback(
-	// 	() => body.split(/\n/gm).map((text, i) => <p key={i}>{text}</p>),
-	// 	[body]
-	// );
+function Post({ title, body, name, date, onUpdate, onDelete }) {
 	return (
 		<li className='post'>
 			<div className='post-header'>
@@ -28,5 +23,6 @@ const Post = ({ title, body, name, date, onUpdate, onDelete }) => {
 			</div>
 		</li>
 	);
-};
-export default memo(Post);
+}
+
+export default Post;

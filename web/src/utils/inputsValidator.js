@@ -7,8 +7,8 @@ const username = {
 	title: 'Username',
 	rule: {
 		required: 'Username is required!',
-		minLength: { value: 6, message: 'more6' },
-		maxLength: { value: 16, message: 'less16' },
+		minLength: { value: 6, message: 'more 6' },
+		maxLength: { value: 16, message: 'less 16' },
 		pattern: { value: usernameRegex, message: 'Username not Valid!' },
 	},
 };
@@ -20,8 +20,8 @@ const password = {
 	autoComplete: 'off',
 	rule: {
 		required: 'Password is required!',
-		minLength: { value: 8, message: 'more8' },
-		maxLength: { value: 16, message: 'less16' },
+		minLength: { value: 8, message: 'more 8' },
+		maxLength: { value: 16, message: 'less 16' },
 		pattern: { value: passwordRegex, message: 'Password not Valid!' },
 	},
 };
@@ -67,8 +67,8 @@ const title = {
 	title: 'Post Title',
 	rule: {
 		required: 'Post title is required!',
-		minLength: { value: 8, message: 'more8' },
-		maxLength: { value: 64, message: 'less64' },
+		minLength: { value: 8, message: 'more 8' },
+		maxLength: { value: 64, message: 'less 64' },
 	},
 };
 
@@ -76,7 +76,7 @@ const body = {
 	name: 'body',
 	title: 'Post Text',
 	textarea: true,
-	rule: { maxLength: { value: 500, message: 'less500' } },
+	rule: { maxLength: { value: 500, message: 'less 500' } },
 };
 
 export default {

@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { Btn } from '.';
 import useStore, { getAccess } from '../store';
 
@@ -9,16 +8,18 @@ const tryAgain = () => {
 	start();
 };
 
-const ListError = () => (
-	<div className='list-error'>
-		<h2 className='list-error-title'>No Connection...</h2>
-		<p className='list-error-text'>
-			Please check your connection or try again.
-		</p>
-		<Btn active onClick={tryAgain}>
-			Try again
-		</Btn>
-	</div>
-);
+function ListError() {
+	return (
+		<div className='list-error'>
+			<h2 className='list-error-title'>No Connection...</h2>
+			<p className='list-error-text'>
+				Please check your connection or try again.
+			</p>
+			<Btn active onClick={tryAgain}>
+				Try again
+			</Btn>
+		</div>
+	);
+}
 
-export default memo(ListError);
+export default ListError;

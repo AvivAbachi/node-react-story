@@ -1,22 +1,22 @@
 .modal {
-	@apply fixed top-0 left-0 w-screen h-screen z-10 duration-300 ease-linear flex justify-center items-center;
+	@apply fixed top-0 left-0 z-10 flex h-screen w-screen items-center justify-center duration-300 ease-linear;
 	&-backdrop {
-		@apply w-screen h-screen absolute top-0 left-0 bg-black/30 z-10;
+		@apply absolute top-0 left-0 z-10 h-screen w-screen bg-black/30;
 	}
 	&-content {
-		@apply max-w-lg w-11/12 rounded-lg shadow-lg relative bg-white dark:bg-gray-700 z-20;
+		@apply relative z-20 w-11/12 max-w-lg rounded-lg bg-white shadow-lg dark:bg-gray-700;
 	}
 	&-header {
 		@apply flex justify-between border-b-2 border-gray-100 px-5 py-4 text-gray-700 dark:text-white;
 	}
 	&-title {
-		@apply font-bold pt-1 text-2xl;
+		@apply pt-1 text-2xl font-bold;
 	}
 	&-body {
 		@apply px-10 pb-4;
 	}
 	&-footer {
-		@apply py-4 px-5 flex justify-end;
+		@apply flex justify-end py-4 px-5;
 		.btn:first-of-type {
 			@apply mr-4;
 		}
@@ -24,8 +24,8 @@
 }
 
 .reset-password {
-	@apply text-center mt-4;
+	@apply mt-4 text-center;
 	button {
-		@apply mx-auto py-2 px-4 font-medium text-gray-500 cursor-pointer hover:text-primary ring-transparent ring-2 rounded-full focus:outline-none focus:ring-primary focus:text-primary;
+		@apply mx-auto cursor-pointer rounded-full py-2 px-4 font-medium text-gray-500 ring-2 ring-transparent hover:text-primary focus:text-primary focus:outline-none focus:ring-primary;
 	}
 }

@@ -1,10 +1,10 @@
-import { memo, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useInterval } from 'react-interval-hook';
 import { Layout, List, Modal } from './components';
 import useStore, { getAccess, getPost } from './store';
 
 const App = () => {
-	const { start, stop } = useInterval(getPost, 2500, {
+	const { start, stop } = useInterval(getPost, 2500_000000, {
 		autoStart: true,
 		immediate: true,
 	});
@@ -22,4 +22,4 @@ const App = () => {
 	);
 };
 
-export default memo(App);
+export default App;

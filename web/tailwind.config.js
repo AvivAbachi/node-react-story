@@ -10,7 +10,8 @@ function withOpacityValue(variable) {
 }
 
 module.exports = {
-	content: ['./index.html', './src/**/*.{scss,js,jsx}'],
+	// content: ['./index.html', './src/**/*.{scss,js,jsx}'],
+	content: ['./public/**/*.html', './src/**/*.{js,jsx,ts,tsx,vue}'],
 	darkMode: 'class',
 	theme: {
 		extend: {

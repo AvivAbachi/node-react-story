@@ -1,14 +1,13 @@
-import { memo } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Btn, Dropdown, Icons, Pagination } from '.';
 import useStore, { setModal, toggleUserPost, logout, setPage } from '../store';
 
-const goToFirst = () => {
+function goToFirst() {
 	toggleUserPost(false);
 	setPage({ page: 0 });
-};
+}
 
-const Layout = ({ children }) => {
+function Layout({ children }) {
 	const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 	const username = useStore((state) => state.user.username);
 	const name = useStore((state) => state.user.name);
@@ -93,6 +92,6 @@ const Layout = ({ children }) => {
 			</footer>
 		</>
 	);
-};
+}
 
-export default memo(Layout);
+export default Layout;

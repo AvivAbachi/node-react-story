@@ -1,18 +1,18 @@
 header {
-	@apply bg-white dark:bg-gray-900 w-full shadow-lg px-6 fixed top-0 left-0 z-10;
+	@apply fixed top-0 left-0 z-10 w-full bg-white px-6 shadow-lg dark:bg-gray-900;
 	nav {
-		@apply flex justify-between items-center w-full h-20 max-w-7xl mx-auto;
+		@apply mx-auto flex h-20 w-full max-w-7xl items-center justify-between;
 		.nav-title {
 			@apply text-3xl font-bold text-primary;
 		}
 		.nav-buttons {
-			@apply flex items-center max-w-2xl;
-			.btn:first-of-type {
-				@apply mr-4;
+			@apply flex max-w-2xl items-center;
+			.btn {
+				@apply ml-4;
 			}
 		}
 		.nav-hello {
-			@apply font-semibold mr-6 text-gray-600 dark:text-white;
+			@apply mr-6 font-semibold text-gray-600 dark:text-white;
 		}
 	}
 }

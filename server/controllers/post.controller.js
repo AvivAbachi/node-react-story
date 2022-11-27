@@ -8,12 +8,10 @@ exports.getAll = async (req, res) => {
 		req.post = await prisma.post.findMany({
 			take: limit || 100,
 			skip: page * limit || undefined,
-			orderBy: [{ createdAt: 'desc' }],
+			orderBy: [{ updatedAt: 'desc' }],
 			include: { author: { select: { username: true, name: true } } },
 		});
-		req.post = req.post.map(({ createdAt, updatedAt, author, ...post }) => {
-			return formatPost(createdAt, updatedAt, author, post);
-		});
+		req.post = req.post.map((post) => formatPost(post));
 		req.total = await prisma.post.count();
 		res.send({ post: req.post, total: req.total });
 	} catch (err) {
@@ -30,7 +28,7 @@ exports.getByUserId = async (req, res) => {
 				posts: {
 					take: limit || 100,
 					skip: page * limit || undefined,
-					orderBy: [{ createdAt: 'desc' }],
+					orderBy: [{ updatedAt: 'desc' }],
 				},
 				_count: true,
 			},
@@ -43,8 +41,8 @@ exports.getByUserId = async (req, res) => {
 				],
 			};
 		}
-		req.post = req.user.posts.map(({ createdAt, updatedAt, ...post }) => {
-			return formatPost(createdAt, updatedAt, req.user, post);
+		req.post = req.user.posts.map((post) => {
+			return formatPost(post, req.user);
 		});
 		req.total = req.user._count.posts;
 		res.send({ post: req.post, total: req.total });
@@ -65,8 +63,7 @@ exports.getByPostId = async (req, res) => {
 				err: [{ msg: 'Post Not found', param: 'id', value: req.params.id }],
 			};
 		}
-		const { createdAt, updatedAt, author, ...post } = req.post;
-		res.send(formatPost(createdAt, updatedAt, author, post));
+		res.send(formatPost(req.post));
 	} catch (err) {
 		res.status(err.status || 500).send(err);
 	}

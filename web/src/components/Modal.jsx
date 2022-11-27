@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { Btn, Icons, Input } from '.';
@@ -28,14 +28,14 @@ import inputsValidator from '../utils/inputsValidator';
 // 	DELETE_POST
 // 	RESET_SUCCESS
 
-const _Portal = (Component, el) => {
+function _Portal(Component, el) {
 	return function Portal() {
 		const modal = useStore((state) => state.modal);
 		return modal.type ? createPortal(<Component {...modal} />, el) : null;
 	};
-};
+}
 
-const ModalSelector = ({ type, data }) => {
+function ModalSelector({ type, data }) {
 	if (
 		type === 'SIGNUP' ||
 		type === 'LOGIN' ||
@@ -49,9 +49,9 @@ const ModalSelector = ({ type, data }) => {
 		return <ResetSuccessModal password={data?.password} />;
 	else if (type === 'DELETE_POST') return <DeletePostModal />;
 	else if (type === 'THEME') return <ThemeModal />;
-};
+}
 
-const Modal = ({
+function Modal({
 	children,
 	title,
 	action,
@@ -60,7 +60,7 @@ const Modal = ({
 	disabel,
 	close,
 	closeState,
-}) => {
+}) {
 	useEffect(() => {
 		document.querySelector('body').style.overflow = 'hidden';
 		return async () => {
@@ -105,9 +105,9 @@ const Modal = ({
 			<div className='modal-backdrop' onClick={closeModal} />
 		</div>
 	);
-};
+}
 
-const FormModal = ({ type, data }) => {
+function FormModal({ type, data }) {
 	const {
 		clearErrors,
 		register,
@@ -200,35 +200,39 @@ const FormModal = ({ type, data }) => {
 			</Modal>
 		</form>
 	);
-};
+}
 
-const ResetBtn = ({ title, onClick }) => (
-	<div className='reset-password'>
-		<button type='button' onClick={onClick}>
-			{title}
-		</button>
-	</div>
-);
-
-const ResetSuccessModal = ({ password }) => (
-	<Modal
-		title='Reset Password Success'
-		action='Login'
-		onAction={() => setModal('LOGIN')}
-		close='Cancel'
-	>
-		<div className='text-center'>
-			<h3 className='text-xl font-semibold text-gray-500 tracking-wide'>
-				Your new Password
-			</h3>
-			<h2 className='text-3xl mt-2 mb-4 text-primary font-semibold'>
-				{password}
-			</h2>
+function ResetBtn({ title, onClick }) {
+	return (
+		<div className='reset-password'>
+			<button type='button' onClick={onClick}>
+				{title}
+			</button>
 		</div>
-	</Modal>
-);
+	);
+}
 
-const DeletePostModal = () => {
+function ResetSuccessModal({ password }) {
+	return (
+		<Modal
+			title='Reset Password Success'
+			action='Login'
+			onAction={() => setModal('LOGIN')}
+			close='Cancel'
+		>
+			<div className='text-center'>
+				<h3 className='text-xl font-semibold text-gray-500 tracking-wide'>
+					Your new Password
+				</h3>
+				<h2 className='text-3xl mt-2 mb-4 text-primary font-semibold'>
+					{password}
+				</h2>
+			</div>
+		</Modal>
+	);
+}
+
+function DeletePostModal() {
 	const [wait, setWait] = useState(false);
 	const [done, setDone] = useState(false);
 	const [error, setError] = useState();
@@ -264,9 +268,9 @@ const DeletePostModal = () => {
 			)}
 		</Modal>
 	);
-};
+}
 
-const ThemeModal = () => {
+function ThemeModal() {
 	const dark = useStore((state) => state.dark);
 	const theme = useStore((state) => state.theme);
 	return (
@@ -281,6 +285,10 @@ const ThemeModal = () => {
 					checked={dark}
 					onChange={() => useStore.setState({ dark: !dark })}
 				/>
+				<div
+					className='toggle'
+					onClick={() => useStore.setState({ dark: !dark })}
+				></div>
 				<label htmlFor='colors' className='input-label'>
 					Color Themes
 				</label>
@@ -297,6 +305,6 @@ const ThemeModal = () => {
 			</div>
 		</Modal>
 	);
-};
+}
 
-export default memo(_Portal(ModalSelector, document.querySelector('#modal')));
+export default _Portal(ModalSelector, document.querySelector('#modal'));

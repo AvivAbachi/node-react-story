@@ -1,8 +1,8 @@
-import { memo, useCallback } from 'react';
+import { useCallback } from 'react';
 import { Post, ListError } from '.';
 import useStore, { setModal } from '../store';
 
-const List = () => {
+function List() {
 	const post = useStore((state) => state.post);
 	const user = useStore((state) => state.user?.userId);
 	const serverError = useStore((state) => state.serverError);
@@ -30,6 +30,6 @@ const List = () => {
 	}, [post, user]);
 
 	return <ul className='list'>{serverError ? <ListError /> : listPost()}</ul>;
-};
+}
 
-export default memo(List);
+export default List;

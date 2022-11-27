@@ -1,14 +1,14 @@
 .input {
-	@apply w-full mt-2 px-4 py-1.5 bg-primary-lightest rounded-2xl block focus:outline-none focus:ring-2 focus:ring-primary-light focus:bg-primary-lightest resize-none;
+	@apply mt-2 block w-full resize-none rounded-2xl bg-primary-lightest px-4 py-1.5 focus:bg-primary-lightest focus:outline-none focus:ring-2 focus:ring-primary-light;
 	&-label {
-		@apply mt-4 font-medium block;
+		@apply mt-4 block font-medium;
 		span {
 			@apply text-primary;
 		}
 	}
 	&-error {
 		border-radius: 1.25rem;
-		@apply mt-2 mx-2 px-2 bg-primary py-1 shadow-md text-white capitalize font-semibold text-sm leading-7 truncate;
+		@apply mx-2 mt-2 truncate bg-primary px-2 py-1 text-sm font-semibold capitalize leading-7 text-white shadow-md;
 	}
 }
 
@@ -25,11 +25,8 @@ textarea.input {
 }
 
 input[type='radio'] {
-	-webkit-appearance: none;
-	-ms-appearance: none;
-	-moz-appearance: none;
 	appearance: none;
-	@apply h-8 w-8 m-2 relative inline-block cursor-pointer rounded-full ring-0 ring-gray-700/50 dark:ring-gray-100/50 dark:ring-offset-gray-700;
+	@apply relative m-2 inline-block h-8 w-8 cursor-pointer rounded-full ring-0 ring-gray-700/50 dark:ring-gray-100/50 dark:ring-offset-gray-700;
 	&:checked {
 		@apply ring-2 ring-offset-2;
 	}
@@ -38,8 +35,34 @@ input[type='radio'] {
 	}
 	&::after {
 		content: '';
-		@apply block absolute rounded-full h-full w-full bg-gradient-to-tr from-gray-100/50 to-white/0;
+		@apply absolute block h-full w-full rounded-full bg-gradient-to-tr from-gray-100/50 to-white/0;
 	}
+}
+
+input[type='checkbox'] {
+	@apply hidden;
+}
+input[type='checkbox'] + .toggle {
+	@apply relative my-4 block cursor-pointer select-none rounded-full bg-gray-400;
+	width: 3em;
+	height: 1.6em;
+	transition: background 0.1s ease-in-out;
+}
+input[type='checkbox'] + .toggle:before {
+	@apply absolute block rounded-full bg-white;
+	content: '';
+	width: 1.2em;
+	height: 1.2em;
+	left: 0.2em;
+	top: 0.2em;
+	transition: all 0.2s ease-in-out;
+}
+input[type='checkbox']:checked + .toggle {
+	@apply bg-primary;
+}
+input[type='checkbox']:checked + .toggle:before {
+	left: 1.6em;
+	transform: rotate(45deg);
 }
 
 // Whitout Appearance (Need to Add Label and Span)

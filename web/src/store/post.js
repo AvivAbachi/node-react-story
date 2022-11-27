@@ -1,7 +1,13 @@
 import axios from 'axios';
 import useStore from '.';
-import dateFormat from '../utils/dateFormat';
 const serverURL = import.meta.env.VITE_SERVER_URL;
+
+const dateHelper = new Date();
+const dateSettings = {
+	dateStyle: 'short',
+	timeStyle: 'medium',
+	hour12: false,
+};
 
 export const getPost = async () => {
 	const { interval, limit, page, userPost, user } = useStore.getState();
@@ -10,10 +16,15 @@ export const getPost = async () => {
 			params: { page, limit },
 		})
 		.then((res) => ({
-			post: res.data?.post?.map(({ createdAt, updatedAt, ...post }) => ({
-				...post,
-				date: dateFormat(createdAt, updatedAt),
-			})),
+			post: res.data?.post.map(({ date, isEdit, ...post }) => {
+				dateHelper.setTime(date);
+				return {
+					...post,
+					date:
+						(isEdit ? 'Create at: ' : 'Update at: ') +
+						dateHelper.toLocaleString(undefined, dateSettings),
+				};
+			}),
 			total: res.data?.total,
 		}))
 		.then(({ post, total }) => {
