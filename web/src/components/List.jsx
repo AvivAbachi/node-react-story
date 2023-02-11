@@ -25,7 +25,7 @@ function List() {
 		});
 	}, [post, user]);
 
-	return <ul className='list'>{serverError ? <ListError /> : listPost()}</ul>;
+	return <ul className='px-6 pt-20 pb-28'>{serverError ? <ListError /> : listPost()}</ul>;
 }
 
 export default List;

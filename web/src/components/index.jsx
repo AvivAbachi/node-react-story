@@ -1,7 +1,7 @@
 import Btn from './Btn';
 import Dropdown from './Dropdown';
 import ListError from './ListError';
-import Icons from './Icons';
+import * as Icons from './Icons';
 import Input from './Input';
 import Layout from './Layout';
 import Pagination from './Pagination';

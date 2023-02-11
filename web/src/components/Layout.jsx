@@ -15,15 +15,15 @@ function Layout({ children }) {
 
 	return (
 		<>
-			<header>
-				<nav>
+			<header className='fixed top-0 left-0 z-10 w-full bg-white px-6 shadow-lg dark:bg-gray-900'>
+				<nav className='mx-auto flex h-20 w-full max-w-7xl items-center justify-between'>
 					<button onClick={goToFirst}>
-						<h1 className='nav-title'>
+						<h1 className='text-3xl font-bold text-primary'>
 							Story <Icons.LogoIcon />
 							{userPost ? ' My Post' : ''}
 						</h1>
 					</button>
-					<div className='nav-buttons'>
+					<div className='flex max-w-2xl items-center gap-5'>
 						<Btn icon active onClick={() => setModal('THEME')}>
 							<Icons.FaceIcon />
 						</Btn>
@@ -36,12 +36,16 @@ function Layout({ children }) {
 							</>
 						) : (
 							<>
-								{!isMobile && <p className='nav-hello'>Hello, {name || username}!</p>}
+								{!isMobile && (
+									<p className='font-semibold text-gray-600 dark:text-white'>
+										Hello, {name || username}!
+									</p>
+								)}
 								<Btn icon={isMobile} active onClick={() => setModal('CREATE_POST')}>
 									{isMobile ? <Icons.PlusIcon /> : 'New Post'}
 								</Btn>
 								<Dropdown
-									Btn={
+									ButtonChildren={
 										<>
 											<Icons.FaceIcon />
 											<Icons.MenuIcon />
@@ -64,7 +68,7 @@ function Layout({ children }) {
 				</nav>
 			</header>
 			{children}
-			<footer>
+			<footer className='fixed bottom-0 left-0 mx-auto w-full bg-white px-8 py-4 text-center shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.1),0_-4px_6px_-4px_rgba(0,0,0,0.1)] dark:bg-gray-900'>
 				<Pagination />
 				<div className='mt-4'>
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit.

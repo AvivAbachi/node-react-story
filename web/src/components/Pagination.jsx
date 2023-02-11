@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import useStore, { setPage } from '../store';
 import { Icons } from './index';
-
+import classNames from 'classnames';
 function Pagination() {
 	const isMobile = useMediaQuery({ maxWidth: 768 });
 	const page = useStore((state) => state.page);
@@ -35,7 +35,7 @@ function Pagination() {
 
 	if (pages > 0) {
 		return (
-			<nav className='pagination' aria-label='Pagination'>
+			<nav className='flex flex-row flex-nowrap items-center justify-between md:justify-center'>
 				<PageBtn
 					titll='Previous Page'
 					onClick={() => setPage({ back: true })}
@@ -56,10 +56,20 @@ function Pagination() {
 	}
 }
 
-function PageBtn({ children, active, title, ...props }) {
+function PageBtn({ children, active, title, disabled, ...props }) {
 	return (
 		<button
-			className={`pagination-btn${active ? ' pagination-btn-active' : ''}`}
+			className={classNames(
+				'mx-1 flex h-9 w-9 select-none items-center justify-center rounded-full outline-none',
+				{
+					'pointer-events-none bg-primary text-white': active && !disabled,
+					'pointer-events-none bg-gray-50 text-gray-300 dark:bg-transparent dark:opacity-20':
+						disabled && !active,
+					'bg-transparent hover:opacity-50 focus:ring-2 focus:ring-primary-light dark:bg-gray-500/10':
+						active && disabled,
+				}
+			)}
+			disabled={disabled}
 			title={title}
 			{...props}
 		>
