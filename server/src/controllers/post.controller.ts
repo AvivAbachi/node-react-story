@@ -1,29 +1,37 @@
-const { PrismaClient } = require('@prisma/client');
-const { formatPost } = require('../utils');
+import { PrismaClient } from '@prisma/client/';
+import { formatPost } from '../utils';
 const prisma = new PrismaClient();
 
-exports.getAll = async (req, res) => {
+import { Request, Response } from 'express';
+
+export const getAll = async (req: Request, res: Response) => {
 	try {
-		const { page, limit } = req.query;
-		req.post = await prisma.post.findMany({
+		const page = Number(req.query.page);
+		const limit = Number(req.query.limit);
+		const post = await prisma.post.findMany({
 			take: limit || 100,
 			skip: page * limit || undefined,
 			orderBy: [{ updatedAt: 'desc' }],
 			include: { author: { select: { username: true, name: true } } },
 		});
-		req.post = req.post.map((post) => formatPost(post));
-		req.total = await prisma.post.count();
-		res.send({ post: req.post, total: req.total });
-	} catch (err) {
+		res.send({
+			post: post.map((post) => formatPost(post)),
+			total: await prisma.post.count(),
+		});
+	} catch (err: any) {
+		console.log(err);
+
 		res.status(err.status || 500).send(err);
 	}
 };
 
-exports.getByUserId = async (req, res) => {
+export const getByUserId = async (req: Request, res: Response) => {
 	try {
-		const { page, limit } = req.query;
-		req.user = await prisma.user.findUnique({
-			where: { id: req.params.id },
+		const page = Number(req.query.page);
+		const limit = Number(req.query.limit);
+		const id = Number(req.query.id);
+		const user = await prisma.user.findUnique({
+			where: { id },
 			include: {
 				posts: {
 					take: limit || 100,
@@ -33,43 +41,42 @@ exports.getByUserId = async (req, res) => {
 				_count: true,
 			},
 		});
-		if (!req.user) {
+		if (!user) {
 			throw {
 				status: 404,
-				err: [
-					{ msg: 'User post Not found', param: 'id', value: req.params.id },
-				],
+				err: [{ msg: 'User post Not found', param: 'id', value: req.params.id }],
 			};
 		}
-		req.post = req.user.posts.map((post) => {
-			return formatPost(post, req.user);
+		res.send({
+			post: user.posts.map((post) => formatPost(post, user)),
+			total: user._count.posts,
 		});
-		req.total = req.user._count.posts;
-		res.send({ post: req.post, total: req.total });
-	} catch (err) {
+	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
 };
 
-exports.getByPostId = async (req, res) => {
+export const getByPostId = async (req: Request, res: Response) => {
 	try {
-		req.post = await prisma.post.findUnique({
-			where: { id: req.params.id },
+		const id = Number(req.query.id);
+
+		const post = await prisma.post.findUnique({
+			where: { id },
 			include: { author: { select: { username: true, name: true } } },
 		});
-		if (!req.post) {
+		if (!post) {
 			throw {
 				status: 404,
 				err: [{ msg: 'Post Not found', param: 'id', value: req.params.id }],
 			};
 		}
-		res.send(formatPost(req.post));
-	} catch (err) {
+		res.send(formatPost(post));
+	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
 };
 
-exports.create = async (req, res) => {
+export const create = async (req: Request | any, res: Response) => {
 	try {
 		const { title, body } = req.body;
 		const userId = req.user.id;
@@ -81,12 +88,12 @@ exports.create = async (req, res) => {
 			};
 		}
 		res.send(create);
-	} catch (err) {
+	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
 };
 
-exports.update = async (req, res) => {
+export const update = async (req: Request | any, res: Response) => {
 	try {
 		const { id, title, body } = req.body;
 		const userId = req.user.id;
@@ -101,12 +108,12 @@ exports.update = async (req, res) => {
 			};
 		}
 		res.send({ msg: 'Post was updated successfully' });
-	} catch (err) {
+	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
 };
 
-exports.delete = async (req, res) => {
+export const remove = async (req: Request | any, res: Response) => {
 	try {
 		const id = req.body.id;
 		const userId = req.user.id;
@@ -114,10 +121,10 @@ exports.delete = async (req, res) => {
 			where: { AND: { id, author: { id: userId } } },
 		});
 		if (!del?.count) {
-			throw { msg: 'Post not delete.', param: 'server' };
+			throw { msg: 'Post not remove.', param: 'server' };
 		}
-		res.send({ msg: `Post was deleted successfully.` });
-	} catch (err) {
+		res.send({ msg: `Post was remove successfully.` });
+	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
 };

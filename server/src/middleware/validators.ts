@@ -1,17 +1,12 @@
-const { PrismaClient } = require('@prisma/client');
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-const {
-	body,
-	header,
-	query,
-	param,
-	validationResult,
-} = require('express-validator');
-const argon2 = require('argon2');
-const jwt = require('jsonwebtoken');
-const config = require('../config/auth.config');
+import { body, header, query, param, validationResult } from 'express-validator';
+import argon2 from 'argon2';
+import jwt from 'jsonwebtoken';
+import config from '../config/auth.config';
+import { NextFunction, Request, Response } from 'express';
 
-exports.username = body('username')
+export const username = body('username')
 	.trim()
 	.toLowerCase()
 	.isLength({ min: 6, max: 24 })
@@ -23,7 +18,7 @@ exports.username = body('username')
 			throw new Error('Username already in use');
 	});
 
-exports.password = body('password')
+export const password = body('password')
 	.trim()
 	.isLength({ min: 8, max: 16 })
 	.withMessage('Password must be between 8 to 16 chars long')
@@ -39,7 +34,7 @@ exports.password = body('password')
 		'Password must be whit at least one uppercase letter, one lowercase letter, and one number'
 	);
 
-exports.email = body('email')
+export const email = body('email')
 	.trim()
 	.isEmail()
 	.withMessage('Email is not allowed')
@@ -49,12 +44,12 @@ exports.email = body('email')
 			throw new Error('Email already in use');
 	});
 
-exports.displayName = body('name')
+export const displayName = body('name')
 	.trim()
 	.isLength({ max: 64 })
 	.withMessage('Display name can be up to 40 chars long');
 
-exports.cheakUsername = body('username')
+export const cheakUsername = body('username')
 	.trim()
 	.toLowerCase()
 	.custom(async (username, { req }) => {
@@ -65,7 +60,7 @@ exports.cheakUsername = body('username')
 		}
 	});
 
-exports.cheakPassword = body('password')
+export const cheakPassword = body('password')
 	.trim()
 	.custom(async (password, { req }) => {
 		if (req.user) {
@@ -77,55 +72,53 @@ exports.cheakPassword = body('password')
 		}
 	});
 
-exports.cheakEmail = body('email')
+export const cheakEmail = body('email')
 	.trim()
 	.toLowerCase()
 	.custom((email, { req }) => {
 		if (email !== req.user.email) throw new Error('Email not match');
 	});
 
-exports.token = header('x-access-token').custom(async (token, { req }) => {
+export const token = header('x-access-token').custom(async (token, { req }) => {
 	if (!token) {
 		req.status = 403;
 		throw new Error('No token provided');
 	}
-	const id = jwt.verify(token, config.secret, (err, decoded) => {
+	jwt.verify(token, config.secret, (err: any, decoded: any) => {
 		if (err) {
 			req.status = 401;
 			throw new Error('Unauthorized');
 		}
-		return decoded.id;
 	});
-	req.user = await prisma.user.findUnique({ where: { id } });
+	req.user = await prisma.user.findUnique({ where: { id: req.decoded?.id } });
 	if (!req.user) {
 		req.status = 404;
 		throw new Error('Username not exist');
 	}
 });
 
-exports.pages = query(['limit', 'page']).toInt();
+export const pages = query(['limit', 'page']).toInt();
 
-exports.id = param('id').toInt().isInt({ min: 0 }).withMessage('Invalid id');
+export const id = param('id').toInt().isInt({ min: 0 }).withMessage('Invalid id');
 
-exports.postTitle = body('title')
+export const postTitle = body('title')
 	.trim()
 	.isLength({ min: 4, max: 64 })
 	.withMessage('Post title must be between 4 to 64 chars long');
 
-exports.postBody = body('body')
+export const postBody = body('body')
 	.trim()
 	.customSanitizer((a) => a.replace(/\n+/gm, '\n'))
 	.isLength({ max: 500 })
 	.withMessage('Post text can be up to 500 chars long');
 
-exports.postId = body('id')
+export const postId = body('id')
 	.toInt()
 	.isInt({ min: 0 })
 	.withMessage('Post id is not allowed');
 
-exports.errors = (req, res, next) => {
+export const errors = (req: Request | any, res: Response, next: NextFunction) => {
 	const errors = validationResult(req);
-	if (!errors.isEmpty())
-		return res.status(req.status || 400).json(errors.array());
+	if (!errors.isEmpty()) return res.status(req.status || 400).json(errors.array());
 	next();
 };

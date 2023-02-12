@@ -1,10 +1,11 @@
-const { PrismaClient } = require('@prisma/client');
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-const argon2 = require('argon2');
-const { generate } = require('generate-password');
-const { newToken } = require('../utils');
+import argon2 from 'argon2';
+import { Request, Response } from 'express';
+import { generate } from 'generate-password';
+import { newToken } from '../utils';
 
-exports.signup = async (req, res) => {
+export const signup = async (req: Request, res: Response) => {
 	try {
 		const { username, email, name, password } = req.body;
 		const passwordHash = await argon2.hash(password);
@@ -21,12 +22,12 @@ exports.signup = async (req, res) => {
 			accessToken: token,
 			user: { username, userId: user.id, name, email },
 		});
-	} catch (err) {
+	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
 };
 
-exports.login = async (req, res) => {
+export const login = async (req: Request | any, res: Response) => {
 	try {
 		const { username, name, id, email } = req.user;
 		const token = newToken(id);
@@ -34,16 +35,16 @@ exports.login = async (req, res) => {
 			accessToken: token,
 			user: { username, userId: id, name, email },
 		});
-	} catch (err) {
+	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
 };
 
-exports.logout = (req, res) => {
+export const logout = (req: Request, res: Response) => {
 	res.send({ msg: 'logout' });
 };
 
-exports.update = async (req, res) => {
+export const update = async (req: Request | any, res: Response) => {
 	try {
 		const id = req.user.id;
 		const { newPassword, email, name } = req.body;
@@ -63,17 +64,17 @@ exports.update = async (req, res) => {
 			accessToken: token,
 			user: {
 				username: user.username,
-				userId: user.userId,
+				userId: user.id,
 				email: user.email,
 				name: user.name,
 			},
 		});
-	} catch (err) {
+	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
 };
 
-exports.reset = async (req, res) => {
+export const reset = async (req: Request | any, res: Response) => {
 	try {
 		const id = req.user.id;
 		const password = generate({
@@ -94,12 +95,12 @@ exports.reset = async (req, res) => {
 			};
 		}
 		res.send({ password });
-	} catch (err) {
+	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
 };
 
-exports.access = async (req, res) => {
+export const access = async (req: Request | any, res: Response) => {
 	try {
 		const { username, name, id, email } = req.user;
 		const token = newToken(id);
@@ -107,7 +108,7 @@ exports.access = async (req, res) => {
 			accessToken: token,
 			user: { username, name, userId: id, email },
 		});
-	} catch (err) {
+	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
 };

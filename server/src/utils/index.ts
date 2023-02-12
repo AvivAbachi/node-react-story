@@ -1,9 +1,11 @@
-const jwt = require('jsonwebtoken');
-const config = require('../config/auth.config');
+import { sign } from 'jsonwebtoken';
+import config from '../config/auth.config';
 
-exports.newToken = (id) => jwt.sign({ id }, config.secret, config.options);
+export function newToken(id: number) {
+	return sign({ id }, config.secret, config.options);
+}
 
-exports.formatPost = (post, altAuthor) => {
+export function formatPost(post: any, altAuthor?: any) {
 	const createdAt = post.createdAt.getTime();
 	const updatedAt = post.updatedAt.getTime();
 	return {
@@ -19,4 +21,4 @@ exports.formatPost = (post, altAuthor) => {
 		date: updatedAt,
 		isEdit: createdAt === updatedAt || createdAt === updatedAt - 1,
 	};
-};
+}

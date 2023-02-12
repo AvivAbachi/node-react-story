@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const user = require('../controllers/user.controller');
-const { validator } = require('../middleware/');
+import * as user from '../controllers/user.controller';
+import validator from '../middleware/';
 
 router.post('/signup', validator.signup, user.signup);
 router.post('/login', validator.login, user.login);
@@ -10,4 +10,4 @@ router.post('/access', validator.token, user.access);
 router.post('/logout', validator.token, user.logout);
 router.put('/update', validator.update, user.update);
 
-module.exports = router;
+export default router;

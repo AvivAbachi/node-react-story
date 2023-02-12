@@ -1,4 +1,4 @@
-const {
+import {
 	username,
 	password,
 	email,
@@ -13,9 +13,9 @@ const {
 	postBody,
 	postId,
 	errors,
-} = require('./validators');
+} from './validators';
 
-exports.validator = {
+export default {
 	signup: [username, password, email, displayName, errors],
 	login: [cheakUsername, cheakPassword, errors],
 	reset: [cheakUsername, cheakEmail, errors],
