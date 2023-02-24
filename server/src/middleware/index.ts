@@ -4,9 +4,7 @@ import {
 	email,
 	displayName,
 	cheakUsername,
-	cheakPassword,
 	cheakEmail,
-	token,
 	pages,
 	id,
 	postTitle,
@@ -17,14 +15,12 @@ import {
 
 export default {
 	signup: [username, password, email, displayName, errors],
-	login: [cheakUsername, cheakPassword, errors],
 	reset: [cheakUsername, cheakEmail, errors],
-	update: [token, email, errors],
-	token: [token, errors],
+	update: [email, errors],
 	postAll: [pages, errors],
 	postId: [id, errors],
 	postUserId: [id, pages, errors],
-	createPost: [token, postTitle, postBody, errors],
-	updatePost: [token, postTitle, postBody, postId, errors],
-	deletePost: [token, postId, errors],
+	createPost: [postTitle, postBody, errors],
+	updatePost: [postTitle, postBody, postId, errors],
+	deletePost: [postId, errors],
 };

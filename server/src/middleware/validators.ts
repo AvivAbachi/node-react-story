@@ -1,10 +1,7 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
-import { body, header, query, param, validationResult } from 'express-validator';
-import argon2 from 'argon2';
-import jwt from 'jsonwebtoken';
-import config from '../config/auth.config';
 import { NextFunction, Request, Response } from 'express';
+import { body, param, query, validationResult } from 'express-validator';
+
+import * as userRepository from '../repositories/user.repository';
 
 export const username = body('username')
 	.trim()
@@ -14,7 +11,7 @@ export const username = body('username')
 	.matches(/^\w+$/)
 	.withMessage('Username is not allowed')
 	.custom(async (username) => {
-		if (await prisma.user.findUnique({ where: { username } }))
+		if (await userRepository.GetUserByUsername(username))
 			throw new Error('Username already in use');
 	});
 
@@ -40,7 +37,7 @@ export const email = body('email')
 	.withMessage('Email is not allowed')
 	.toLowerCase()
 	.custom(async (email) => {
-		if (await prisma.user.findUnique({ where: { email } }))
+		if (await userRepository.GetUserByEmail(email))
 			throw new Error('Email already in use');
 	});
 
@@ -53,22 +50,10 @@ export const cheakUsername = body('username')
 	.trim()
 	.toLowerCase()
 	.custom(async (username, { req }) => {
-		req.user = await prisma.user.findUnique({ where: { username } });
+		req.user = await userRepository.GetUserByUsername(username);
 		if (!req.user) {
 			req.status = 404;
 			throw new Error('Username not exist');
-		}
-	});
-
-export const cheakPassword = body('password')
-	.trim()
-	.custom(async (password, { req }) => {
-		if (req.user) {
-			const passwordIsValid = await argon2.verify(req.user.password, password);
-			if (!passwordIsValid) {
-				req.status = 401;
-				throw new Error('Invalid Password');
-			}
 		}
 	});
 
@@ -76,28 +61,11 @@ export const cheakEmail = body('email')
 	.trim()
 	.toLowerCase()
 	.custom((email, { req }) => {
+		console.log(email === req.user.email);
 		if (email !== req.user.email) throw new Error('Email not match');
 	});
 
-export const token = header('x-access-token').custom(async (token, { req }) => {
-	if (!token) {
-		req.status = 403;
-		throw new Error('No token provided');
-	}
-	jwt.verify(token, config.secret, (err: any, decoded: any) => {
-		if (err) {
-			req.status = 401;
-			throw new Error('Unauthorized');
-		}
-	});
-	req.user = await prisma.user.findUnique({ where: { id: req.decoded?.id } });
-	if (!req.user) {
-		req.status = 404;
-		throw new Error('Username not exist');
-	}
-});
-
-export const pages = query(['limit', 'page']).toInt();
+export const pages = query(['limit', 'page']);
 
 export const id = param('id').toInt().isInt({ min: 0 }).withMessage('Invalid id');
 
@@ -117,8 +85,12 @@ export const postId = body('id')
 	.isInt({ min: 0 })
 	.withMessage('Post id is not allowed');
 
-export const errors = (req: Request | any, res: Response, next: NextFunction) => {
+export const errors = (
+	req: Request & { status?: number },
+	res: Response,
+	next: NextFunction
+) => {
 	const errors = validationResult(req);
-	if (!errors.isEmpty()) return res.status(req.status || 400).json(errors.array());
+	if (!errors.isEmpty()) return res.json(errors.array()).status(req.status || 400);
 	next();
 };

@@ -1,27 +1,21 @@
-import express from 'express';
 import cors from 'cors';
+import express from 'express';
+import passport from 'passport';
 
-import userRouter from './routes/user';
 import postRouter from './routes/post';
+import userRouter from './routes/user';
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT ?? 5000;
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
 
-// app.use((req, res, next) => {
-// 	console.log({
-// 		method: req.method,
-// 		url: req.url,
-// 		token: req.headers['x-access-token'] ? true : undefined,
-// 		...req.body,
-// 	});
-// 	next();
-// });
+require('./config/passport');
 
-app.use('/', postRouter);
+app.use('/post', postRouter);
 app.use('/user', userRouter);
 
 app.listen(port, () => console.log(`Server is listening on port ${port}!`));
