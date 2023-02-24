@@ -1,56 +1,33 @@
-import { PrismaClient } from '@prisma/client/';
-import { formatPost } from '../utils';
-const prisma = new PrismaClient();
-
 import { Request, Response } from 'express';
+
+import * as postRepository from '../repositories/post.repository';
+import { AuthorizeRequest } from '../types/Requests/Index';
 
 export const getAll = async (req: Request, res: Response) => {
 	try {
-		const page = Number(req.query.page);
-		const limit = Number(req.query.limit);
-		const post = await prisma.post.findMany({
-			take: limit || 100,
-			skip: page * limit || undefined,
-			orderBy: [{ updatedAt: 'desc' }],
-			include: { author: { select: { username: true, name: true } } },
-		});
-		res.send({
-			post: post.map((post) => formatPost(post)),
-			total: await prisma.post.count(),
-		});
+		const limit = req.query.limit as number | undefined;
+		const page = req.query.page as number | undefined;
+		const posts = await postRepository.GetAll(limit, page);
+		res.send(posts);
 	} catch (err: any) {
-		console.log(err);
-
 		res.status(err.status || 500).send(err);
 	}
 };
 
 export const getByUserId = async (req: Request, res: Response) => {
 	try {
-		const page = Number(req.query.page);
-		const limit = Number(req.query.limit);
-		const id = Number(req.query.id);
-		const user = await prisma.user.findUnique({
-			where: { id },
-			include: {
-				posts: {
-					take: limit || 100,
-					skip: page * limit || undefined,
-					orderBy: [{ updatedAt: 'desc' }],
-				},
-				_count: true,
-			},
-		});
-		if (!user) {
+		const id = req.query.id as unknown as number;
+		const limit = req.query.limit as number | undefined;
+		const page = req.query.page as number | undefined;
+		const posts = await postRepository.GetByUserId(id, limit, page);
+
+		if (!posts) {
 			throw {
 				status: 404,
 				err: [{ msg: 'User post Not found', param: 'id', value: req.params.id }],
 			};
 		}
-		res.send({
-			post: user.posts.map((post) => formatPost(post, user)),
-			total: user._count.posts,
-		});
+		res.send(posts);
 	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
@@ -58,29 +35,28 @@ export const getByUserId = async (req: Request, res: Response) => {
 
 export const getByPostId = async (req: Request, res: Response) => {
 	try {
-		const id = Number(req.query.id);
+		const id = req.params.id as unknown as number;
+		console.log({ id });
 
-		const post = await prisma.post.findUnique({
-			where: { id },
-			include: { author: { select: { username: true, name: true } } },
-		});
+		const post = await postRepository.GetByPostId(id);
 		if (!post) {
 			throw {
 				status: 404,
 				err: [{ msg: 'Post Not found', param: 'id', value: req.params.id }],
 			};
 		}
-		res.send(formatPost(post));
+		res.send(post);
 	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
 };
 
-export const create = async (req: Request | any, res: Response) => {
+export const create = async (req: AuthorizeRequest, res: Response) => {
 	try {
-		const { title, body } = req.body;
-		const userId = req.user.id;
-		const create = await prisma.post.create({ data: { title, body, userId } });
+		const title = req.body.title;
+		const body = req.body.body;
+		const userId = req.user?.id as unknown as number;
+		const create = await postRepository.CreatePost(userId, title, body);
 		if (!create) {
 			throw {
 				status: 500,
@@ -93,15 +69,13 @@ export const create = async (req: Request | any, res: Response) => {
 	}
 };
 
-export const update = async (req: Request | any, res: Response) => {
+export const update = async (req: AuthorizeRequest, res: Response) => {
 	try {
-		const { id, title, body } = req.body;
-		const userId = req.user.id;
-		const update = await prisma.post.updateMany({
-			where: { AND: { id, author: { id: userId } } },
-			data: { title, body },
-		});
-		if (!update?.count) {
+		const title = req.body.title;
+		const body = req.body.body;
+		const postId = req.body.id;
+		const update = await postRepository.UpdatePost(postId, title, body);
+		if (!update) {
 			throw {
 				status: 500,
 				err: [{ msg: 'No post to update Post.', param: 'server' }],
@@ -113,14 +87,11 @@ export const update = async (req: Request | any, res: Response) => {
 	}
 };
 
-export const remove = async (req: Request | any, res: Response) => {
+export const remove = async (req: AuthorizeRequest, res: Response) => {
 	try {
-		const id = req.body.id;
-		const userId = req.user.id;
-		const del = await prisma.post.deleteMany({
-			where: { AND: { id, author: { id: userId } } },
-		});
-		if (!del?.count) {
+		const postId = Number(req.body.id);
+		const remove = await postRepository.RemovePost(postId);
+		if (!remove) {
 			throw { msg: 'Post not remove.', param: 'server' };
 		}
 		res.send({ msg: `Post was remove successfully.` });

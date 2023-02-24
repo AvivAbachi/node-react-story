@@ -1,23 +1,19 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
-import argon2 from 'argon2';
+import { User } from '@prisma/client';
 import { Request, Response } from 'express';
-import { generate } from 'generate-password';
-import { newToken } from '../utils';
+
+import * as userRepository from '../repositories/user.repository';
+import { AuthorizeRequest } from '../types/Requests/Index';
 
 export const signup = async (req: Request, res: Response) => {
 	try {
 		const { username, email, name, password } = req.body;
-		const passwordHash = await argon2.hash(password);
-		const user = await prisma.user.create({
-			data: { username, name, email, password: passwordHash },
-		});
+		const user = await userRepository.CreateUser(username, name, email, password);
 		if (!user)
 			throw {
 				status: 500,
 				err: [{ msg: 'Error creating new user', param: 'server' }],
 			};
-		const token = newToken(user.id);
+		const token = userRepository.CreateToken(user.id);
 		res.send({
 			accessToken: token,
 			user: { username, userId: user.id, name, email },
@@ -27,10 +23,10 @@ export const signup = async (req: Request, res: Response) => {
 	}
 };
 
-export const login = async (req: Request | any, res: Response) => {
+export const login = async (req: AuthorizeRequest, res: Response) => {
 	try {
-		const { username, name, id, email } = req.user;
-		const token = newToken(id);
+		const { username, name, id, email } = req.user as User;
+		const token = userRepository.CreateToken(id);
 		res.send({
 			accessToken: token,
 			user: { username, userId: id, name, email },
@@ -41,25 +37,21 @@ export const login = async (req: Request | any, res: Response) => {
 };
 
 export const logout = (req: Request, res: Response) => {
-	res.send({ msg: 'logout' });
+	res.send();
 };
 
-export const update = async (req: Request | any, res: Response) => {
+export const update = async (req: AuthorizeRequest, res: Response) => {
 	try {
-		const id = req.user.id;
+		const id = (req.user as User)?.id;
 		const { newPassword, email, name } = req.body;
-		const password = newPassword ? await argon2.hash(newPassword) : undefined;
-		const user = await prisma.user.update({
-			where: { id },
-			data: { email, name, password },
-		});
+		const user = await userRepository.UpdateUser(id, email, name, newPassword);
 		if (!user) {
 			throw {
 				status: 500,
 				err: [{ msg: 'Error updating User', param: 'server' }],
 			};
 		}
-		const token = newToken(id);
+		const token = userRepository.CreateToken(id);
 		res.send({
 			accessToken: token,
 			user: {
@@ -74,36 +66,27 @@ export const update = async (req: Request | any, res: Response) => {
 	}
 };
 
-export const reset = async (req: Request | any, res: Response) => {
+export const reset = async (req: AuthorizeRequest, res: Response) => {
 	try {
-		const id = req.user.id;
-		const password = generate({
-			lowercase: true,
-			uppercase: true,
-			numbers: true,
-			length: 16,
-		});
-		const passwordHash = await argon2.hash(password);
-		const update = await prisma.user.update({
-			where: { id },
-			data: { password: passwordHash },
-		});
-		if (!update) {
+		const id = (req.user as User)?.id;
+
+		const update = await userRepository.ResetPassword(id);
+		if (!update.user) {
 			throw {
 				status: 500,
 				err: [{ msg: 'Error reset password', param: 'server' }],
 			};
 		}
-		res.send({ password });
+		res.send({ password: update.password });
 	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
 };
 
-export const access = async (req: Request | any, res: Response) => {
+export const access = async (req: AuthorizeRequest, res: Response) => {
 	try {
-		const { username, name, id, email } = req.user;
-		const token = newToken(id);
+		const { username, name, id, email } = req.user as User;
+		const token = userRepository.CreateToken(id);
 		res.send({
 			accessToken: token,
 			user: { username, name, userId: id, email },
