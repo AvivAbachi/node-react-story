@@ -7,6 +7,7 @@ export default {
 		algorithm: 'HS512',
 		expiresIn: '7d',
 	} as SignOptions,
+
 	resetPasword: {
 		lowercase: true,
 		uppercase: true,

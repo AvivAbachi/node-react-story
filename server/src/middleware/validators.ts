@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { body, param, query, validationResult } from 'express-validator';
-
+import Joi from 'joi';
 import * as userRepository from '../repositories/user.repository';
 
 export const username = body('username')

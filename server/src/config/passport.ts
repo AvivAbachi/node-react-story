@@ -1,7 +1,7 @@
 import passport from 'passport';
-import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
-import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as CustomStrategy } from 'passport-custom';
+import { ExtractJwt, Strategy as JwtStrategy, StrategyOptions } from 'passport-jwt';
+import { Strategy as LocalStrategy } from 'passport-local';
 
 import * as userRepository from '../repositories/user.repository';
 import config from './auth.config';
@@ -9,7 +9,7 @@ import config from './auth.config';
 const opts = {
 	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 	secretOrKey: config.secret,
-};
+} as StrategyOptions;
 
 passport.use(
 	new LocalStrategy(function (username, password, done) {
@@ -47,12 +47,12 @@ passport.use(
 passport.use(
 	new CustomStrategy(function (req, done) {
 		userRepository
-			.GetUserByUsername(req.body.username)
+			.GetUserByUsername(req.body.username.trim().toLowerCase())
 			.then((user) => {
 				if (!user) {
 					return done(null, false);
 				}
-				if (user.email !== req.body.email) {
+				if (user.email !== req.body.email.trim().toLowerCase()) {
 					return done(null, false);
 				}
 				return done(null, user);
