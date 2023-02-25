@@ -1,25 +1,9 @@
-import { User } from '@prisma/client';
 import argon2 from 'argon2';
 import { generate } from 'generate-password';
 import { sign } from 'jsonwebtoken';
 
 import config from '../config/auth.config';
 import database from '../config/database';
-
-interface IUserRepository {
-	CreateUser(
-		username: string,
-		name: string,
-		email: string,
-		password: string
-	): Promise<User>;
-	UpdateUser(): Promise<User>;
-	GetUserByUsername(username: string): Promise<User>;
-	GetUserByEmail(email: string): Promise<User>;
-	ResetPassword(): Promise<User>;
-	CheakPassword(): Promise<User>;
-	LoginUser(username: string, password: string): Promise<User>;
-}
 
 export async function CreateUser(
 	username: string,

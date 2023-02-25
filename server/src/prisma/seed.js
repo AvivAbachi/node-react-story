@@ -3,17 +3,17 @@ const prisma = new PrismaClient();
 const argon2 = require('argon2');
 const data = require('./data.json');
 
-async function main() {
+(async function () {
 	try {
 		console.log('Start seeding ...');
 		console.log('Seeding users...');
 		const users = data.users;
 		for (let i = 0; i < users.length; i++) {
-			const password = await argon2.hash('ABCabc123');
-			users[i].password = password;
+			users[i].password = await argon2.hash('ABCabc123');
 		}
-		await prisma.user.createMany({ data: users, skipDuplicates: true });
+		await prisma.user.createMany({ data: users });
 		console.log('Seeding posts...');
+
 		const usersID = await prisma.user.findMany({ select: { id: true } });
 		const posts = data.posts;
 		for (let i = 0; i < posts.length; i++) {
@@ -28,6 +28,4 @@ async function main() {
 	} finally {
 		await prisma.$disconnect();
 	}
-}
-
-main();
+})();

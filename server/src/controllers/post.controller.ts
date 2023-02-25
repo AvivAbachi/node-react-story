@@ -1,3 +1,4 @@
+import { User } from '@prisma/client';
 import { Request, Response } from 'express';
 
 import * as postRepository from '../repositories/post.repository';
@@ -55,7 +56,7 @@ export const create = async (req: AuthorizeRequest, res: Response) => {
 	try {
 		const title = req.body.title;
 		const body = req.body.body;
-		const userId = req.user?.id as unknown as number;
+		const userId = (req.user as User)?.id;
 		const create = await postRepository.CreatePost(userId, title, body);
 		if (!create) {
 			throw {

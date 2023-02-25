@@ -17,10 +17,10 @@ passport.use(
 			.GetUserByUsername(username)
 			.then(async (user) => {
 				if (!user) {
-					return done(null, false, { message: 'Incorrect username.' });
+					return done(null, false, { message: 'Username not exist' });
 				}
 				if (!(await userRepository.CheakPassword(user.password, password))) {
-					return done(null, false, { message: 'Incorrect password.' });
+					return done(null, false, { message: 'Invalid password' });
 				}
 				return done(null, user);
 			})
@@ -45,6 +45,7 @@ passport.use(
 );
 
 passport.use(
+	'reset',
 	new CustomStrategy(function (req, done) {
 		userRepository
 			.GetUserByUsername(req.body.username.trim().toLowerCase())
