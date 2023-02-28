@@ -2,7 +2,7 @@ const usernameRegex = /^\w+$/;
 const emailRegex = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/;
 
-const username = {
+export const username = {
 	name: 'username',
 	title: 'Username',
 	rule: {
@@ -13,7 +13,7 @@ const username = {
 	},
 };
 
-const password = {
+export const password = {
 	name: 'password',
 	title: 'Password',
 	type: 'password',
@@ -26,7 +26,7 @@ const password = {
 	},
 };
 
-const newPassword = {
+export const newPassword = {
 	name: 'newPassword',
 	title: 'New Password',
 	autoComplete: 'off',
@@ -34,35 +34,34 @@ const newPassword = {
 	rule: { ...password.rule, required: undefined },
 };
 
-const confirmPassword = {
+export const confirmPassword = {
 	name: 'confirmPassword',
 	title: 'Confirm Password',
 	type: password.type,
 	rule: password.rule,
 };
 
-const email = {
+export const email = {
 	name: 'email',
 	title: 'Email',
 	type: 'email',
 	rule: {
 		required: 'Email is required!',
 		pattern: { value: emailRegex, message: 'Email not Valid!' },
-		// validate: (value) => validator.isEmail(value) || 'Email not Valid!',
 	},
 };
 
-const emailOptimal = {
+export const emailOptimal = {
 	...email,
 	rule: { ...email.rule, required: undefined },
 };
 
-const name = {
+export const name = {
 	name: 'name',
 	title: 'Display Name',
 	rule: { maxLength: { value: 40, message: 'less40' } },
 };
-const title = {
+export const title = {
 	name: 'title',
 	title: 'Post Title',
 	rule: {
@@ -72,21 +71,9 @@ const title = {
 	},
 };
 
-const body = {
+export const body = {
 	name: 'body',
 	title: 'Post Text',
 	textarea: true,
 	rule: { maxLength: { value: 500, message: 'less 500' } },
-};
-
-export default {
-	username,
-	password,
-	newPassword,
-	confirmPassword,
-	email,
-	emailOptimal,
-	name,
-	title,
-	body,
 };

@@ -8,20 +8,20 @@ function List() {
 	const serverError = useStore((state) => state.serverError);
 
 	const listPost = useCallback(() => {
-		return post?.map(({ userId, id, ...post }) => {
+		return post?.map(({ userId, postId, ...post }) => {
 			if (user === userId) {
 				return (
 					<Post
-						key={id}
+						key={postId}
 						{...post}
 						onUpdate={() =>
-							setModal('UPDATE_POST', { id, title: post.title, body: post.body })
+							setModal('UPDATE_POST', { postId, title: post.title, body: post.body })
 						}
-						onDelete={() => setModal('DELETE_POST', { id })}
+						onDelete={() => setModal('DELETE_POST', { postId })}
 					/>
 				);
 			}
-			return <Post key={id} {...post} />;
+			return <Post key={postId} {...post} />;
 		});
 	}, [post, user]);
 

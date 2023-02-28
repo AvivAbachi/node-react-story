@@ -49,7 +49,10 @@ const displayName = body('name')
 
 const pages = query(['limit', 'page']).optional().toInt();
 
-const id = param('id').toInt().isInt({ min: 0 }).withMessage('Invalid id');
+const userId = param('userId')
+	.toInt()
+	.isInt({ min: 0 })
+	.withMessage('User id is not allowed');
 
 const postTitle = body('title')
 	.trim()
@@ -62,14 +65,17 @@ const postBody = body('body')
 	.isLength({ max: 500 })
 	.withMessage('Post text can be up to 500 chars long');
 
-const postId = body('id').toInt().isInt({ min: 0 }).withMessage('Post id is not allowed');
+const postId = body('postId')
+	.toInt()
+	.isInt({ min: 0 })
+	.withMessage('Post id is not allowed');
 
 export const validators = {
 	signup: [username, password, email, displayName, validateSchema],
 	update: [email.optional(), displayName, password.optional(), validateSchema],
 	postAll: [pages, validateSchema],
-	postId: [id, validateSchema],
-	postUserId: [id, pages, validateSchema],
+	postId: [postId, validateSchema],
+	postUserId: [userId, pages, validateSchema],
 	createPost: [postTitle, postBody, validateSchema],
 	updatePost: [postTitle, postBody, postId, validateSchema],
 	deletePost: [postId, validateSchema],

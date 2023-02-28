@@ -1,5 +1,5 @@
 export type PostFormat = {
-	id: number;
+	postId: number;
 	title: string;
 	body: string | null;
 	userId: number;

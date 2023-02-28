@@ -1,9 +1,8 @@
-import create from 'zustand';
-import { persist, subscribeWithSelector } from 'zustand/middleware';
-import axios from 'axios';
+import { create } from 'zustand';
+import { createJSONStorage, persist, subscribeWithSelector } from 'zustand/middleware';
 import { mountStoreDevtool } from 'simple-zustand-devtools';
+import storyApi from '../api';
 
-// axios.defaults.timeout = 3000;
 export const useStore = create(
 	subscribeWithSelector(
 		persist(
@@ -18,7 +17,6 @@ export const useStore = create(
 				limit: 15,
 				total: 0,
 				pages: () => Math.ceil(get().total / get().limit) - 1,
-				interval: { start: undefined, stop: undefined },
 				user: {
 					username: undefined,
 					name: undefined,
@@ -35,19 +33,21 @@ export const useStore = create(
 					theme: state.theme,
 					token: state.token,
 				}),
-				getStorage: () => sessionStorage,
+				storage: createJSONStorage(() => localStorage),
 			}
 		)
 	)
 );
 
-if (process.env.NODE_ENV === 'development') {
+if (import.meta.env.DEV) {
 	mountStoreDevtool('Store', useStore);
 }
 
 useStore.subscribe(
 	(state) => state.token,
-	(token) => (axios.defaults.headers['x-access-token'] = token),
+	(token) => {
+		storyApi.defaults.headers['Authorization'] = token;
+	},
 	{ fireImmediately: true }
 );
 

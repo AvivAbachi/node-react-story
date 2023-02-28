@@ -13,7 +13,7 @@ import useStore, {
 	themeData,
 	modalData,
 } from '../store';
-import inputsValidator from '../utils/inputsValidator';
+import * as inputsValidator from '../utils/inputsValidator';
 
 function ModalLayout({ type, data }) {
 	if (type === 'RESET_SUCCESS') return <ResetSuccessModal password={data?.password} />;
@@ -56,7 +56,7 @@ function FormModal({ type, data }) {
 			else if (type === 'RESET')
 				await reset(form).then((user) => setModal('RESET_SUCCESS', user));
 			else if (type === 'CREATE_POST') await createPost(form);
-			else if (type === 'UPDATE_POST') await updatePost({ ...form, id: data.id });
+			else if (type === 'UPDATE_POST') await updatePost({ ...form, postId: data.postId });
 			if (type !== 'RESET') setDone(true);
 		} catch (err) {
 			if (err.message === 'Network Error') {
@@ -147,11 +147,11 @@ function DeletePostModal() {
 	const [done, setDone] = useState(false);
 	const [error, setError] = useState();
 
-	const handelDelete = async () => {
+	const handelDelete = async (data) => {
 		setWait(true);
 		setError();
 		try {
-			await deletePost({ id: data.id });
+			await deletePost({ postId: data.postId });
 			setDone(true);
 		} catch (err) {
 			setError('Post id is not allowed');

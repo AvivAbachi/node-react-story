@@ -18,34 +18,34 @@ export async function CreateUser(
 }
 
 export async function UpdateUser(
-	id: number,
+	userId: number,
 	email?: string,
 	name?: string,
 	password?: string
 ) {
 	const passwordHash = password ? await argon2.hash(password) : undefined;
 	return await database.user.update({
-		where: { id },
+		where: { userId },
 		data: { email, name, password: passwordHash },
 	});
 }
 
-export async function ResetPassword(id: number) {
+export async function ResetPassword(userId: number) {
 	const password = generate(config.resetPasword);
 	const passwordHash = await argon2.hash(password);
 	const user = await database.user.update({
-		where: { id },
+		where: { userId },
 		data: { password: passwordHash },
 	});
 	return { user, password };
 }
 
-export function CreateToken(id: number) {
-	return sign({ id }, config.secret, config.options);
+export function CreateToken(userId: number) {
+	return 'Bearer ' + sign({ userId }, config.secret, config.options);
 }
 
-export async function GetUserById(id: number) {
-	return await database.user.findUnique({ where: { id } });
+export async function GetUserById(userId: number) {
+	return await database.user.findUnique({ where: { userId } });
 }
 
 export async function GetUserByUsername(username: string) {

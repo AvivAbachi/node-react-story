@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import useStore, { setPage } from '../store';
 import { Icons } from './index';
-import classNames from 'classnames';
+import classnames from 'classnames';
 function Pagination() {
 	const isMobile = useMediaQuery({ maxWidth: 768 });
 	const page = useStore((state) => state.page);
@@ -59,7 +59,7 @@ function Pagination() {
 function PageBtn({ children, active, title, disabled, ...props }) {
 	return (
 		<button
-			className={classNames(
+			className={classnames(
 				'mx-1 flex h-9 w-9 select-none items-center justify-center rounded-full outline-none',
 				{
 					'pointer-events-none bg-primary text-white': active && !disabled,

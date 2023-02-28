@@ -31,7 +31,7 @@ passport.use(
 passport.use(
 	new JwtStrategy(opts, function (payload, done) {
 		userRepository
-			.GetUserById(payload.id)
+			.GetUserById(payload.userId)
 			.then((user) => {
 				if (!user) {
 					return done(null, false);

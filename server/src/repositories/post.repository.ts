@@ -18,9 +18,9 @@ export async function GetAll(limit: number = 100, page?: number) {
 	} as PostListResponse;
 }
 
-export async function GetByPostId(id: number) {
+export async function GetByPostId(postId: number) {
 	const post = await database.post.findUnique({
-		where: { id },
+		where: { postId },
 		include: { author: { select: { username: true, name: true } } },
 	});
 	return post === null ? null : formatPost(post);
@@ -28,7 +28,7 @@ export async function GetByPostId(id: number) {
 
 export async function GetByUserId(userId: number, limit: number = 100, page?: number) {
 	const user = await database.user.findFirst({
-		where: { id: userId },
+		where: { userId },
 		include: {
 			posts: {
 				take: limit,
@@ -54,18 +54,18 @@ export const CreatePost = async (userId: number, title: string, body: string | n
 };
 
 export async function UpdatePost(postId: number, title?: string, body?: string) {
-	return await database.post.update({ where: { id: postId }, data: { title, body } });
+	return await database.post.update({ where: { postId }, data: { title, body } });
 }
 
 export async function RemovePost(postId: number) {
-	return await database.post.delete({ where: { id: postId } });
+	return await database.post.delete({ where: { postId } });
 }
 
 const formatPost = (post: Post & { author: Author }) => {
 	const createdAt = post.createdAt.getTime();
 	const updatedAt = post.updatedAt.getTime();
 	return {
-		id: post.id,
+		postId: post.postId,
 		title: post.title,
 		body: post.body,
 		userId: post.userId,

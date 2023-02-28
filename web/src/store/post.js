@@ -1,6 +1,5 @@
-import axios from 'axios';
 import useStore from '.';
-const serverURL = import.meta.env.VITE_SERVER_URL;
+import { post as api } from '../api';
 
 const dateHelper = new Date();
 const dateSettings = {
@@ -10,71 +9,51 @@ const dateSettings = {
 };
 
 export const getPost = async () => {
-	const { interval, limit, page, userPost, user } = useStore.getState();
-	axios
-		.get(serverURL + (userPost ? `user/${user.userId}` : ''), {
-			params: { page, limit },
-		})
-		.then((res) => ({
-			post: res.data?.post.map(({ date, isEdit, ...post }) => {
-				dateHelper.setTime(date);
-				return {
-					...post,
-					date:
-						(isEdit ? 'Create at: ' : 'Update at: ') +
-						dateHelper.toLocaleString(undefined, dateSettings),
-				};
-			}),
-			total: res.data?.total,
-		}))
-		.then(({ post, total }) => {
-			useStore.setState((state) => {
-				if (JSON.stringify(post) === JSON.stringify(state.post))
-					return { total, serverError: false };
-				return { post, total, serverError: false };
-			});
-		})
-		.catch((err) => {
-			console.error(err);
-			useStore.setState({ serverError: true, page: 0, total: 0, post: [] });
-			interval.stop();
+	const { limit, page, userPost, user } = useStore.getState();
+	try {
+		const res = userPost
+			? await api.getUserPost(user.userId, limit, page)
+			: await api.getPost(limit, page);
+		useStore.setState({
+			post: res.post.map(formatpost),
+			total: res.total,
+			serverError: false,
 		});
+	} catch (err) {
+		console.error(err);
+		useStore.setState({ serverError: true, page: 0, total: 0, post: [] });
+	}
+};
+
+export const createPost = async (data) => {
+	const post = await api.createPost(data);
+	useStore.setState((store) => ({ post: [formatpost(post), ...store.post] }));
+};
+
+export const updatePost = async (data) => {
+	const post = await api.updatePost(data);
+	console.log(post);
+	// useStore.setState((store) => {
+	// 	return { post: [formatpost(post), ...store.post] };
+	// });
+};
+
+export const deletePost = async (data) => {
+	console.log(data);
+	const post = await api.deletePost(data);
+	console.log(post);
+	//useStore.setState((store) => ({ post: store.post.filter((p) => p.postId !== data.postId) }));
 };
 
 export const toggleUserPost = (force) => {
-	const { start, stop } = useStore.getState().interval;
-	stop();
 	useStore.setState((state) => ({
 		userPost: typeof force === 'boolean' ? force : !state.userPost,
 		page: 0,
 	}));
-	start();
-};
-
-export const createPost = async (data) => {
-	const { start, stop } = useStore.getState().interval;
-	stop();
-	await axios.post(`${serverURL}`, data);
-	start();
-};
-
-export const updatePost = async (data) => {
-	const { start, stop } = useStore.getState().interval;
-	stop();
-	await axios.put(`${serverURL}`, data);
-	start();
-};
-
-export const deletePost = async (data) => {
-	const { start, stop } = useStore.getState().interval;
-	stop();
-	await axios.delete(`${serverURL}`, { data });
-	start();
+	getPost();
 };
 
 export const setPage = ({ next, back, page }) => {
-	const { start, stop } = useStore.getState().interval;
-	stop();
 	useStore.setState((state) => {
 		if (next)
 			return {
@@ -83,5 +62,15 @@ export const setPage = ({ next, back, page }) => {
 		if (back) return { page: state.page > 0 ? state.page - 1 : 0 };
 		if (page !== undefined) return { page };
 	});
-	start();
+	getPost();
 };
+
+function formatpost({ date, isEdit, ...post }) {
+	dateHelper.setTime(date);
+	return {
+		...post,
+		date:
+			(isEdit ? 'Create at: ' : 'Update at: ') +
+			dateHelper.toLocaleString(undefined, dateSettings),
+	};
+}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import classNames from 'classNames';
+import classnames from 'classnames';
 import { Btn } from './index';
 
 function Dropdown({ children, ButtonChildren, className }) {
@@ -23,11 +23,11 @@ function Dropdown({ children, ButtonChildren, className }) {
 	}, []);
 
 	return (
-		<div className={classNames('relative', { [` ${className}`]: className })}>
+		<div className={classnames('relative', { [` ${className}`]: className })}>
 			<Btn
 				ref={buttonRef}
 				active
-				className={classNames({
+				className={classnames({
 					'border-primary bg-primary text-white shadow-lg shadow-primary/25': open,
 				})}
 				onClick={() => setOpen(!open)}
@@ -49,7 +49,7 @@ function Dropdown({ children, ButtonChildren, className }) {
 Dropdown.Item = function DropdownItem({ border, children, onClick }) {
 	return (
 		<button
-			className={classNames(
+			className={classnames(
 				'mb-2 block w-full select-none rounded-full bg-transparent px-2 py-1 text-center text-sm font-semibold last:mb-0 hover:bg-primary/25 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary-light',
 				{
 					'relative mt-4 before:pointer-events-none				before:absolute before:top-[-9px] before:right-0 before:h-px before:w-full before:rounded-full before:bg-gray-500/20 before:content-[""] before:dark:bg-primary/20':

@@ -12,13 +12,13 @@ const data = require('./data.json');
 			users[i].password = await argon2.hash('ABCabc123');
 		}
 		await prisma.user.createMany({ data: users });
-		console.log('Seeding posts...');
 
-		const usersID = await prisma.user.findMany({ select: { id: true } });
+		console.log('Seeding posts...');
+		const usersIdList = await prisma.user.findMany({ select: { userId: true } });
 		const posts = data.posts;
 		for (let i = 0; i < posts.length; i++) {
-			const j = Math.floor(usersID.length * Math.random());
-			posts[i].userId = usersID[j].id;
+			const j = Math.floor(usersIdList.length * Math.random());
+			posts[i].userId = usersIdList[j].userId;
 		}
 		await prisma.post.createMany({ data: posts });
 		console.log('Seeding finished.');

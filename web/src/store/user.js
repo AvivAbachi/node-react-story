@@ -1,27 +1,20 @@
-import axios from 'axios';
 import useStore from '.';
-const serverURL = import.meta.env.VITE_SERVER_URL;
+import { user as api } from '../api';
 
 export const signup = async (data) => {
-	await axios
-		.post(`${serverURL}user/signup`, data)
-		.then((res) => res.data)
-		.then(({ accessToken, user }) => {
-			useStore.setState({ token: accessToken, user });
-		});
+	await api.signup(data).then(({ accessToken, user }) => {
+		useStore.setState({ token: accessToken, user });
+	});
 };
 
 export const login = async (data) => {
-	await axios
-		.post(`${serverURL}user/login`, data)
-		.then((res) => res.data)
-		.then(({ accessToken, user }) => {
-			useStore.setState({ token: accessToken, user });
-		});
+	await api.login(data).then(({ accessToken, user }) => {
+		useStore.setState({ token: accessToken, user });
+	});
 };
 
 export const logout = async () => {
-	await axios.post(`${serverURL}user/logout`);
+	await api.logout();
 	useStore.setState({
 		user: {
 			username: undefined,
@@ -36,9 +29,8 @@ export const logout = async () => {
 export const getAccess = async () => {
 	const token = useStore.getState().token;
 	if (token) {
-		await axios
-			.post(`${serverURL}user/access`)
-			.then((res) => res.data)
+		await api
+			.getAccess()
 			.then(({ accessToken, user }) => {
 				useStore.setState({ token: accessToken, user });
 			})
@@ -52,16 +44,13 @@ export const getAccess = async () => {
 };
 
 export const update = async (data) => {
-	await axios
-		.put(`${serverURL}user/update`, data)
-		.then((res) => res.data)
-		.then(({ accessToken, user }) => {
-			useStore.setState({ token: accessToken, user });
-		});
+	await api.update(data).then(({ accessToken, user }) => {
+		useStore.setState({ token: accessToken, user });
+	});
 };
 
 export const reset = async (data) => {
-	return await axios.post(`${serverURL}user/reset`, data).then((res) => {
-		return { username: data.username, password: res.data.password };
-	});
+	return await api
+		.reset(data)
+		.then(({ password }) => ({ username: data.username, password }));
 };

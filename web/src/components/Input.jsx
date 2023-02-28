@@ -7,9 +7,9 @@ function Input({ error, textarea, required, ...props }, ref) {
 			{required && <span>{'* '}</span>}
 			{props.title || props.name}
 			{textarea ? (
-				<textarea ref={ref} className='input' {...props} rows={4} />
+				<textarea ref={ref} className='input' {...props} required={required} rows={4} />
 			) : (
-				<input ref={ref} className='input' {...props} />
+				<input ref={ref} className='input' {...props} required={required} />
 			)}
 			{error && <InputError error={error} />}
 		</label>

@@ -17,15 +17,15 @@ export const getAll = async (req: Request, res: Response) => {
 
 export const getByUserId = async (req: Request, res: Response) => {
 	try {
-		const id = req.query.id as unknown as number;
+		const userId = req.query.userId as unknown as number;
 		const limit = req.query.limit as number | undefined;
 		const page = req.query.page as number | undefined;
-		const posts = await postRepository.GetByUserId(id, limit, page);
+		const posts = await postRepository.GetByUserId(userId, limit, page);
 
 		if (!posts) {
 			throw {
 				status: 404,
-				err: [{ msg: 'User post Not found', param: 'id', value: req.params.id }],
+				err: [{ msg: 'User post Not found', param: 'userId', value: userId }],
 			};
 		}
 		res.send(posts);
@@ -36,14 +36,12 @@ export const getByUserId = async (req: Request, res: Response) => {
 
 export const getByPostId = async (req: Request, res: Response) => {
 	try {
-		const id = req.params.id as unknown as number;
-		console.log({ id });
-
-		const post = await postRepository.GetByPostId(id);
+		const postId = req.params.postId as unknown as number;
+		const post = await postRepository.GetByPostId(postId);
 		if (!post) {
 			throw {
 				status: 404,
-				err: [{ msg: 'Post Not found', param: 'id', value: req.params.id }],
+				err: [{ msg: 'Post Not found', param: 'postId', value: postId }],
 			};
 		}
 		res.send(post);
@@ -56,7 +54,7 @@ export const create = async (req: AuthorizeRequest, res: Response) => {
 	try {
 		const title = req.body.title;
 		const body = req.body.body;
-		const userId = (req.user as User)?.id;
+		const userId = (req.user as User)?.userId;
 		const create = await postRepository.CreatePost(userId, title, body);
 		if (!create) {
 			throw {
@@ -74,7 +72,7 @@ export const update = async (req: AuthorizeRequest, res: Response) => {
 	try {
 		const title = req.body.title;
 		const body = req.body.body;
-		const postId = req.body.id;
+		const postId = req.body.postId;
 		const update = await postRepository.UpdatePost(postId, title, body);
 		if (!update) {
 			throw {
@@ -82,7 +80,7 @@ export const update = async (req: AuthorizeRequest, res: Response) => {
 				err: [{ msg: 'No post to update Post.', param: 'server' }],
 			};
 		}
-		res.send({ msg: 'Post was updated successfully' });
+		res.send(update);
 	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
@@ -90,12 +88,12 @@ export const update = async (req: AuthorizeRequest, res: Response) => {
 
 export const remove = async (req: AuthorizeRequest, res: Response) => {
 	try {
-		const postId = Number(req.body.id);
+		const postId = Number(req.body.postId);
 		const remove = await postRepository.RemovePost(postId);
 		if (!remove) {
 			throw { msg: 'Post not remove.', param: 'server' };
 		}
-		res.send({ msg: `Post was remove successfully.` });
+		res.send(remove.postId);
 	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
