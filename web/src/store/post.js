@@ -38,9 +38,8 @@ export const updatePost = async (data) => {
 	// });
 };
 
-export const deletePost = async (data) => {
-	console.log(data);
-	const post = await api.deletePost(data);
+export const deletePost = async (postId) => {
+	const post = await api.deletePost(postId);
 	console.log(post);
 	//useStore.setState((store) => ({ post: store.post.filter((p) => p.postId !== data.postId) }));
 };

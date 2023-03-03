@@ -17,11 +17,10 @@ export const getAll = async (req: Request, res: Response) => {
 
 export const getByUserId = async (req: Request, res: Response) => {
 	try {
-		const userId = req.query.userId as unknown as number;
+		const userId = req.params.userId as unknown as number;
 		const limit = req.query.limit as number | undefined;
 		const page = req.query.page as number | undefined;
 		const posts = await postRepository.GetByUserId(userId, limit, page);
-
 		if (!posts) {
 			throw {
 				status: 404,
@@ -52,9 +51,9 @@ export const getByPostId = async (req: Request, res: Response) => {
 
 export const create = async (req: AuthorizeRequest, res: Response) => {
 	try {
+		const userId = (req.user as User)?.userId;
 		const title = req.body.title;
 		const body = req.body.body;
-		const userId = (req.user as User)?.userId;
 		const create = await postRepository.CreatePost(userId, title, body);
 		if (!create) {
 			throw {
@@ -70,9 +69,9 @@ export const create = async (req: AuthorizeRequest, res: Response) => {
 
 export const update = async (req: AuthorizeRequest, res: Response) => {
 	try {
-		const title = req.body.title;
-		const body = req.body.body;
-		const postId = req.body.postId;
+		const postId = req.body.postId as unknown as number;
+		const title = req.body.title as string;
+		const body = req.body.body as string | undefined;
 		const update = await postRepository.UpdatePost(postId, title, body);
 		if (!update) {
 			throw {
@@ -88,7 +87,7 @@ export const update = async (req: AuthorizeRequest, res: Response) => {
 
 export const remove = async (req: AuthorizeRequest, res: Response) => {
 	try {
-		const postId = Number(req.body.postId);
+		const postId = req.params.postId as unknown as number;
 		const remove = await postRepository.RemovePost(postId);
 		if (!remove) {
 			throw { msg: 'Post not remove.', param: 'server' };

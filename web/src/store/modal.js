@@ -1,7 +1,7 @@
 import useStore from '.';
 
 export const setModal = (type, data) => {
-	useStore.setState({ modal: { type: type, data } });
+	useStore.setState({ modal: { type, data } });
 };
 
 export const modalData = {

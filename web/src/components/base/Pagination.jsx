@@ -1,45 +1,41 @@
-import { useCallback } from 'react';
-import { useMediaQuery } from 'react-responsive';
-import useStore, { setPage } from '../store';
-import { Icons } from './index';
 import classnames from 'classnames';
-function Pagination() {
-	const isMobile = useMediaQuery({ maxWidth: 768 });
-	const page = useStore((state) => state.page);
-	const pages = useStore((state) => state.pages());
+import { useCallback } from 'react';
 
+import { Icons } from './Index';
+
+function Pagination({ buttons = 4, current = 0, total = 0, setPage }) {
 	const PageBtns = useCallback(() => {
-		const range = Math.min(isMobile ? 4 : 8, pages);
+		const range = Math.min(buttons, total);
 		let pageBtns = [];
 		let offset =
-			page < Math.floor(range / 2)
+			current < Math.floor(range / 2)
 				? 0
-				: page >= pages - Math.floor(range / 2)
-				? pages - range
-				: page - Math.floor(range / 2);
+				: current >= total - Math.floor(range / 2)
+				? total - range
+				: current - Math.floor(range / 2);
 
 		for (let i = offset; i <= offset + range; i++) {
 			pageBtns.push(
 				<PageBtn
 					key={i}
 					title={'Page ' + (i + 1)}
-					active={page === i}
-					onClick={() => setPage({ page: i })}
+					active={current === i}
+					onClick={() => setPage({ current: i })}
 				>
 					{i + 1}
 				</PageBtn>
 			);
 		}
 		return pageBtns;
-	}, [pages, page, isMobile]);
+	}, [current, buttons, setPage, total]);
 
-	if (pages > 0) {
+	if (total > 0) {
 		return (
 			<nav className='flex flex-row flex-nowrap items-center justify-between md:justify-center'>
 				<PageBtn
 					titll='Previous Page'
 					onClick={() => setPage({ back: true })}
-					disabled={page === 0}
+					disabled={current === 0}
 				>
 					<Icons.BackIcon />
 				</PageBtn>
@@ -47,7 +43,7 @@ function Pagination() {
 				<PageBtn
 					titll='Next Page'
 					onClick={() => setPage({ next: true })}
-					disabled={page === pages}
+					disabled={current === total}
 				>
 					<Icons.NextIcon />
 				</PageBtn>

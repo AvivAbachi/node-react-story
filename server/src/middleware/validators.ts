@@ -65,7 +65,7 @@ const postBody = body('body')
 	.isLength({ max: 500 })
 	.withMessage('Post text can be up to 500 chars long');
 
-const postId = body('postId')
+const postId = param('postId')
 	.toInt()
 	.isInt({ min: 0 })
 	.withMessage('Post id is not allowed');
@@ -78,5 +78,4 @@ export const validators = {
 	postUserId: [userId, pages, validateSchema],
 	createPost: [postTitle, postBody, validateSchema],
 	updatePost: [postTitle, postBody, postId, validateSchema],
-	deletePost: [postId, validateSchema],
 };

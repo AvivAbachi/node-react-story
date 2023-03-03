@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
-import { Btn } from './index';
+import { useEffect, useRef, useState } from 'react';
+
+import { Button } from './Index';
 
 function Dropdown({ children, ButtonChildren, className }) {
 	const [open, setOpen] = useState(false);
@@ -24,7 +25,7 @@ function Dropdown({ children, ButtonChildren, className }) {
 
 	return (
 		<div className={classnames('relative', { [` ${className}`]: className })}>
-			<Btn
+			<Button
 				ref={buttonRef}
 				active
 				className={classnames({
@@ -33,7 +34,7 @@ function Dropdown({ children, ButtonChildren, className }) {
 				onClick={() => setOpen(!open)}
 			>
 				{ButtonChildren}
-			</Btn>
+			</Button>
 			{open && (
 				<div
 					ref={menuRef}
@@ -52,7 +53,7 @@ Dropdown.Item = function DropdownItem({ border, children, onClick }) {
 			className={classnames(
 				'mb-2 block w-full select-none rounded-full bg-transparent px-2 py-1 text-center text-sm font-semibold last:mb-0 hover:bg-primary/25 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary-light',
 				{
-					'relative mt-4 before:pointer-events-none				before:absolute before:top-[-9px] before:right-0 before:h-px before:w-full before:rounded-full before:bg-gray-500/20 before:content-[""] before:dark:bg-primary/20':
+					'relative mt-4 before:pointer-events-none before:absolute before:top-[-9px] before:right-0 before:h-px before:w-full before:rounded-full before:bg-gray-500/20 before:content-[""] before:dark:bg-primary/20':
 						border,
 				}
 			)}

@@ -1,4 +1,4 @@
-import { Btn, Icons } from './index';
+import { Button, Icons } from './Index';
 
 function Post({ title, body, name, date, onUpdate, onDelete }) {
 	return (
@@ -8,14 +8,14 @@ function Post({ title, body, name, date, onUpdate, onDelete }) {
 					{title}
 				</h4>
 				{onUpdate && (
-					<Btn className='h-7 w-7 p-1' ghost onClick={onUpdate}>
+					<Button className='h-7 w-7 p-1' ghost onClick={onUpdate}>
 						<Icons.EditIcon />
-					</Btn>
+					</Button>
 				)}
 				{onDelete && (
-					<Btn className='h-7 w-7 p-1' ghost onClick={onDelete}>
+					<Button className='h-7 w-7 p-1' ghost onClick={onDelete}>
 						<Icons.TrashIcon />
-					</Btn>
+					</Button>
 				)}
 			</div>
 			<div className='whitespace-pre-wrap rounded-xl bg-white p-4 font-medium shadow-2xl dark:bg-primary'>

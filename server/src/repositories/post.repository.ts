@@ -54,11 +54,22 @@ export const CreatePost = async (userId: number, title: string, body: string | n
 };
 
 export async function UpdatePost(postId: number, title?: string, body?: string) {
-	return await database.post.update({ where: { postId }, data: { title, body } });
+	return await database.post
+		.update({
+			where: { postId },
+			data: { title, body },
+			include: { author: { select: { username: true, name: true } } },
+		})
+		.then((post) => formatPost(post));
 }
 
 export async function RemovePost(postId: number) {
-	return await database.post.delete({ where: { postId } });
+	return await database.post
+		.delete({
+			where: { postId },
+			include: { author: { select: { username: true, name: true } } },
+		})
+		.then((post) => formatPost(post));
 }
 
 const formatPost = (post: Post & { author: Author }) => {

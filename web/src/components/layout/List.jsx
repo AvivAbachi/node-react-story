@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
-import { Post, ListError } from './index';
-import useStore, { setModal } from '../store';
+
+import { Button, Post } from '../base/Index';
+import useStore, { getAccess, getPost, setModal } from '../../store';
 
 function List() {
 	const post = useStore((state) => state.post);
@@ -26,6 +27,25 @@ function List() {
 	}, [post, user]);
 
 	return <ul className='px-6 pt-20 pb-28'>{serverError ? <ListError /> : listPost()}</ul>;
+}
+
+const tryAgain = () => {
+	getAccess();
+	getPost();
+};
+
+function ListError() {
+	return (
+		<div className='mx-auto mt-16 w-96 text-center'>
+			<h2 className='text-4xl font-bold text-gray-700'>No Connection...</h2>
+			<p className='mt-1 mb-5 inline-block text-gray-500'>
+				Please check your connection or try again.
+			</p>
+			<Button className='m-auto' active onClick={tryAgain}>
+				Try again
+			</Button>
+		</div>
+	);
 }
 
 export default List;

@@ -1,5 +1,6 @@
 import { forwardRef } from 'react';
-import { Icons } from './index';
+
+import { Icons } from './Index';
 
 function Input({ error, textarea, required, ...props }, ref) {
 	return (
