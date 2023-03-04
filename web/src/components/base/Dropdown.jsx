@@ -28,6 +28,7 @@ function Dropdown({ children, ButtonChildren, className }) {
 			<Button
 				ref={buttonRef}
 				active
+				icon
 				className={classnames({
 					'border-primary bg-primary text-white shadow-lg shadow-primary/25': open,
 				})}

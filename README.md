@@ -32,15 +32,17 @@ Runs the server on production mode.
 
 ---
 
-### Web (React)
+### Web (Vite & React)
 
 - Axios
-- SCSS
 - React Hook Form
 - Tailwind CSS
+- Zustand
 
 ### Server (Node.js & Express)
 
 - JSON Web Token
 - Postgre SQL
-- Sequelize
+- Prisma
+- Passport (local, jwt, custom)
+- Express Validator

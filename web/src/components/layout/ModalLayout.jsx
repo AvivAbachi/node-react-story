@@ -1,8 +1,8 @@
-import useStore, { modal } from '../../../store';
-import { Modal } from '../../base';
-import FormModal from './FormModal';
-import ResetSuccessModal from './ResetSuccessModal';
-import ThemeModal from './ThemeModal';
+import useStore, { modal } from '../../store';
+import { Modal } from '../base';
+import FormModal from './modal/FormModal';
+import ResetSuccessModal from './modal/ResetSuccessModal';
+import ThemeModal from './modal/ThemeModal';
 
 function ModalLayout() {
 	const { type, data } = useStore((state) => state.modal);

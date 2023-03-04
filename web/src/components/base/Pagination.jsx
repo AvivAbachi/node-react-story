@@ -1,7 +1,8 @@
 import classnames from 'classnames';
 import { useMemo } from 'react';
 
-import { Icons } from './Index';
+import { ReactComponent as BackIcon } from '../../assets/back.svg';
+import { ReactComponent as NextIcon } from '../../assets/next.svg';
 
 function Pagination({ buttons = 5, current = 0, total = 0, setPage }) {
 	const pages = useMemo(() => {
@@ -24,7 +25,7 @@ function Pagination({ buttons = 5, current = 0, total = 0, setPage }) {
 					onClick={() => setPage({ back: true })}
 					disabled={current === 0}
 				>
-					<Icons.BackIcon />
+					<BackIcon />
 				</PageBtn>
 				{pages.map((i) => (
 					<PageBtn
@@ -41,7 +42,7 @@ function Pagination({ buttons = 5, current = 0, total = 0, setPage }) {
 					onClick={() => setPage({ next: true })}
 					disabled={current === total}
 				>
-					<Icons.NextIcon />
+					<NextIcon />
 				</PageBtn>
 			</nav>
 		);

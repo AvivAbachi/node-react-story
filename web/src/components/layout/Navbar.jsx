@@ -1,5 +1,9 @@
+import { ReactComponent as FaceIcon } from '../../assets/face.svg';
+import { ReactComponent as LogoIcon } from '../../assets/logo.svg';
+import { ReactComponent as MenuIcon } from '../../assets/menu.svg';
+import { ReactComponent as PlusIcon } from '../../assets/plus.svg';
 import useStore, { modal, post, user } from '../../store';
-import { Button, Dropdown, Icons } from '../base/Index';
+import { Button, Dropdown } from '../base/Index';
 
 function goToFirst() {
 	post.toggleUserPost(false);
@@ -15,13 +19,13 @@ function Navbar({ isMobile }) {
 			<nav className='mx-auto flex h-20 w-full max-w-7xl items-center justify-between'>
 				<button onClick={goToFirst}>
 					<h1 className='text-3xl font-bold text-primary'>
-						Story <Icons.LogoIcon />
+						Story <LogoIcon />
 						{userPost ? ' My Post' : ''}
 					</h1>
 				</button>
 				<div className='flex max-w-2xl items-center gap-5'>
 					<Button icon active onClick={() => modal.setModal('THEME')}>
-						<Icons.FaceIcon />
+						<FaceIcon />
 					</Button>
 					{!username ? (
 						<>
@@ -42,13 +46,13 @@ function Navbar({ isMobile }) {
 								active
 								onClick={() => modal.setModal('CREATE_POST')}
 							>
-								{isMobile ? <Icons.PlusIcon /> : 'New Post'}
+								{isMobile ? <PlusIcon /> : 'New Post'}
 							</Button>
 							<Dropdown
 								ButtonChildren={
 									<>
-										<Icons.FaceIcon />
-										<Icons.MenuIcon />
+										<FaceIcon />
+										<MenuIcon />
 									</>
 								}
 							>

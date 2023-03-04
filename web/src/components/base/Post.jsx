@@ -1,4 +1,6 @@
-import { Button, Icons } from './Index';
+import { ReactComponent as Delete } from '../../assets/delete.svg';
+import { ReactComponent as EditIcon } from '../../assets/edit.svg';
+import { Button } from './Index';
 
 function Post({ postId, title, body, name, date, onUpdate, onDelete }) {
 	return (
@@ -13,12 +15,12 @@ function Post({ postId, title, body, name, date, onUpdate, onDelete }) {
 						ghost
 						onClick={() => onUpdate({ postId, title, body })}
 					>
-						<Icons.EditIcon />
+						<EditIcon />
 					</Button>
 				)}
 				{onDelete && (
 					<Button className='h-7 w-7 p-1' ghost onClick={() => onDelete({ postId })}>
-						<Icons.TrashIcon />
+						<Delete />
 					</Button>
 				)}
 			</div>

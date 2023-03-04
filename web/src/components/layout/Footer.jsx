@@ -14,7 +14,14 @@ function Footer({ isMobile }) {
 				setPage={post.setPage}
 			/>
 			<div className='mt-4'>
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+				{'Github '}
+				<a
+					target='_blank'
+					rel='noopener noreferrer'
+					href='https://github.com/AvivAbachi/node-react-story'
+				>
+					Aviv Abachi
+				</a>
 			</div>
 		</footer>
 	);

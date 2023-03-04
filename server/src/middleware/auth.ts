@@ -1,6 +1,6 @@
 import passport from '../config/passport';
 
-export const IsJWTAuth = passport.authenticate('jwt', { session: false }); //Authorization:Bearer Token
+export const IsJWTAuth = passport.authenticate('jwt', { session: false });
 
 export const IsLocalAuth = passport.authenticate('local', { session: false });
 

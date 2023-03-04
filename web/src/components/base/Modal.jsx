@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
-import { Button, Icons, Portal } from './Index';
+import { ReactComponent as CloseIcon } from '../../assets/close.svg';
+import { Button, Portal } from './Index';
 
 function Modal({ children, open, onClose }) {
 	// const handelClose = useCallback(() => {
@@ -41,7 +42,7 @@ Modal.Header = function Header({ title, onClose }) {
 			<div className='pt-1 text-2xl font-bold'>{title}</div>
 			{onClose && (
 				<Button type='button' icon onClick={onClose}>
-					<Icons.CloseIcon />
+					<CloseIcon />
 				</Button>
 			)}
 		</div>

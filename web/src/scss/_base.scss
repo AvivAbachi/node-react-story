@@ -1,25 +1,34 @@
 @tailwind base;
 @tailwind components;
-
-:root {
-	--primary-darkest: 17 94 89;
-	--primary-dark: 15 118 110;
-	--primary: 20 184 166;
-	--primary-light: 94 234 212;
-	--primary-lightest: 240 253 250;
-}
-
-body {
-	@apply bg-primary-lightest text-gray-900 dark:bg-gray-800 dark:text-white;
-}
-
-// .btn,
-// .dropdown-btn,
-// .dropdown-item,
-// .input input,
-// .reset-password button {
-// 	transition-property: color, background-color, border-color, fill, stroke, box-shadow, opacity;
-// 	@apply duration-200 ease-linear;
-// }
-
 @tailwind utilities;
+
+@layer base {
+	:root {
+		--primary-darkest: 17 94 89;
+		--primary-dark: 15 118 110;
+		--primary: 20 184 166;
+		--primary-light: 94 234 212;
+		--primary-lightest: 240 253 250;
+	}
+
+	body {
+		@apply bg-primary-lightest text-gray-900 dark:bg-gray-800 dark:text-white;
+	}
+	a {
+		@apply text-[#539bf5] hover:underline;
+	}
+}
+
+@layer utilities {
+	.textarea-scroll {
+		&::-webkit-scrollbar {
+			@apply w-2.5;
+		}
+		&::-webkit-scrollbar-track {
+			@apply my-2;
+		}
+		&::-webkit-scrollbar-thumb {
+			@apply rounded-md bg-primary hover:bg-primary dark:bg-white;
+		}
+	}
+}
