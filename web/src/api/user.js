@@ -1,4 +1,4 @@
-import storyApi from './index';
+import storyApi from '.';
 
 export const signup = async (data) => {
 	return await storyApi.post('user/signup', data).then((res) => res.data);

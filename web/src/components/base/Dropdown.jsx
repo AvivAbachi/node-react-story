@@ -8,15 +8,14 @@ function Dropdown({ children, ButtonChildren, className }) {
 	const menuRef = useRef();
 	const buttonRef = useRef();
 
-	const checkClick = (e) => {
-		const isMenu =
-			e.target.isSameNode(menuRef.current) || e.target.isSameNode(buttonRef.current);
-		if (!isMenu) {
-			setOpen(false);
-		}
-	};
-
 	useEffect(() => {
+		const checkClick = (e) => {
+			const isMenu =
+				e.target.isSameNode(menuRef.current) || e.target.isSameNode(buttonRef.current);
+			if (!isMenu) {
+				setOpen(false);
+			}
+		};
 		document.addEventListener('click', checkClick);
 		return () => {
 			document.removeEventListener('click', checkClick);

@@ -52,7 +52,7 @@ export function CloseIcon() {
 export function ErrorIcon() {
 	return (
 		<svg
-			className='h-5 w-5 fill-current stroke-current p-0.5'
+			className='inline-block h-5 w-5 fill-current stroke-current p-0.5'
 			viewBox='0 0 24 24'
 			xmlns='http://www.w3.org/2000/svg'
 		>

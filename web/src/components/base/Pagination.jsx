@@ -1,33 +1,20 @@
 import classnames from 'classnames';
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 
 import { Icons } from './Index';
 
-function Pagination({ buttons = 4, current = 0, total = 0, setPage }) {
-	const PageBtns = useCallback(() => {
-		const range = Math.min(buttons, total);
-		let pageBtns = [];
-		let offset =
+function Pagination({ buttons = 5, current = 0, total = 0, setPage }) {
+	const pages = useMemo(() => {
+		const range = Math.max(Math.min(buttons, total), 0);
+		const offset =
 			current < Math.floor(range / 2)
 				? 0
 				: current >= total - Math.floor(range / 2)
-				? total - range
+				? total - range + 1
 				: current - Math.floor(range / 2);
 
-		for (let i = offset; i <= offset + range; i++) {
-			pageBtns.push(
-				<PageBtn
-					key={i}
-					title={'Page ' + (i + 1)}
-					active={current === i}
-					onClick={() => setPage({ current: i })}
-				>
-					{i + 1}
-				</PageBtn>
-			);
-		}
-		return pageBtns;
-	}, [current, buttons, setPage, total]);
+		return [...Array(range).keys()].map((i) => i + offset);
+	}, [buttons, current, total]);
 
 	if (total > 0) {
 		return (
@@ -39,7 +26,16 @@ function Pagination({ buttons = 4, current = 0, total = 0, setPage }) {
 				>
 					<Icons.BackIcon />
 				</PageBtn>
-				{PageBtns()}
+				{pages.map((i) => (
+					<PageBtn
+						key={i}
+						title={'Page ' + (i + 1)}
+						onClick={() => setPage({ page: i })}
+						active={current === i}
+					>
+						{i + 1}
+					</PageBtn>
+				))}
 				<PageBtn
 					titll='Next Page'
 					onClick={() => setPage({ next: true })}

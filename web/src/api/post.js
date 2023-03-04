@@ -1,4 +1,4 @@
-import storyApi from './index';
+import storyApi from '.';
 
 export async function getUserPost(userId, limit, page) {
 	return storyApi
@@ -14,8 +14,8 @@ export async function createPost(post) {
 	return await storyApi.post('post/', post).then((res) => res.data);
 }
 
-export async function updatePost(post) {
-	return await storyApi.put('post/', post).then((res) => res.data);
+export async function updatePost(postId, post) {
+	return await storyApi.put(`post/${postId}`, post).then((res) => res.data);
 }
 
 export async function deletePost(postId) {

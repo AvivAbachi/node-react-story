@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
-import { Button, Post } from '../base/Index';
 import useStore, { getAccess, getPost, setModal } from '../../store';
+import { Button, Post } from '../base/Index';
 
 function List() {
 	const post = useStore((state) => state.post);

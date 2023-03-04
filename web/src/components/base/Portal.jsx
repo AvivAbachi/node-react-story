@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 
 function Portal({ children, id }) {
 	const [element, setElement] = useState();
+
 	useLayoutEffect(() => {
 		let el = document.getElementById(id);
 		let systemCreated = false;

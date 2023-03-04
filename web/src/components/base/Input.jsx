@@ -1,25 +1,29 @@
-import { forwardRef } from 'react';
+import { forwardRef, useMemo } from 'react';
 
-import { Icons } from './Index';
+import { Icons, Label } from './Index';
 
 function Input({ error, textarea, required, ...props }, ref) {
+	const [Tag, rows] = useMemo(
+		() => (textarea ? ['textarea', 4] : ['input', undefined]),
+		[textarea]
+	);
 	return (
-		<label className='input-label'>
-			{required && <span>{'* '}</span>}
-			{props.title || props.name}
-			{textarea ? (
-				<textarea ref={ref} className='input' {...props} required={required} rows={4} />
-			) : (
-				<input ref={ref} className='input' {...props} required={required} />
-			)}
+		<>
+			<Label required={required} htmlFor={props.name}>
+				{props.title || props.name}
+			</Label>
+			<Tag ref={ref} {...props} required={required} rows={rows} />
 			{error && <InputError error={error} />}
-		</label>
+		</>
 	);
 }
 
 function InputError({ error }) {
 	return (
-		<div className='input-error' title={error}>
+		<div
+			className='mx-2 mt-2 truncate rounded-[1.25rem] bg-primary px-2 py-1 text-sm font-semibold capitalize leading-7 text-white shadow-md'
+			title={error}
+		>
 			<Icons.ErrorIcon />
 			{error}
 		</div>

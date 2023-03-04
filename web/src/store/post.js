@@ -8,7 +8,7 @@ const dateSettings = {
 	hour12: false,
 };
 
-export const getPost = async () => {
+export async function getPost() {
 	const { limit, page, userPost, user } = useStore.getState();
 	try {
 		const res = userPost
@@ -23,36 +23,37 @@ export const getPost = async () => {
 		console.error(err);
 		useStore.setState({ serverError: true, page: 0, total: 0, post: [] });
 	}
-};
+}
 
 export const createPost = async (data) => {
 	const post = await api.createPost(data);
 	useStore.setState((store) => ({ post: [formatpost(post), ...store.post] }));
 };
 
-export const updatePost = async (data) => {
-	const post = await api.updatePost(data);
-	console.log(post);
-	// useStore.setState((store) => {
-	// 	return { post: [formatpost(post), ...store.post] };
-	// });
-};
+export async function updatePost({ postId, ...data }) {
+	const post = await api.updatePost(postId, data);
+	useStore.setState((store) => {
+		const posts = [...store.post];
+		const index = posts.findIndex((p) => p.postId === post.postId);
+		posts[index] = formatpost(post);
+		return { post: posts };
+	});
+}
 
-export const deletePost = async (postId) => {
-	const post = await api.deletePost(postId);
-	console.log(post);
-	//useStore.setState((store) => ({ post: store.post.filter((p) => p.postId !== data.postId) }));
-};
+export async function deletePost({ postId }) {
+	await api.deletePost(postId);
+	getPost();
+}
 
-export const toggleUserPost = (force) => {
+export function toggleUserPost(force) {
 	useStore.setState((state) => ({
 		userPost: typeof force === 'boolean' ? force : !state.userPost,
 		page: 0,
 	}));
 	getPost();
-};
+}
 
-export const setPage = ({ next, back, page }) => {
+export function setPage({ next, back, page }) {
 	useStore.setState((state) => {
 		if (next)
 			return {
@@ -62,7 +63,7 @@ export const setPage = ({ next, back, page }) => {
 		if (page !== undefined) return { page };
 	});
 	getPost();
-};
+}
 
 function formatpost({ date, isEdit, ...post }) {
 	dateHelper.setTime(date);

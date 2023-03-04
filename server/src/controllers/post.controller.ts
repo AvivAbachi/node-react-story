@@ -69,7 +69,7 @@ export const create = async (req: AuthorizeRequest, res: Response) => {
 
 export const update = async (req: AuthorizeRequest, res: Response) => {
 	try {
-		const postId = req.body.postId as unknown as number;
+		const postId = req.params.postId as unknown as number;
 		const title = req.body.title as string;
 		const body = req.body.body as string | undefined;
 		const update = await postRepository.UpdatePost(postId, title, body);
@@ -92,7 +92,7 @@ export const remove = async (req: AuthorizeRequest, res: Response) => {
 		if (!remove) {
 			throw { msg: 'Post not remove.', param: 'server' };
 		}
-		res.send(remove.postId);
+		res.send(remove);
 	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}

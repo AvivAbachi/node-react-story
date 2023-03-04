@@ -1,6 +1,7 @@
+import { mountStoreDevtool } from 'simple-zustand-devtools';
 import { create } from 'zustand';
 import { createJSONStorage, persist, subscribeWithSelector } from 'zustand/middleware';
-import { mountStoreDevtool } from 'simple-zustand-devtools';
+
 import storyApi from '../api';
 
 export const useStore = create(

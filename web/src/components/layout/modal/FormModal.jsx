@@ -1,73 +1,59 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import {
-	createPost,
-	login,
-	modalData,
-	reset,
-	setModal,
-	signup,
-	update,
-	updatePost,
-} from '../../../store';
+import { modalData, setModal } from '../../../store';
 import * as inputsValidator from '../../../utils/inputsValidator';
 import { Button, Input, Modal } from '../../base';
 
 function FormModal({ type, data, onClose }) {
-	const {
-		clearErrors,
-		register,
-		handleSubmit,
-		setError,
-		setValue,
-		unregister,
-		formState,
-	} = useForm();
+	const { clearErrors, register, handleSubmit, setError, setValue, formState } =
+		useForm();
+
 	const [wait, setWait] = useState(false);
-	const { title, action, inputs } = modalData[type];
+	const { title, action, inputs, submit } = useMemo(() => modalData[type], [type]);
 
 	useEffect(() => {
-		if (type === 'UPDATE_POST') {
-			setValue('title', data?.title);
-			setValue('body', data?.body);
-		} else if (type === 'LOGIN') {
-			setValue('username', data?.username);
-			setValue('password', data?.password);
-			unregister('email');
-		} else if (type === 'RESET') unregister('password');
-	}, []);
-
-	const onSubmit = async (form) => {
-		setWait(true);
-		try {
-			if (type === 'SIGNUP') await signup(form);
-			else if (type === 'LOGIN') await login(form);
-			else if (type === 'UPDATE') await update(form);
-			else if (type === 'RESET')
-				await reset(form).then((user) => setModal('RESET_SUCCESS', user));
-			else if (type === 'CREATE_POST') await createPost(form);
-			else if (type === 'UPDATE_POST') await updatePost({ ...form, postId: data.postId });
-			if (type !== 'RESET') onClose();
-		} catch (err) {
-			if (err.message === 'Network Error') {
-				setError('server', {
-					type: 'response',
-					message: 'Network error, please try again later',
-				});
-			} else {
-				err?.response?.data?.forEach((err) => {
-					setError(err.param, { type: 'response', message: err.msg });
-				});
-			}
+		switch (type) {
+			case 'LOGIN':
+				if (data?.username) setValue('username', data.username);
+				if (data?.password) setValue('password', data.password);
+				break;
+			case 'UPDATE_POST':
+				setValue('title', data.title);
+				setValue('body', data.body);
+				break;
 		}
-		setWait(false);
-	};
+	}, [type]);
+
+	const onSubmit = useCallback(
+		async (form) => {
+			setWait(true);
+			try {
+				if (type === 'UPDATE_POST' || type === 'DELETE_POST') form.postId = data.postId;
+				const res = await submit(form);
+				if (type === 'RESET') setModal('RESET_SUCCESS', res);
+				else onClose();
+			} catch (err) {
+				if (err.message === 'Network Error') {
+					setError('server', {
+						type: 'response',
+						message: 'Network error, please try again later',
+					});
+				} else {
+					err?.response?.data?.forEach((err) => {
+						setError(err.param, { type: 'response', message: err.msg });
+					});
+				}
+			}
+			setWait(false);
+		},
+		[onClose, setError, submit, type, data]
+	);
 
 	return (
 		<Modal.Content>
+			<Modal.Header title={title} onClose={onClose} />
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<Modal.Header title={title} onClose={onClose} />
 				<Modal.Body>
 					{inputs?.map((type) => {
 						const { rule, name, ...input } = inputsValidator[type];
@@ -87,6 +73,9 @@ function FormModal({ type, data, onClose }) {
 					{type === 'RESET' && (
 						<ResetBtn title='Back to login' onClick={() => setModal('LOGIN')} />
 					)}
+					{type === 'DELETE_POST' && (
+						<p className='mt-6'>Deleting this post will be permanently!</p>
+					)}
 					{formState.errors?.server && (
 						<div className='mx-3'>
 							<Input.InputError error={formState.errors.server?.message} />
@@ -94,7 +83,12 @@ function FormModal({ type, data, onClose }) {
 					)}
 				</Modal.Body>
 				<Modal.Footer onClose={onClose}>
-					<Button type='submit' disabled={wait} onClick={() => clearErrors('server')}>
+					<Button
+						active
+						type='submit'
+						disabled={wait}
+						onClick={() => clearErrors('server')}
+					>
 						{action}
 					</Button>
 				</Modal.Footer>
@@ -105,8 +99,12 @@ function FormModal({ type, data, onClose }) {
 
 function ResetBtn({ title, onClick }) {
 	return (
-		<div className='reset-password'>
-			<button type='button' onClick={onClick}>
+		<div className='mt-4 text-center'>
+			<button
+				className='mx-auto cursor-pointer rounded-full py-2 px-4 font-medium text-gray-500 ring-2 ring-transparent hover:text-primary focus:text-primary focus:outline-none focus:ring-primary'
+				type='button'
+				onClick={onClick}
+			>
 				{title}
 			</button>
 		</div>

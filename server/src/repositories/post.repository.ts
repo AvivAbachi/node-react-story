@@ -50,7 +50,12 @@ export async function GetByUserId(userId: number, limit: number = 100, page?: nu
 }
 
 export const CreatePost = async (userId: number, title: string, body: string | null) => {
-	return await database.post.create({ data: { title, body, userId } });
+	return await database.post
+		.create({
+			data: { title, body, userId },
+			include: { author: { select: { username: true, name: true } } },
+		})
+		.then((post) => formatPost(post));
 };
 
 export async function UpdatePost(postId: number, title?: string, body?: string) {
