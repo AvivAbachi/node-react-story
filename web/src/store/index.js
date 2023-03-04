@@ -1,42 +1,42 @@
 import { mountStoreDevtool } from 'simple-zustand-devtools';
 import { create } from 'zustand';
-import { createJSONStorage, persist, subscribeWithSelector } from 'zustand/middleware';
+import { persist, subscribeWithSelector } from 'zustand/middleware';
 
 import storyApi from '../api';
 
-export const useStore = create(
+const state = (set, get) => ({
+	//user
+	token: undefined,
+	user: {
+		username: undefined,
+		name: undefined,
+		userId: undefined,
+		email: undefined,
+	},
+	//post
+	post: [],
+	userPost: false,
+	page: 0,
+	pages: () => Math.ceil(get().total / get().limit) - 1,
+	limit: 15,
+	total: 0,
+	serverError: false,
+	//modal
+	theme: 'teal',
+	dark: false,
+	modal: { type: undefined, data: undefined },
+});
+
+const useStore = create(
 	subscribeWithSelector(
-		persist(
-			(set, get) => ({
-				token: undefined,
-				userPost: false,
-				serverError: false,
-				theme: 'teal',
-				dark: false,
-				isMobile: true,
-				page: 0,
-				limit: 15,
-				total: 0,
-				pages: () => Math.ceil(get().total / get().limit) - 1,
-				user: {
-					username: undefined,
-					name: undefined,
-					userId: undefined,
-					email: undefined,
-				},
-				post: [],
-				modal: { type: undefined, data: undefined },
+		persist(state, {
+			name: 'setting',
+			partialize: (state) => ({
+				dark: state.dark,
+				theme: state.theme,
+				token: state.token,
 			}),
-			{
-				name: 'setting',
-				partialize: (state) => ({
-					dark: state.dark,
-					theme: state.theme,
-					token: state.token,
-				}),
-				storage: createJSONStorage(() => localStorage),
-			}
-		)
+		})
 	)
 );
 
@@ -59,14 +59,7 @@ useStore.subscribe(
 	{ fireImmediately: true }
 );
 
-export { getAccess, login, logout, reset, signup, update } from './user';
-export {
-	getPost,
-	createPost,
-	deletePost,
-	toggleUserPost,
-	updatePost,
-	setPage,
-} from './post';
-export { setModal, modalData, themeData } from './modal';
+export * as user from './user';
+export * as post from './post';
+export * as modal from './modal';
 export default useStore;

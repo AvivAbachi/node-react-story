@@ -1,4 +1,4 @@
-import useStore, { setPage } from '../../store';
+import useStore, { post } from '../../store';
 import { Pagination } from '../base/Index';
 
 function Footer({ isMobile }) {
@@ -11,7 +11,7 @@ function Footer({ isMobile }) {
 				buttons={isMobile ? 5 : 9}
 				current={page}
 				total={pages}
-				setPage={setPage}
+				setPage={post.setPage}
 			/>
 			<div className='mt-4'>
 				Lorem ipsum dolor sit amet, consectetur adipisicing elit.

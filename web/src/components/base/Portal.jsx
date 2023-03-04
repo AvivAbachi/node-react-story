@@ -1,10 +1,10 @@
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 function Portal({ children, id }) {
 	const [element, setElement] = useState();
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		let el = document.getElementById(id);
 		let systemCreated = false;
 		if (!el) {

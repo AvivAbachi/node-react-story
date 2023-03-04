@@ -1,19 +1,19 @@
-import useStore from '.';
+import useStore, { modal, post } from '.';
 import { user as api } from '../api';
 
-export const signup = async (data) => {
+export async function signup(data) {
 	await api.signup(data).then(({ accessToken, user }) => {
 		useStore.setState({ token: accessToken, user });
 	});
-};
+}
 
-export const login = async (data) => {
+export async function login(data) {
 	await api.login(data).then(({ accessToken, user }) => {
 		useStore.setState({ token: accessToken, user });
 	});
-};
+}
 
-export const logout = async () => {
+export async function logout() {
 	await api.logout();
 	useStore.setState({
 		user: {
@@ -24,9 +24,9 @@ export const logout = async () => {
 		},
 		token: undefined,
 	});
-};
+}
 
-export const getAccess = async () => {
+export async function getAccess() {
 	const token = useStore.getState().token;
 	if (token) {
 		await api
@@ -41,16 +41,23 @@ export const getAccess = async () => {
 				}
 			});
 	}
-};
+}
 
-export const update = async (data) => {
+export async function update(data) {
 	await api.update(data).then(({ accessToken, user }) => {
 		useStore.setState({ token: accessToken, user });
 	});
-};
+}
 
-export const reset = async (data) => {
-	return await api
+export async function reset(data) {
+	const res = await api
 		.reset(data)
 		.then(({ password }) => ({ username: data.username, password }));
-};
+
+	modal.setModal('RESET_SUCCESS', res);
+}
+
+export async function start() {
+	await getAccess();
+	await post.getPost();
+}

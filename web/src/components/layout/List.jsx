@@ -1,6 +1,6 @@
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 
-import useStore, { getAccess, getPost, setModal } from '../../store';
+import useStore, { modal, user } from '../../store';
 import { Button, Post } from '../base/Index';
 
 function List() {
@@ -8,31 +8,26 @@ function List() {
 	const user = useStore((state) => state.user?.userId);
 	const serverError = useStore((state) => state.serverError);
 
-	const listPost = useCallback(() => {
-		return post?.map(({ userId, postId, ...post }) => {
+	const listPost = useMemo(() => {
+		return post?.map(({ userId, ...post }) => {
 			if (user === userId) {
-				return (
-					<Post
-						key={postId}
-						{...post}
-						onUpdate={() =>
-							setModal('UPDATE_POST', { postId, title: post.title, body: post.body })
-						}
-						onDelete={() => setModal('DELETE_POST', { postId })}
-					/>
-				);
+				post.onUpdate = (post) => modal.setModal('UPDATE_POST', post);
+				post.onDelete = (post) => modal.setModal('DELETE_POST', post);
 			}
-			return <Post key={postId} {...post} />;
+			return post;
 		});
 	}, [post, user]);
 
-	return <ul className='px-6 pt-20 pb-28'>{serverError ? <ListError /> : listPost()}</ul>;
+	return (
+		<ul className='px-6 pt-20 pb-28'>
+			{serverError ? (
+				<ListError />
+			) : (
+				listPost.map((post) => <Post key={post.postId} {...post} />)
+			)}
+		</ul>
+	);
 }
-
-const tryAgain = () => {
-	getAccess();
-	getPost();
-};
 
 function ListError() {
 	return (
@@ -41,7 +36,7 @@ function ListError() {
 			<p className='mt-1 mb-5 inline-block text-gray-500'>
 				Please check your connection or try again.
 			</p>
-			<Button className='m-auto' active onClick={tryAgain}>
+			<Button className='m-auto' active onClick={user.start}>
 				Try again
 			</Button>
 		</div>

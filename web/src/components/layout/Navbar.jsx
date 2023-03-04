@@ -1,9 +1,9 @@
-import useStore, { logout, setModal, setPage, toggleUserPost } from '../../store';
+import useStore, { modal, post, user } from '../../store';
 import { Button, Dropdown, Icons } from '../base/Index';
 
 function goToFirst() {
-	toggleUserPost(false);
-	setPage({ page: 0 });
+	post.toggleUserPost(false);
+	post.setPage({ page: 0 });
 }
 
 function Navbar({ isMobile }) {
@@ -20,15 +20,15 @@ function Navbar({ isMobile }) {
 					</h1>
 				</button>
 				<div className='flex max-w-2xl items-center gap-5'>
-					<Button icon active onClick={() => setModal('THEME')}>
+					<Button icon active onClick={() => modal.setModal('THEME')}>
 						<Icons.FaceIcon />
 					</Button>
 					{!username ? (
 						<>
-							<Button active onClick={() => setModal('SIGNUP')}>
+							<Button active onClick={() => modal.setModal('SIGNUP')}>
 								Sign up
 							</Button>
-							<Button onClick={() => setModal('LOGIN')}>Log In</Button>
+							<Button onClick={() => modal.setModal('LOGIN')}>Log In</Button>
 						</>
 					) : (
 						<>
@@ -37,7 +37,11 @@ function Navbar({ isMobile }) {
 									Hello, {name || username}!
 								</p>
 							)}
-							<Button icon={isMobile} active onClick={() => setModal('CREATE_POST')}>
+							<Button
+								icon={isMobile}
+								active
+								onClick={() => modal.setModal('CREATE_POST')}
+							>
 								{isMobile ? <Icons.PlusIcon /> : 'New Post'}
 							</Button>
 							<Dropdown
@@ -48,11 +52,13 @@ function Navbar({ isMobile }) {
 									</>
 								}
 							>
-								<Dropdown.Item onClick={toggleUserPost}>
+								<Dropdown.Item onClick={post.toggleUserPost}>
 									{userPost ? 'All Post' : 'My Post'}
 								</Dropdown.Item>
-								<Dropdown.Item onClick={() => setModal('UPDATE')}>Account</Dropdown.Item>
-								<Dropdown.Item border onClick={logout}>
+								<Dropdown.Item onClick={() => modal.setModal('UPDATE')}>
+									Account
+								</Dropdown.Item>
+								<Dropdown.Item border onClick={user.logout}>
 									Logout
 								</Dropdown.Item>
 							</Dropdown>

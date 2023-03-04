@@ -1,4 +1,4 @@
-import { setModal } from '../../../store';
+import { modal } from '../../../store';
 import { Button, Modal } from '../../base';
 
 function ResetSuccessModal({ password, onClose }) {
@@ -14,11 +14,12 @@ function ResetSuccessModal({ password, onClose }) {
 				</div>
 			</Modal.Body>
 			<Modal.Footer onClose={onClose}>
-				<Button active onClick={() => setModal('LOGIN')}>
+				<Button active onClick={() => modal.setModal('LOGIN')}>
 					Login
 				</Button>
 			</Modal.Footer>
 		</Modal.Content>
 	);
 }
+
 export default ResetSuccessModal;

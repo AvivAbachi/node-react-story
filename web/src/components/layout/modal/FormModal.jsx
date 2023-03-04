@@ -1,16 +1,22 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { modalData, setModal } from '../../../store';
+import { modal } from '../../../store';
 import * as inputsValidator from '../../../utils/inputsValidator';
 import { Button, Input, Modal } from '../../base';
 
 function FormModal({ type, data, onClose }) {
-	const { clearErrors, register, handleSubmit, setError, setValue, formState } =
-		useForm();
+	const {
+		clearErrors,
+		register,
+		handleSubmit,
+		setError,
+		setValue,
+		formState: { errors },
+	} = useForm();
 
 	const [wait, setWait] = useState(false);
-	const { title, action, inputs, submit } = useMemo(() => modalData[type], [type]);
+	const { title, action, inputs, submit } = useMemo(() => modal.modalData[type], [type]);
 
 	useEffect(() => {
 		switch (type) {
@@ -23,16 +29,15 @@ function FormModal({ type, data, onClose }) {
 				setValue('body', data.body);
 				break;
 		}
-	}, [type]);
+	}, [data, setValue, type]);
 
 	const onSubmit = useCallback(
 		async (form) => {
 			setWait(true);
 			try {
 				if (type === 'UPDATE_POST' || type === 'DELETE_POST') form.postId = data.postId;
-				const res = await submit(form);
-				if (type === 'RESET') setModal('RESET_SUCCESS', res);
-				else onClose();
+				await submit(form);
+				if (type !== 'RESET') onClose();
 			} catch (err) {
 				if (err.message === 'Network Error') {
 					setError('server', {
@@ -61,24 +66,24 @@ function FormModal({ type, data, onClose }) {
 							<Input
 								key={name}
 								required={!!rule.required}
-								error={formState.errors[name]?.message}
+								error={errors[name]?.message}
 								{...register(name, { ...rule })}
 								{...input}
 							/>
 						);
 					})}
 					{type === 'LOGIN' && (
-						<ResetBtn title='Reset Password' onClick={() => setModal('RESET')} />
+						<ResetBtn title='Reset Password' onClick={() => modal.setModal('RESET')} />
 					)}
 					{type === 'RESET' && (
-						<ResetBtn title='Back to login' onClick={() => setModal('LOGIN')} />
+						<ResetBtn title='Back to login' onClick={() => modal.setModal('LOGIN')} />
 					)}
 					{type === 'DELETE_POST' && (
 						<p className='mt-6'>Deleting this post will be permanently!</p>
 					)}
-					{formState.errors?.server && (
+					{errors?.server && (
 						<div className='mx-3'>
-							<Input.InputError error={formState.errors.server?.message} />
+							<Input.InputError error={errors.server?.message} />
 						</div>
 					)}
 				</Modal.Body>
@@ -110,4 +115,5 @@ function ResetBtn({ title, onClick }) {
 		</div>
 	);
 }
+
 export default FormModal;

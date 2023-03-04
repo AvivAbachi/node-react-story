@@ -1,5 +1,6 @@
-import { useCallback, useMemo } from 'react';
-import useStore, { themeData } from '../../../store';
+import { useMemo } from 'react';
+
+import useStore, { modal } from '../../../store';
 import { Label, Modal, Switch } from '../../base';
 
 function ThemeModal({ onClose }) {
@@ -8,7 +9,7 @@ function ThemeModal({ onClose }) {
 
 	const RadioTheme = useMemo(
 		() =>
-			Object.entries(themeData).map(([name, color]) => (
+			Object.entries(modal.themeData).map(([name, color]) => (
 				<input
 					key={name}
 					type='radio'
@@ -21,16 +22,16 @@ function ThemeModal({ onClose }) {
 		[theme]
 	);
 
-	const darkChange = useCallback(
-		() => useStore.setState((state) => ({ dark: !state.dark })),
-		[]
-	);
-
 	return (
 		<Modal.Content>
 			<Modal.Header onClose={onClose} title='Theme Colors' />
 			<Modal.Body>
-				<Switch title='Dark Theme' checked={dark} name='dark' onChange={darkChange} />
+				<Switch
+					title='Dark Theme'
+					checked={dark}
+					name='dark'
+					onChange={() => useStore.setState((state) => ({ dark: !state.dark }))}
+				/>
 				<Label htmlFor='colors'>Color Themes</Label>
 				{RadioTheme}
 			</Modal.Body>
@@ -38,4 +39,5 @@ function ThemeModal({ onClose }) {
 		</Modal.Content>
 	);
 }
+
 export default ThemeModal;

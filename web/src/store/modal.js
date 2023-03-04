@@ -1,60 +1,56 @@
-import useStore, {
-	createPost,
-	deletePost,
-	login,
-	reset,
-	signup,
-	update,
-	updatePost,
-} from '.';
+import useStore, { post, user } from '.';
 
-export const setModal = (type, data) => {
+export function setModal(type, data) {
 	useStore.setState({ modal: { type, data } });
-};
+}
+
+export function closeModal() {
+	setModal();
+}
 
 export const modalData = {
 	SIGNUP: {
 		title: 'Sing Up',
 		action: 'Sing Up',
 		inputs: ['username', 'password', 'email', 'name'],
-		submit: signup,
+		submit: user.signup,
 	},
 	LOGIN: {
 		title: 'Login',
 		action: 'Login',
 		inputs: ['username', 'password'],
-		submit: login,
+		submit: user.login,
 	},
 	RESET: {
 		title: 'Reset Password',
 		action: 'Reset Password',
 		inputs: ['username', 'email'],
-		submit: reset,
+		submit: user.reset,
 	},
 
 	UPDATE: {
 		title: 'Update User',
 		action: 'Update User',
 		inputs: ['password', 'newPassword', 'email', 'name'],
-		submit: update,
+		submit: user.update,
 	},
 	CREATE_POST: {
 		title: 'Create New Post',
 		action: 'Create Post',
 		inputs: ['title', 'body'],
-		submit: createPost,
+		submit: post.createPost,
 	},
 	UPDATE_POST: {
 		title: 'Update Post',
 		action: 'Update Post',
 		inputs: ['title', 'body'],
-		submit: updatePost,
+		submit: post.updatePost,
 	},
 	DELETE_POST: {
 		title: 'Delete Post',
 		action: 'Delete Post',
 		inputs: [],
-		submit: deletePost,
+		submit: post.deletePost,
 	},
 	RESET_SUCCESS: null,
 	THEME: null,

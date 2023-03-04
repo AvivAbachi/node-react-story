@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Button } from './Index';
 
@@ -8,19 +8,20 @@ function Dropdown({ children, ButtonChildren, className }) {
 	const menuRef = useRef();
 	const buttonRef = useRef();
 
+	const checkClick = useCallback((e) => {
+		const isMenu =
+			e.target.isSameNode(menuRef.current) || e.target.isSameNode(buttonRef.current);
+		if (!isMenu) {
+			setOpen(false);
+		}
+	}, []);
+
 	useEffect(() => {
-		const checkClick = (e) => {
-			const isMenu =
-				e.target.isSameNode(menuRef.current) || e.target.isSameNode(buttonRef.current);
-			if (!isMenu) {
-				setOpen(false);
-			}
-		};
 		document.addEventListener('click', checkClick);
 		return () => {
 			document.removeEventListener('click', checkClick);
 		};
-	}, []);
+	}, [checkClick]);
 
 	return (
 		<div className={classnames('relative', { [` ${className}`]: className })}>
