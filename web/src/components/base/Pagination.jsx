@@ -25,7 +25,7 @@ function Pagination({ buttons = 5, current = 0, total = 0, setPage }) {
 					onClick={() => setPage({ back: true })}
 					disabled={current === 0}
 				>
-					<BackIcon />
+					<BackIcon className='block h-4 w-4 fill-current' />
 				</PageBtn>
 				{pages.map((i) => (
 					<PageBtn
@@ -42,7 +42,7 @@ function Pagination({ buttons = 5, current = 0, total = 0, setPage }) {
 					onClick={() => setPage({ next: true })}
 					disabled={current === total}
 				>
-					<NextIcon />
+					<NextIcon className='block h-4 w-4 fill-current' />
 				</PageBtn>
 			</nav>
 		);

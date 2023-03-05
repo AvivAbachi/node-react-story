@@ -35,7 +35,7 @@ function InputError({ error }) {
 			className='mx-2 mt-2 truncate rounded-[1.25rem] bg-primary px-2 py-1 text-sm font-semibold capitalize leading-7 text-white shadow-md'
 			title={error}
 		>
-			<ErrorIcon />
+			<ErrorIcon className='inline-block h-5 w-5 fill-current stroke-current p-0.5' />
 			{error}
 		</div>
 	);

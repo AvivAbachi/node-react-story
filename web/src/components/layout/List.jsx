@@ -5,18 +5,18 @@ import { Button, Post } from '../base/Index';
 
 function List() {
 	const post = useStore((state) => state.post);
-	const user = useStore((state) => state.user?.userId);
+	const id = useStore((state) => state.user?.userId);
 	const serverError = useStore((state) => state.serverError);
 
 	const listPost = useMemo(() => {
 		return post?.map(({ userId, ...post }) => {
-			if (user === userId) {
+			if (id === userId) {
 				post.onUpdate = (post) => modal.setModal('UPDATE_POST', post);
 				post.onDelete = (post) => modal.setModal('DELETE_POST', post);
 			}
 			return post;
 		});
-	}, [post, user]);
+	}, [post, id]);
 
 	return (
 		<ul className='px-6 pt-20 pb-28'>

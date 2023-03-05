@@ -42,7 +42,7 @@ Modal.Header = function Header({ title, onClose }) {
 			<div className='pt-1 text-2xl font-bold'>{title}</div>
 			{onClose && (
 				<Button type='button' icon onClick={onClose}>
-					<CloseIcon />
+					<CloseIcon className='h-7 w-7 fill-current p-1' />
 				</Button>
 			)}
 		</div>

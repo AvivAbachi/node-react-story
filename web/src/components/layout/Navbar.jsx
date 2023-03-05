@@ -11,21 +11,21 @@ function goToFirst() {
 }
 
 function Navbar({ isMobile }) {
-	const username = useStore((state) => state.user.username);
-	const name = useStore((state) => state.user.name);
+	const { username, name } = useStore((state) => state.user);
 	const userPost = useStore((state) => state.userPost);
+
 	return (
 		<header className='fixed top-0 left-0 z-10 w-full bg-white px-6 shadow-lg dark:bg-gray-900'>
 			<nav className='mx-auto flex h-20 w-full max-w-7xl items-center justify-between'>
 				<button onClick={goToFirst}>
 					<h1 className='text-3xl font-bold text-primary'>
-						Story <LogoIcon />
+						Story <LogoIcon className='inline h-8 w-8 fill-none stroke-current' />
 						{userPost ? ' My Post' : ''}
 					</h1>
 				</button>
 				<div className='flex max-w-2xl items-center gap-5'>
 					<Button icon active onClick={() => modal.setModal('THEME')}>
-						<FaceIcon />
+						<FaceIcon className='pointer-events-none relative inline-block h-7 w-7 fill-current' />
 					</Button>
 					{!username ? (
 						<>
@@ -46,13 +46,20 @@ function Navbar({ isMobile }) {
 								active
 								onClick={() => modal.setModal('CREATE_POST')}
 							>
-								{isMobile ? <PlusIcon /> : 'New Post'}
+								{isMobile ? (
+									<PlusIcon className=' h-6 w-6 fill-current p-1' />
+								) : (
+									'New Post'
+								)}
 							</Button>
 							<Dropdown
 								ButtonChildren={
 									<>
-										<FaceIcon />
-										<MenuIcon />
+										<FaceIcon className='pointer-events-none relative inline-block h-7 w-7 fill-current' />
+										<MenuIcon
+											className='pointer-events-none ml-2 inline-block h-7 w-7 fill-transparent stroke-current stroke-3 pr-2'
+											strokeLinecap='round'
+										/>
 									</>
 								}
 							>

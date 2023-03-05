@@ -13,47 +13,46 @@ export const modalData = {
 		title: 'Sing Up',
 		action: 'Sing Up',
 		inputs: ['username', 'password', 'email', 'name'],
-		submit: user.signup,
+		onSubmit: user.signup,
 	},
 	LOGIN: {
 		title: 'Login',
 		action: 'Login',
 		inputs: ['username', 'password'],
-		submit: user.login,
+		onSubmit: user.login,
 	},
 	RESET: {
 		title: 'Reset Password',
 		action: 'Reset Password',
 		inputs: ['username', 'email'],
-		submit: user.reset,
+		onSubmit: user.reset,
 	},
-
 	UPDATE: {
 		title: 'Update User',
 		action: 'Update User',
 		inputs: ['password', 'newPassword', 'email', 'name'],
-		submit: user.update,
+		onSubmit: user.update,
 	},
 	CREATE_POST: {
 		title: 'Create New Post',
 		action: 'Create Post',
 		inputs: ['title', 'body'],
-		submit: post.createPost,
+		onSubmit: post.createPost,
 	},
 	UPDATE_POST: {
 		title: 'Update Post',
 		action: 'Update Post',
 		inputs: ['title', 'body'],
-		submit: post.updatePost,
+		onSubmit: post.updatePost,
 	},
 	DELETE_POST: {
 		title: 'Delete Post',
 		action: 'Delete Post',
 		inputs: [],
-		submit: post.deletePost,
+		onSubmit: post.deletePost,
 	},
-	RESET_SUCCESS: null,
-	THEME: null,
+	RESET_SUCCESS: undefined,
+	THEME: undefined,
 };
 
 export const themeData = {

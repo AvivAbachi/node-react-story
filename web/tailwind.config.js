@@ -1,14 +1,5 @@
 const colors = require('tailwindcss/colors');
 
-function withOpacityValue(variable) {
-	return ({ opacityValue }) => {
-		if (opacityValue === undefined) {
-			return `rgb(var(${variable}))`;
-		}
-		return `rgb(var(${variable}) / ${opacityValue})`;
-	};
-}
-
 module.exports = {
 	content: ['./public/**/*.html', './src/**/*.{js,jsx,ts,tsx,vue}'],
 	darkMode: 'class',
@@ -17,17 +8,18 @@ module.exports = {
 			strokeWidth: { 3: '3' },
 		},
 		colors: {
-			transparent: 'transparent',
-			current: 'currentColor',
+			inherit: colors.inherit,
+			current: colors.current,
+			transparent: colors.transparent,
 			black: colors.black,
 			white: colors.white,
 			gray: colors.slate,
 			primary: {
-				darkest: withOpacityValue('--primary-darkest'),
-				dark: withOpacityValue('--primary-dark'),
-				DEFAULT: withOpacityValue('--primary'),
-				light: withOpacityValue('--primary-light'),
-				lightest: withOpacityValue('--primary-lightest'),
+				darkest: 'rgb(var(--primary-darkest) / <alpha-value>)',
+				dark: 'rgb(var(--primary-dark) / <alpha-value>)',
+				DEFAULT: 'rgb(var(--primary) / <alpha-value>)',
+				light: 'rgb(var(--primary-light) / <alpha-value>)',
+				lightest: 'rgb(var(--primary-lightest) / <alpha-value>)',
 			},
 		},
 	},
