@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import * as inputsValidator from '../../../utils/inputsValidator';
 import { Button, Input, Modal } from '../../base';
 
 function FormModal({
@@ -27,11 +26,25 @@ function FormModal({
 
 	useEffect(() => {
 		if (data) {
-			Object.entries(data).forEach(([key, value]) => {
-				setValue(key, value);
-			});
+			Object.entries(data).forEach(([key, value]) => setValue(key, value));
 		}
 	}, [data, setValue]);
+
+	const handelError = useCallback(
+		(err) => {
+			if (err.message === 'Network Error') {
+				setError('server', {
+					type: 'response',
+					message: 'Network error, please try again later',
+				});
+			} else {
+				err?.response?.data?.forEach((err) => {
+					setError(err.param, { type: 'response', message: err.msg });
+				});
+			}
+		},
+		[setError]
+	);
 
 	const submit = useCallback(
 		async (form) => {
@@ -40,32 +53,19 @@ function FormModal({
 				await onSubmit?.(form);
 				if (autoClose) onClose();
 			} catch (err) {
-				if (err.message === 'Network Error') {
-					setError('server', {
-						type: 'response',
-						message: 'Network error, please try again later',
-					});
-				} else {
-					err?.response?.data?.forEach((err) => {
-						setError(err.param, { type: 'response', message: err.msg });
-					});
-				}
+				handelError(err);
 			}
 			setWait(false);
 		},
-		[autoClose, onClose, onSubmit, setError]
+		[autoClose, handelError, onClose, onSubmit]
 	);
-
-	const inputList = useMemo(() => {
-		return inputs?.map((type) => inputsValidator[type]);
-	}, [inputs]);
 
 	return (
 		<Modal.Content>
 			<Modal.Header title={title} onClose={onClose} />
 			<form onSubmit={handleSubmit(submit)}>
 				<Modal.Body>
-					{inputList?.map(({ rule, name, input }) => (
+					{inputs?.map(({ rule, name, input }) => (
 						<Input
 							key={name}
 							required={!!rule.required}

@@ -1,6 +1,7 @@
 import { ReactComponent as FaceIcon } from '../../assets/face.svg';
 import { ReactComponent as LogoIcon } from '../../assets/logo.svg';
 import { ReactComponent as MenuIcon } from '../../assets/menu.svg';
+import { ReactComponent as PaletteIcon } from '../../assets/palette.svg';
 import { ReactComponent as PlusIcon } from '../../assets/plus.svg';
 import useStore, { modal, post, user } from '../../store';
 import { Button, Dropdown } from '../base/Index';
@@ -13,7 +14,6 @@ function goToFirst() {
 function Navbar({ isMobile }) {
 	const { username, name } = useStore((state) => state.user);
 	const userPost = useStore((state) => state.userPost);
-
 	return (
 		<header className='fixed top-0 left-0 z-10 w-full bg-white px-6 shadow-lg dark:bg-gray-900'>
 			<nav className='mx-auto flex h-20 w-full max-w-7xl items-center justify-between'>
@@ -25,7 +25,7 @@ function Navbar({ isMobile }) {
 				</button>
 				<div className='flex max-w-2xl items-center gap-5'>
 					<Button icon active onClick={() => modal.setModal('THEME')}>
-						<FaceIcon className='pointer-events-none relative inline-block h-7 w-7 fill-current' />
+						<PaletteIcon className='pointer-events-none h-6 w-6 fill-current p-1' />
 					</Button>
 					{!username ? (
 						<>

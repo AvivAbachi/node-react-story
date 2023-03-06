@@ -5,10 +5,12 @@ import { ReactComponent as ErrorIcon } from '../../assets/error.svg';
 import { Label } from './Index';
 
 function Input({ error, textarea, required, ...props }, ref) {
-	const [Tag, rows] = useMemo(
-		() => (textarea ? ['textarea', 4] : ['input', undefined]),
-		[textarea]
-	);
+	const [Tag, rows, extraClass] = useMemo(() => {
+		return textarea
+			? ['textarea', 4, 'textarea-scroll resize-none rounded-xl']
+			: ['input', undefined, undefined];
+	}, [textarea]);
+
 	return (
 		<>
 			<Label required={required} htmlFor={props.name}>
@@ -17,7 +19,7 @@ function Input({ error, textarea, required, ...props }, ref) {
 			<Tag
 				className={classnames(
 					'mt-2 block w-full rounded-2xl bg-primary-lightest px-4 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary-light dark:bg-primary-dark',
-					{ 'textarea-scroll resize-none rounded-xl': textarea }
+					extraClass
 				)}
 				ref={ref}
 				{...props}

@@ -6,16 +6,7 @@ import { Label, Modal, Radio, Switch } from '../../base';
 function ThemeModal({ onClose }) {
 	const dark = useStore((state) => state.dark);
 	const theme = useStore((state) => state.theme);
-
-	const radioTheme = useMemo(
-		() =>
-			Object.entries(modal.themeData).map(([color, css]) => ({
-				color,
-				css,
-				checked: theme === color,
-			})),
-		[theme]
-	);
+	const radioTheme = useMemo(() => Object.entries(modal.themeData), []);
 
 	return (
 		<Modal.Content>
@@ -28,7 +19,7 @@ function ThemeModal({ onClose }) {
 					onChange={() => useStore.setState((state) => ({ dark: !state.dark }))}
 				/>
 				<Label htmlFor='colors'>Color Themes</Label>
-				{radioTheme.map(({ color, css }) => (
+				{radioTheme.map(([color, css]) => (
 					<Radio
 						key={color}
 						name='color'
