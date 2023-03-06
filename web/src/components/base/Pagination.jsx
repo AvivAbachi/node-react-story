@@ -1,10 +1,10 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { useMemo } from 'react';
 
 import { ReactComponent as BackIcon } from '../../assets/back.svg';
 import { ReactComponent as NextIcon } from '../../assets/next.svg';
 
-function Pagination({ buttons = 5, current = 0, total = 0, setPage }) {
+function Pagination({ buttons = 5, current = 0, total = 0, className, setPage }) {
 	const pages = useMemo(() => {
 		const range = Math.max(Math.min(buttons, total), 0);
 		const offset =
@@ -19,7 +19,12 @@ function Pagination({ buttons = 5, current = 0, total = 0, setPage }) {
 
 	if (total > 0) {
 		return (
-			<nav className='flex flex-row flex-nowrap items-center justify-between md:justify-center'>
+			<nav
+				className={classNames(
+					'flex flex-row flex-nowrap items-center justify-between md:justify-center',
+					{ [` ${className}`]: className }
+				)}
+			>
 				<PageBtn
 					titll='Previous Page'
 					onClick={() => setPage({ back: true })}
@@ -52,7 +57,7 @@ function Pagination({ buttons = 5, current = 0, total = 0, setPage }) {
 function PageBtn({ children, active, title, disabled, ...props }) {
 	return (
 		<button
-			className={classnames(
+			className={classNames(
 				'mx-1 flex h-9 w-9 select-none items-center justify-center rounded-full outline-none',
 				{
 					'pointer-events-none bg-primary text-white': active && !disabled,

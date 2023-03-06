@@ -1,10 +1,10 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { forwardRef, useMemo } from 'react';
 
 import { ReactComponent as ErrorIcon } from '../../assets/error.svg';
 import { Label } from './Index';
 
-function Input({ error, textarea, required, ...props }, ref) {
+function Input({ error, textarea, required, className, ...props }, ref) {
 	const [Tag, rows, extraClass] = useMemo(() => {
 		return textarea
 			? ['textarea', 4, 'textarea-scroll resize-none rounded-xl']
@@ -17,9 +17,10 @@ function Input({ error, textarea, required, ...props }, ref) {
 				{props.title || props.name}
 			</Label>
 			<Tag
-				className={classnames(
+				className={classNames(
 					'mt-2 block w-full rounded-2xl bg-primary-lightest px-4 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary-light dark:bg-primary-dark',
-					extraClass
+					extraClass,
+					{ [` ${className}`]: className }
 				)}
 				ref={ref}
 				{...props}

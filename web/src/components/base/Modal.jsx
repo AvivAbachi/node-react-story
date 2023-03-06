@@ -1,9 +1,10 @@
+import classNames from 'classnames';
 import { useEffect } from 'react';
 
 import { ReactComponent as CloseIcon } from '../../assets/close.svg';
 import { Button, Portal } from './Index';
 
-function Modal({ children, open, onClose }) {
+function Modal({ children, className, open, backdrop = true, onClose }) {
 	// const handelClose = useCallback(() => {
 	// setTimeout(() => onClose?.(), 110);
 	// }, [onClose]);
@@ -20,26 +21,47 @@ function Modal({ children, open, onClose }) {
 	if (open)
 		return (
 			<Portal id='modal'>
-				<div className='fixed top-0 left-0 z-10 flex h-screen w-screen items-center justify-center duration-300 ease-linear'>
+				<div
+					className={classNames(
+						'fixed top-0 left-0 z-10 flex h-screen w-screen items-center justify-center duration-300 ease-linear',
+						{ [` ${className}`]: className }
+					)}
+				>
 					{children}
-					<Backdrop onClose={onClose} />
+					{backdrop && <Backdrop onClose={onClose} />}
 				</div>
 			</Portal>
 		);
 }
 
-Modal.Content = function Content({ children }) {
+Modal.Content = function Content({ children, className }) {
 	return (
-		<div className='relative z-20 w-11/12 max-w-lg rounded-lg bg-white shadow-lg dark:bg-gray-700'>
+		<div
+			className={classNames(
+				'relative z-20 w-11/12 max-w-lg rounded-lg bg-white shadow-lg dark:bg-gray-700',
+				{ [` ${className}`]: className }
+			)}
+		>
 			{children}
 		</div>
 	);
 };
 
-Modal.Header = function Header({ title, onClose }) {
+Modal.Header = function Header({ title, className, classNameTitle, onClose }) {
 	return (
-		<div className='flex justify-between border-b-2 border-gray-100 px-5 py-4 text-gray-700 dark:text-white'>
-			<div className='pt-1 text-2xl font-bold'>{title}</div>
+		<div
+			className={classNames(
+				'flex justify-between border-b-2 border-gray-100 px-5 py-4 text-gray-700 dark:text-white',
+				{ [` ${className}`]: className }
+			)}
+		>
+			<div
+				className={classNames('pt-1 text-2xl font-bold', {
+					[` ${classNameTitle}`]: classNameTitle,
+				})}
+			>
+				{title}
+			</div>
 			{onClose && (
 				<Button type='button' icon onClick={onClose}>
 					<CloseIcon className='h-7 w-7 fill-current p-1' />
@@ -49,13 +71,21 @@ Modal.Header = function Header({ title, onClose }) {
 	);
 };
 
-Modal.Body = function Body({ children }) {
-	return <div className='px-10 pb-4'>{children}</div>;
+Modal.Body = function Body({ children, className }) {
+	return (
+		<div className={classNames('px-10 pb-4', { [` ${className}`]: className })}>
+			{children}
+		</div>
+	);
 };
 
-Modal.Footer = function Footer({ children, onClose }) {
+Modal.Footer = function Footer({ children, className, onClose }) {
 	return (
-		<div className='flex justify-end py-4 px-5'>
+		<div
+			className={classNames('flex justify-end py-4 px-5', {
+				[` ${className}`]: className,
+			})}
+		>
 			{onClose && (
 				<Button className='mr-4' type='button' onClick={onClose}>
 					Close

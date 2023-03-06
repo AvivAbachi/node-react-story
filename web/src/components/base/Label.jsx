@@ -1,6 +1,11 @@
-function Label({ children, htmlFor, required }) {
+import classNames from 'classnames';
+
+function Label({ children, className, htmlFor, required }) {
 	return (
-		<label htmlFor={htmlFor} className='mt-4 block font-medium'>
+		<label
+			htmlFor={htmlFor}
+			className={classNames('mt-4 block font-medium', { [` ${className}`]: className })}
+		>
 			{required && <span className='text-primary'>* </span>}
 			{children}
 		</label>
