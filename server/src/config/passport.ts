@@ -4,7 +4,9 @@ import { ExtractJwt, Strategy as JwtStrategy, StrategyOptions } from 'passport-j
 import { Strategy as LocalStrategy } from 'passport-local';
 
 import * as userRepository from '../repositories/user.repository';
+import * as postRepository from '../repositories/post.repository';
 import config from './auth.config';
+import { User } from '@prisma/client';
 
 const opts = {
 	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -61,6 +63,18 @@ passport.use(
 			.catch((err) => {
 				return done(err);
 			});
+	})
+);
+
+passport.use(
+	'user-post',
+	new CustomStrategy(function (req, done) {
+		const userId = (req.user as User).userId;
+		const postId = req.params.postId as unknown as number;
+		postRepository
+			.IsUserPost(userId, postId)
+			.then((isUserPost) => done(null, isUserPost))
+			.catch((err) => done(err));
 	})
 );
 

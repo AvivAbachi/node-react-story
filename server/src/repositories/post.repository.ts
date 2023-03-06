@@ -77,6 +77,15 @@ export async function RemovePost(postId: number) {
 		.then((post) => formatPost(post));
 }
 
+export async function IsUserPost(userId: number, postId: number) {
+	const res = await database.post.findFirst({
+		where: { AND: { userId, postId: Number(postId) } },
+		select: { postId: true },
+	});
+
+	return res !== null;
+}
+
 const formatPost = (post: Post & { author: Author }) => {
 	const createdAt = post.createdAt.getTime();
 	const updatedAt = post.updatedAt.getTime();
