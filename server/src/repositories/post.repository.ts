@@ -49,14 +49,14 @@ export async function GetByUserId(userId: number, limit: number = 100, page?: nu
 	} as PostListResponse;
 }
 
-export const CreatePost = async (userId: number, title: string, body: string | null) => {
+export async function CreatePost(userId: number, title: string, body: string | null) {
 	return await database.post
 		.create({
 			data: { title, body, userId },
 			include: { author: { select: { username: true, name: true } } },
 		})
 		.then((post) => formatPost(post));
-};
+}
 
 export async function UpdatePost(postId: number, title?: string, body?: string) {
 	return await database.post
@@ -86,7 +86,7 @@ export async function IsUserPost(userId: number, postId: number) {
 	return res !== null;
 }
 
-const formatPost = (post: Post & { author: Author }) => {
+function formatPost(post: Post & { author: Author }) {
 	const createdAt = post.createdAt.getTime();
 	const updatedAt = post.updatedAt.getTime();
 	return {
@@ -98,4 +98,4 @@ const formatPost = (post: Post & { author: Author }) => {
 		date: updatedAt,
 		isEdit: createdAt === updatedAt || createdAt === updatedAt - 1,
 	} as PostFormat;
-};
+}

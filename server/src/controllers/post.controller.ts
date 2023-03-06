@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import * as postRepository from '../repositories/post.repository';
 import { AuthorizeRequest } from '../types/Requests/Index';
 
-export const getAll = async (req: Request, res: Response) => {
+export async function getAll(req: Request, res: Response) {
 	try {
 		const limit = req.query.limit as number | undefined;
 		const page = req.query.page as number | undefined;
@@ -13,9 +13,9 @@ export const getAll = async (req: Request, res: Response) => {
 	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
-};
+}
 
-export const getByUserId = async (req: Request, res: Response) => {
+export async function getByUserId(req: Request, res: Response) {
 	try {
 		const userId = req.params.userId as unknown as number;
 		const limit = req.query.limit as number | undefined;
@@ -31,9 +31,9 @@ export const getByUserId = async (req: Request, res: Response) => {
 	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
-};
+}
 
-export const getByPostId = async (req: Request, res: Response) => {
+export async function getByPostId(req: Request, res: Response) {
 	try {
 		const postId = req.params.postId as unknown as number;
 		const post = await postRepository.GetByPostId(postId);
@@ -47,9 +47,9 @@ export const getByPostId = async (req: Request, res: Response) => {
 	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
-};
+}
 
-export const create = async (req: AuthorizeRequest, res: Response) => {
+export async function create(req: AuthorizeRequest, res: Response) {
 	try {
 		const userId = (req.user as User)?.userId;
 		const title = req.body.title;
@@ -65,9 +65,9 @@ export const create = async (req: AuthorizeRequest, res: Response) => {
 	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
-};
+}
 
-export const update = async (req: AuthorizeRequest, res: Response) => {
+export async function update(req: AuthorizeRequest, res: Response) {
 	try {
 		const postId = req.params.postId as unknown as number;
 		const title = req.body.title as string;
@@ -83,9 +83,9 @@ export const update = async (req: AuthorizeRequest, res: Response) => {
 	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
-};
+}
 
-export const remove = async (req: AuthorizeRequest, res: Response) => {
+export async function remove(req: AuthorizeRequest, res: Response) {
 	try {
 		const postId = req.params.postId as unknown as number;
 		const remove = await postRepository.RemovePost(postId);
@@ -96,4 +96,4 @@ export const remove = async (req: AuthorizeRequest, res: Response) => {
 	} catch (err: any) {
 		res.status(err.status || 500).send(err);
 	}
-};
+}

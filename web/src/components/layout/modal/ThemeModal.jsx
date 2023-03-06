@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 
-import useStore, { modal } from '../../../store';
+import useStore from '../../../store';
 import { Label, Modal, Radio, Switch } from '../../base';
 
-function ThemeModal({ onClose }) {
+function ThemeModal({ themesList, onClose }) {
 	const dark = useStore((state) => state.dark);
 	const theme = useStore((state) => state.theme);
-	const radioTheme = useMemo(() => Object.entries(modal.themeData), []);
+	const radioTheme = useMemo(() => Object.entries(themesList), [themesList]);
 
 	return (
 		<Modal.Content>

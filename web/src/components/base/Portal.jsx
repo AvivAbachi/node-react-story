@@ -22,8 +22,7 @@ function Portal({ children, id }) {
 		};
 	}, [id]);
 
-	if (!element) return null;
-	return createPortal(children, element);
+	return element ? createPortal(children, element) : null;
 }
 
 export default Portal;

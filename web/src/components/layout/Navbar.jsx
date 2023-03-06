@@ -14,6 +14,7 @@ function goToFirst() {
 function Navbar({ isMobile }) {
 	const { username, name } = useStore((state) => state.user);
 	const userPost = useStore((state) => state.userPost);
+
 	return (
 		<header className='fixed top-0 left-0 z-10 w-full bg-white px-6 shadow-lg dark:bg-gray-900'>
 			<nav className='mx-auto flex h-20 w-full max-w-7xl items-center justify-between'>

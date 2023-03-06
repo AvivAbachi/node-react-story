@@ -13,7 +13,9 @@ function useBreakpoint(point = 1024, bigger = false) {
 
 	useEffect(() => {
 		window.addEventListener('resize', handleResize);
-		return () => window.removeEventListener('resize', handleResize);
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
 	}, [handleResize]);
 
 	return isBreak;

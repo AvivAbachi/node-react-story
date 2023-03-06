@@ -25,10 +25,10 @@ export async function getPost() {
 	}
 }
 
-export const createPost = async (data) => {
+export async function createPost(data) {
 	const post = await api.createPost(data);
 	useStore.setState((store) => ({ post: [formatpost(post), ...store.post] }));
-};
+}
 
 export async function updatePost({ postId, ...data }) {
 	const post = await api.updatePost(postId, data);
