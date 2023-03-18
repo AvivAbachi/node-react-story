@@ -1,5 +1,4 @@
-import { NextFunction } from 'connect';
-import { Request, Response } from 'express-serve-static-core';
+import { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 
 export function validateSchema(

@@ -6,8 +6,7 @@
 		"dev": "nodemon ./src/app.ts",
 		"start": "tsc && node ./dist/app.js",
 		"db:docker": "docker run --name postgres-story -p 5432:5432 -e POSTGRES_PASSWORD=123456 -d postgres",
-		"db:create": "prisma db push",
-		"db:seed": "prisma db seed",
+		"db:create": "prisma db push && prisma db seed",
 		"db:clear": "prisma migrate reset --skip-seed"
 	},
 	"dependencies": {
