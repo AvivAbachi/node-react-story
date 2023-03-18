@@ -1,12 +1,6 @@
 import useStore from '.';
 import { post as api } from '../api';
-
-const dateHelper = new Date();
-const dateSettings = {
-	dateStyle: 'short',
-	timeStyle: 'medium',
-	hour12: false,
-};
+import { formatPost } from '../utils';
 
 export async function getPost() {
 	const { limit, page, userPost, user } = useStore.getState();
@@ -15,7 +9,7 @@ export async function getPost() {
 			? await api.getUserPost(user.userId, limit, page)
 			: await api.getPost(limit, page);
 		useStore.setState({
-			post: res.post.map(formatpost),
+			post: res.post.map(formatPost),
 			total: res.total,
 			serverError: false,
 		});
@@ -27,7 +21,7 @@ export async function getPost() {
 
 export async function createPost(data) {
 	const post = await api.createPost(data);
-	useStore.setState((store) => ({ post: [formatpost(post), ...store.post] }));
+	useStore.setState((store) => ({ post: [formatPost(post), ...store.post] }));
 }
 
 export async function updatePost({ postId, ...data }) {
@@ -35,7 +29,7 @@ export async function updatePost({ postId, ...data }) {
 	useStore.setState((store) => {
 		const posts = [...store.post];
 		const index = posts.findIndex((p) => p.postId === post.postId);
-		posts[index] = formatpost(post);
+		posts[index] = formatPost(post);
 		return { post: posts };
 	});
 }
@@ -63,14 +57,4 @@ export function setPage({ next, back, page }) {
 		if (page !== undefined) return { page };
 	});
 	getPost();
-}
-
-function formatpost({ date, isEdit, ...post }) {
-	dateHelper.setTime(date);
-	return {
-		...post,
-		date:
-			(isEdit ? 'Create at: ' : 'Update at: ') +
-			dateHelper.toLocaleString(undefined, dateSettings),
-	};
 }

@@ -1,13 +1,18 @@
 import storyApi from '.';
+import { formatPost } from '../utils';
 
 export async function getUserPost(userId, limit, page) {
-	return storyApi
-		.get(`post/user/${userId}`, { params: { limit, page } })
-		.then((res) => res.data);
+	return storyApi.get(`post/user/${userId}`, { params: { limit, page } }).then((res) => {
+		res.data.post = res.data.post?.map(formatPost);
+		return res.data;
+	});
 }
 
 export async function getPost(limit, page) {
-	return storyApi.get('post/', { params: { limit, page } }).then((res) => res.data);
+	return storyApi.get('post/', { params: { limit, page } }).then((res) => {
+		res.data.post = res.data.post?.map(formatPost);
+		return res.data;
+	});
 }
 
 export async function createPost(post) {
