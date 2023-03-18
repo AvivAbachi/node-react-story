@@ -9,6 +9,7 @@ export async function getAll(req: Request, res: Response) {
 		const limit = req.query.limit as number | undefined;
 		const page = req.query.page as number | undefined;
 		const posts = await postRepository.GetAll(limit, page);
+		// setTimeout(() => {}, 1000);
 		res.send(posts);
 	} catch (err: any) {
 		res.status(err.status || 500).send(err);
