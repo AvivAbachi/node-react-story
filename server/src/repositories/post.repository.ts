@@ -86,16 +86,20 @@ export async function IsUserPost(userId: number, postId: number) {
 	return res !== null;
 }
 
-function formatPost(post: Post & { author: Author }) {
-	const createdAt = post.createdAt.getTime();
-	const updatedAt = post.updatedAt.getTime();
-	return {
-		postId: post.postId,
-		title: post.title,
-		body: post.body,
-		userId: post.userId,
-		name: post.author.name || post.author.username,
-		date: updatedAt,
-		isEdit: createdAt === updatedAt || createdAt === updatedAt - 1,
-	} as PostFormat;
+const dateTimeFormat = new Intl.DateTimeFormat('es', {
+	dateStyle: 'short',
+	timeStyle: 'medium',
+	hour12: false,
+});
+
+function formatPost({
+	author,
+	createdAt,
+	updatedAt,
+	...post
+}: Post & { author: Author }): PostFormat {
+	const name = author.name || author.username;
+	const date = dateTimeFormat.format(updatedAt);
+	const isEdit = Math.abs(createdAt.getTime() - updatedAt.getTime()) <= 1;
+	return { name, date, isEdit, ...post };
 }

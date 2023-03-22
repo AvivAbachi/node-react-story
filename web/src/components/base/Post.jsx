@@ -2,7 +2,7 @@ import { ReactComponent as DeleteIcon } from '../../assets/delete.svg';
 import { ReactComponent as EditIcon } from '../../assets/edit.svg';
 import { Button } from './Index';
 
-function Post({ postId, title, body, name, date, onUpdate, onDelete }) {
+function Post({ postId, title, body, name, date, isEdit, onUpdate, onDelete }) {
 	return (
 		<li className='m-auto my-8 max-w-2xl'>
 			<div className='-z-10 mx-8 -mb-4 flex rounded-xl bg-primary px-4 pb-6 pt-2 text-center text-white shadow-xl dark:bg-primary-dark'>
@@ -31,7 +31,7 @@ function Post({ postId, title, body, name, date, onUpdate, onDelete }) {
 						{name}
 					</p>
 					<p className='m-auto w-fit text-sm font-semibold text-gray-400 dark:text-gray-200 md:mr-0'>
-						{date}
+						{isEdit ? 'Created' : 'Updated'} at: {date}
 					</p>
 				</div>
 			</div>

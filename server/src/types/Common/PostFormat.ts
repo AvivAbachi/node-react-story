@@ -4,6 +4,6 @@ export type PostFormat = {
 	body: string | null;
 	userId: number;
 	name: string;
-	date: number;
+	date: string;
 	isEdit: boolean;
 };
