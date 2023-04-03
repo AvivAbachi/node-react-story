@@ -3,8 +3,8 @@
 	"version": "1.0.0",
 	"license": "ISC",
 	"scripts": {
-		"dev": "nodemon ./src/app.ts",
 		"start": "tsc && node ./dist/app.js",
+		"dev": "nodemon ./src/app.ts",
 		"db:docker": "docker run --name postgres-story -p 5432:5432 -e POSTGRES_PASSWORD=123456 -d postgres",
 		"db:create": "prisma db push && prisma db seed",
 		"db:clear": "prisma migrate reset --skip-seed"

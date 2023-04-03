@@ -21,12 +21,7 @@ function Modal({ children, className, open, backdrop = true, onClose }) {
 	if (open)
 		return (
 			<Portal id='modal'>
-				<div
-					className={classNames(
-						'fixed top-0 left-0 z-10 flex h-screen w-screen items-center justify-center duration-300 ease-linear',
-						{ [` ${className}`]: className }
-					)}
-				>
+				<div className={classNames('fixed top-0 left-0 z-10 flex h-screen w-screen items-center justify-center duration-300 ease-linear', { [` ${className}`]: className })}>
 					{children}
 					{backdrop && <Backdrop onClose={onClose} />}
 				</div>
@@ -35,26 +30,12 @@ function Modal({ children, className, open, backdrop = true, onClose }) {
 }
 
 Modal.Content = function Content({ children, className }) {
-	return (
-		<div
-			className={classNames(
-				'relative z-20 w-11/12 max-w-lg rounded-lg bg-white shadow-lg dark:bg-gray-700',
-				{ [` ${className}`]: className }
-			)}
-		>
-			{children}
-		</div>
-	);
+	return <div className={classNames('relative z-20 w-11/12 max-w-lg rounded-lg bg-white shadow-lg dark:bg-gray-700', { [` ${className}`]: className })}>{children}</div>;
 };
 
 Modal.Header = function Header({ title, className, classNameTitle, onClose }) {
 	return (
-		<div
-			className={classNames(
-				'flex justify-between border-b-2 border-gray-100 px-5 py-4 text-gray-700 dark:text-white',
-				{ [` ${className}`]: className }
-			)}
-		>
+		<div className={classNames('flex justify-between border-b-2 border-gray-100 px-5 py-4 text-gray-700 dark:text-white', { [` ${className}`]: className })}>
 			<div
 				className={classNames('pt-1 text-2xl font-bold', {
 					[` ${classNameTitle}`]: classNameTitle,
@@ -64,7 +45,7 @@ Modal.Header = function Header({ title, className, classNameTitle, onClose }) {
 			</div>
 			{onClose && (
 				<Button type='button' icon onClick={onClose}>
-					<CloseIcon className='h-7 w-7 fill-current p-1' />
+					<CloseIcon className='h-7 w-7 p-1' />
 				</Button>
 			)}
 		</div>
@@ -72,11 +53,7 @@ Modal.Header = function Header({ title, className, classNameTitle, onClose }) {
 };
 
 Modal.Body = function Body({ children, className }) {
-	return (
-		<div className={classNames('px-10 pb-4', { [` ${className}`]: className })}>
-			{children}
-		</div>
-	);
+	return <div className={classNames('px-10 pb-4', { [` ${className}`]: className })}>{children}</div>;
 };
 
 Modal.Footer = function Footer({ children, className, onClose }) {
@@ -97,12 +74,7 @@ Modal.Footer = function Footer({ children, className, onClose }) {
 };
 
 function Backdrop({ onClose }) {
-	return (
-		<div
-			className='absolute top-0 left-0 z-10 h-screen w-screen bg-black/30'
-			onClick={onClose}
-		/>
-	);
+	return <div className='absolute top-0 left-0 z-10 h-screen w-screen bg-black/30' onClick={onClose} />;
 }
 
 export default Modal;

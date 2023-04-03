@@ -20,13 +20,13 @@ function Navbar({ isMobile }) {
 			<nav className='mx-auto flex h-20 w-full max-w-7xl items-center justify-between'>
 				<button onClick={goToFirst}>
 					<h1 className='text-3xl font-bold text-primary'>
-						Story <LogoIcon className='inline h-8 w-8 fill-none stroke-current' />
+						Story <LogoIcon className='inline h-8 w-8' />
 						{userPost ? ' My Post' : ''}
 					</h1>
 				</button>
 				<div className='flex max-w-2xl items-center gap-5'>
 					<Button icon active onClick={() => modal.setModal('THEME')}>
-						<PaletteIcon className='pointer-events-none h-6 w-6 fill-current p-1' />
+						<PaletteIcon className='pointer-events-none h-6 w-6 p-1' />
 					</Button>
 					{!username ? (
 						<>
@@ -37,39 +37,20 @@ function Navbar({ isMobile }) {
 						</>
 					) : (
 						<>
-							{!isMobile && (
-								<p className='font-semibold text-gray-600 dark:text-white'>
-									Hello, {name || username}!
-								</p>
-							)}
-							<Button
-								icon={isMobile}
-								active
-								onClick={() => modal.setModal('CREATE_POST')}
-							>
-								{isMobile ? (
-									<PlusIcon className=' h-6 w-6 fill-current p-1' />
-								) : (
-									'New Post'
-								)}
+							{!isMobile && <p className='font-semibold text-gray-600 dark:text-white'>Hello, {name || username}!</p>}
+							<Button icon={isMobile} active onClick={() => modal.setModal('CREATE_POST')}>
+								{isMobile ? <PlusIcon className=' h-6 w-6 p-1' /> : 'New Post'}
 							</Button>
 							<Dropdown
 								ButtonChildren={
 									<>
-										<FaceIcon className='pointer-events-none relative inline-block h-7 w-7 fill-current' />
-										<MenuIcon
-											className='pointer-events-none ml-2 inline-block h-7 w-7 fill-transparent stroke-current stroke-3 pr-2'
-											strokeLinecap='round'
-										/>
+										<FaceIcon className='pointer-events-none relative inline-block h-7 w-7' />
+										<MenuIcon className='pointer-events-none ml-2 inline-block h-7 w-7 pr-2' strokeLinecap='round' />
 									</>
 								}
 							>
-								<Dropdown.Item onClick={post.toggleUserPost}>
-									{userPost ? 'All Post' : 'My Post'}
-								</Dropdown.Item>
-								<Dropdown.Item onClick={() => modal.setModal('UPDATE')}>
-									Account
-								</Dropdown.Item>
+								<Dropdown.Item onClick={post.toggleUserPost}>{userPost ? 'All Post' : 'My Post'}</Dropdown.Item>
+								<Dropdown.Item onClick={() => modal.setModal('UPDATE')}>Account</Dropdown.Item>
 								<Dropdown.Item border onClick={user.logout}>
 									Logout
 								</Dropdown.Item>
