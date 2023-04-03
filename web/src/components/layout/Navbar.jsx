@@ -45,7 +45,7 @@ function Navbar({ isMobile }) {
 								ButtonChildren={
 									<>
 										<FaceIcon className='pointer-events-none relative inline-block h-7 w-7' />
-										<MenuIcon className='pointer-events-none ml-2 inline-block h-7 w-7 pr-2' strokeLinecap='round' />
+										<MenuIcon className='pointer-events-none ml-2 inline-block h-7 w-7 pr-2' />
 									</>
 								}
 							>
