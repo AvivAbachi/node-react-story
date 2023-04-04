@@ -13,8 +13,8 @@ export async function login(data) {
 	});
 }
 
-export async function logout() {
-	await api.logout();
+export async function logout(localOnly = false) {
+	if (!localOnly) await api.logout();
 	useStore.setState({
 		user: {
 			username: undefined,
@@ -34,11 +34,8 @@ export async function getAccess() {
 			.then(({ accessToken, user }) => {
 				useStore.setState({ token: accessToken, user });
 			})
-			.catch((err) => {
-				const status = err?.response?.status;
-				if (status === 401 || status === 403 || status === 404) {
-					logout();
-				}
+			.catch(async (err) => {
+				if (err?.response?.status === 401) await logout(true);
 			});
 	}
 }
@@ -50,11 +47,9 @@ export async function update(data) {
 }
 
 export async function reset(data) {
-	const res = await api
-		.reset(data)
-		.then(({ password }) => ({ username: data.username, password }));
-
-	modal.setModal('RESET_SUCCESS', res);
+	await api.reset(data).then(({ password }) => {
+		modal.setModal('RESET_SUCCESS', { username: data.username, password });
+	});
 }
 
 export async function start() {

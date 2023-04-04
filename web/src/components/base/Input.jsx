@@ -5,7 +5,7 @@ import { forwardRef, useMemo } from 'react';
 
 import { Label } from './Index';
 
-function Input({ error, textarea, required, className, ...props }, ref) {
+const Input = forwardRef(function Input({ error, textarea, required, className, ...props }, ref) {
 	const [Tag, rows, extraClass] = useMemo(() => {
 		return textarea ? ['textarea', 4, 'textarea-scroll resize-none rounded-xl'] : ['input', undefined, undefined];
 	}, [textarea]);
@@ -19,7 +19,7 @@ function Input({ error, textarea, required, className, ...props }, ref) {
 			{error && <InputError error={error} />}
 		</>
 	);
-}
+});
 
 function InputError({ error }) {
 	return (
@@ -30,4 +30,5 @@ function InputError({ error }) {
 	);
 }
 
-export default forwardRef(Input);
+Input.Error = InputError;
+export default Input;

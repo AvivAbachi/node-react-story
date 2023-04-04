@@ -4,7 +4,7 @@ import database from '../config/database';
 import { Author, PostFormat } from '../types/Common/Index';
 import { PostListResponse } from '../types/Responses/PostListResponse';
 
-export async function GetAll(limit: number = 100, page?: number) {
+export async function GetAll(limit: number = 100, page?: number): Promise<PostListResponse> {
 	const post = await database.post.findMany({
 		take: limit,
 		skip: page ? page * limit : undefined,
@@ -15,7 +15,7 @@ export async function GetAll(limit: number = 100, page?: number) {
 	return {
 		post: post.map((post) => formatPost(post)),
 		total: await database.post.count(),
-	} as PostListResponse;
+	};
 }
 
 export async function GetByPostId(postId: number) {
@@ -26,7 +26,7 @@ export async function GetByPostId(postId: number) {
 	return post === null ? null : formatPost(post);
 }
 
-export async function GetByUserId(userId: number, limit: number = 100, page?: number) {
+export async function GetByUserId(userId: number, limit: number = 100, page?: number): Promise<PostListResponse | null> {
 	const user = await database.user.findFirst({
 		where: { userId },
 		include: {
@@ -39,14 +39,14 @@ export async function GetByUserId(userId: number, limit: number = 100, page?: nu
 		},
 	});
 	if (user === null) return null;
-	const author = {
+	const author: Author = {
 		username: user.username,
 		name: user.name,
-	} as Author;
+	};
 	return {
 		post: user.posts.map((post) => formatPost({ ...post, author })),
 		total: user._count.posts,
-	} as PostListResponse;
+	};
 }
 
 export async function CreatePost(userId: number, title: string, body: string | null) {
@@ -92,12 +92,7 @@ const dateTimeFormat = new Intl.DateTimeFormat('es', {
 	hour12: false,
 });
 
-function formatPost({
-	author,
-	createdAt,
-	updatedAt,
-	...post
-}: Post & { author: Author }): PostFormat {
+function formatPost({ author, createdAt, updatedAt, ...post }: Post & { author: Author }): PostFormat {
 	const name = author.name || author.username;
 	const date = dateTimeFormat.format(updatedAt);
 	const isEdit = Math.abs(createdAt.getTime() - updatedAt.getTime()) <= 1;

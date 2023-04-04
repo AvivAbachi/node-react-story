@@ -8,10 +8,10 @@ import * as postRepository from '../repositories/post.repository';
 import config from './auth.config';
 import { User } from '@prisma/client';
 
-const opts = {
+const opts: StrategyOptions = {
 	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 	secretOrKey: config.secret,
-} as StrategyOptions;
+};
 
 passport.use(
 	new LocalStrategy(function (username, password, done) {
@@ -70,7 +70,7 @@ passport.use(
 	'user-post',
 	new CustomStrategy(function (req, done) {
 		const userId = (req.user as User).userId;
-		const postId = req.params.postId as unknown as number;
+		const postId = Number(req.params.postId);
 		postRepository
 			.IsUserPost(userId, postId)
 			.then((isUserPost) => done(null, isUserPost))

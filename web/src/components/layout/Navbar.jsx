@@ -1,9 +1,9 @@
 import { faBars, faCircleUser, faPlus, faSwatchbook } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { ReactComponent as LogoIcon } from '../../assets/logo.svg';
 import useStore, { modal, post, user } from '../../store';
 import { Button, Dropdown } from '../base/Index';
+import { faBookOpenReader } from '@fortawesome/free-solid-svg-icons';
 
 function goToFirst() {
 	post.toggleUserPost(false);
@@ -20,7 +20,7 @@ function Navbar({ isMobile }) {
 				<button onClick={goToFirst}>
 					<h1 className='text-3xl font-bold text-primary flex items-center'>
 						Story
-						<LogoIcon className='h-8 w-8 mx-2' />
+						<FontAwesomeIcon icon={faBookOpenReader} className='h-8 w-8 mx-2' />
 						{userPost ? '  My Post' : ''}
 					</h1>
 				</button>

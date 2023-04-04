@@ -5,24 +5,14 @@ import { sign } from 'jsonwebtoken';
 import config from '../config/auth.config';
 import database from '../config/database';
 
-export async function CreateUser(
-	username: string,
-	name: string,
-	email: string,
-	password: string
-) {
+export async function CreateUser(username: string, name: string, email: string, password: string) {
 	const passwordHash = await argon2.hash(password);
 	return await database.user.create({
 		data: { username, name, email, password: passwordHash },
 	});
 }
 
-export async function UpdateUser(
-	userId: number,
-	email?: string,
-	name?: string,
-	password?: string
-) {
+export async function UpdateUser(userId: number, email?: string, name?: string, password?: string) {
 	const passwordHash = password ? await argon2.hash(password) : undefined;
 	return await database.user.update({
 		where: { userId },
