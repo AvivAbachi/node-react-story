@@ -1,5 +1,6 @@
-import { ReactComponent as DeleteIcon } from '../../assets/delete.svg';
-import { ReactComponent as EditIcon } from '../../assets/edit.svg';
+import { faPen, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { Button } from './Index';
 
 function Post({ postId, title, body, name, date, isEdit, onUpdate, onDelete }) {
@@ -11,12 +12,12 @@ function Post({ postId, title, body, name, date, isEdit, onUpdate, onDelete }) {
 				</h4>
 				{onUpdate && (
 					<Button icon ghost onClick={() => onUpdate({ postId, title, body })}>
-						<EditIcon className='block h-[0.8rem]  w-[0.8rem]' />
+						<FontAwesomeIcon icon={faPen} className='block h-[0.8rem]  w-[0.8rem]' />
 					</Button>
 				)}
 				{onDelete && (
 					<Button ghost icon onClick={() => onDelete({ postId })}>
-						<DeleteIcon className='block h-[0.8rem] w-[0.8rem]' />
+						<FontAwesomeIcon icon={faTrashAlt} className='block h-[0.8rem]  w-[0.8rem]' />
 					</Button>
 				)}
 			</div>

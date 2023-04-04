@@ -1,8 +1,7 @@
-import { ReactComponent as FaceIcon } from '../../assets/face.svg';
+import { faBars, faCircleUser, faPlus, faSwatchbook } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { ReactComponent as LogoIcon } from '../../assets/logo.svg';
-import { ReactComponent as MenuIcon } from '../../assets/menu.svg';
-import { ReactComponent as PaletteIcon } from '../../assets/palette.svg';
-import { ReactComponent as PlusIcon } from '../../assets/plus.svg';
 import useStore, { modal, post, user } from '../../store';
 import { Button, Dropdown } from '../base/Index';
 
@@ -20,13 +19,14 @@ function Navbar({ isMobile }) {
 			<nav className='mx-auto flex h-20 w-full max-w-7xl items-center justify-between'>
 				<button onClick={goToFirst}>
 					<h1 className='text-3xl font-bold text-primary flex items-center'>
-						Story <LogoIcon className='h-8 w-8 mx-2' />
+						Story
+						<LogoIcon className='h-8 w-8 mx-2' />
 						{userPost ? '  My Post' : ''}
 					</h1>
 				</button>
 				<div className='flex max-w-2xl items-center gap-5'>
 					<Button icon active onClick={() => modal.setModal('THEME')}>
-						<PaletteIcon className='pointer-events-none h-6 w-6 p-1' />
+						<FontAwesomeIcon icon={faSwatchbook} className='h-4 w-4 mx-1' />
 					</Button>
 					{!username ? (
 						<>
@@ -39,13 +39,13 @@ function Navbar({ isMobile }) {
 						<>
 							{!isMobile && <p className='font-semibold text-gray-600 dark:text-white'>Hello, {name || username}!</p>}
 							<Button icon={isMobile} active onClick={() => modal.setModal('CREATE_POST')}>
-								{isMobile ? <PlusIcon className=' h-6 w-6 p-1' /> : 'New Post'}
+								{isMobile ? <FontAwesomeIcon icon={faPlus} className='h-4 w-4 mx-1' /> : 'New Post'}
 							</Button>
 							<Dropdown
 								ButtonChildren={
 									<>
-										<FaceIcon className='pointer-events-none h-7 w-7' />
-										<MenuIcon className='pointer-events-none ml-2 h-7 w-7 pr-2' />
+										<FontAwesomeIcon icon={faCircleUser} className='h-6 w-6' />
+										<FontAwesomeIcon icon={faBars} className='h-6 w-6 mx-1' />
 									</>
 								}
 							>

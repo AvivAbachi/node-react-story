@@ -1,7 +1,8 @@
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { forwardRef, useMemo } from 'react';
 
-import { ReactComponent as ErrorIcon } from '../../assets/error.svg';
 import { Label } from './Index';
 
 function Input({ error, textarea, required, className, ...props }, ref) {
@@ -22,8 +23,8 @@ function Input({ error, textarea, required, className, ...props }, ref) {
 
 function InputError({ error }) {
 	return (
-		<div className='mx-2 mt-2 truncate rounded-[1.25rem] bg-primary px-2 py-1 text-sm font-semibold capitalize leading-7 text-white shadow-md' title={error}>
-			<ErrorIcon className='mb-1 mr-1 inline h-5 w-5' />
+		<div className='mx-2 mt-2 truncate rounded-[1.25rem] bg-primary p-2 text-sm font-semibold capitalize text-white shadow-md' title={error}>
+			<FontAwesomeIcon icon={faCircleExclamation} className='mr-1 h-5 w-5' />
 			{error}
 		</div>
 	);

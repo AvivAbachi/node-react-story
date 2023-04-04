@@ -1,8 +1,7 @@
+import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { useMemo } from 'react';
-
-import { ReactComponent as BackIcon } from '../../assets/back.svg';
-import { ReactComponent as NextIcon } from '../../assets/next.svg';
 
 function Pagination({ buttons = 5, current = 0, total = 0, className, setPage }) {
 	const pages = useMemo(() => {
@@ -16,7 +15,7 @@ function Pagination({ buttons = 5, current = 0, total = 0, className, setPage })
 		return (
 			<nav className={classNames('flex flex-row flex-nowrap items-center justify-between md:justify-center', { [` ${className}`]: className })}>
 				<PageBtn titll='Previous Page' onClick={() => setPage({ back: true })} disabled={current === 0}>
-					<BackIcon className='block h-4 w-4' />
+					<FontAwesomeIcon icon={faAngleLeft} className='h-4 w-4' />
 				</PageBtn>
 				{pages.map((i) => (
 					<PageBtn key={i} title={'Page ' + (i + 1)} onClick={() => setPage({ page: i })} active={current === i}>
@@ -24,7 +23,7 @@ function Pagination({ buttons = 5, current = 0, total = 0, className, setPage })
 					</PageBtn>
 				))}
 				<PageBtn titll='Next Page' onClick={() => setPage({ next: true })} disabled={current === total}>
-					<NextIcon className='block h-4 w-4' />
+					<FontAwesomeIcon icon={faAngleRight} className='h-4 w-4' />
 				</PageBtn>
 			</nav>
 		);

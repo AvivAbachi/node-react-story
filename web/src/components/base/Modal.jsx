@@ -1,7 +1,8 @@
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { useEffect } from 'react';
 
-import { ReactComponent as CloseIcon } from '../../assets/close.svg';
 import { Button, Portal } from './Index';
 
 function Modal({ children, className, open, backdrop = true, onClose }) {
@@ -45,7 +46,7 @@ Modal.Header = function Header({ title, className, classNameTitle, onClose }) {
 			</div>
 			{onClose && (
 				<Button type='button' icon onClick={onClose}>
-					<CloseIcon className='h-7 w-7 p-1' />
+					<FontAwesomeIcon icon={faXmark} className='h-7 w-7 block p-0' />
 				</Button>
 			)}
 		</div>
