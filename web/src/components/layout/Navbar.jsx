@@ -19,9 +19,9 @@ function Navbar({ isMobile }) {
 		<header className='fixed top-0 left-0 z-10 w-full bg-white px-6 shadow-lg dark:bg-gray-900'>
 			<nav className='mx-auto flex h-20 w-full max-w-7xl items-center justify-between'>
 				<button onClick={goToFirst}>
-					<h1 className='text-3xl font-bold text-primary'>
-						Story <LogoIcon className='inline h-8 w-8' />
-						{userPost ? ' My Post' : ''}
+					<h1 className='text-3xl font-bold text-primary flex items-center'>
+						Story <LogoIcon className='h-8 w-8 mx-2' />
+						{userPost ? '  My Post' : ''}
 					</h1>
 				</button>
 				<div className='flex max-w-2xl items-center gap-5'>
@@ -44,8 +44,8 @@ function Navbar({ isMobile }) {
 							<Dropdown
 								ButtonChildren={
 									<>
-										<FaceIcon className='pointer-events-none relative inline-block h-7 w-7' />
-										<MenuIcon className='pointer-events-none ml-2 inline-block h-7 w-7 pr-2' />
+										<FaceIcon className='pointer-events-none h-7 w-7' />
+										<MenuIcon className='pointer-events-none ml-2 h-7 w-7 pr-2' />
 									</>
 								}
 							>

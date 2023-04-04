@@ -1,7 +1,6 @@
-import { PrismaClient } from '@prisma/client';
-import argon2 from 'argon2';
-
-import data from './data.json';
+const { PrismaClient } = require('@prisma/client');
+const argon2 = require('argon2');
+const data = require('./data.json');
 
 const prisma = new PrismaClient();
 
@@ -37,7 +36,8 @@ async function seedPosts() {
 	const users = await prisma.user.findMany({ select: { userId: true } });
 
 	const seededPosts = data.posts.map((post) => {
-		const userId = Math.floor(users.length * Math.random());
+		const index = Math.floor(users.length * Math.random());
+		const userId = users[index].userId;
 		const createdAt = new Date(date);
 		const updatedAt = createdAt;
 

@@ -27,7 +27,7 @@ function Dropdown({ children, ButtonChildren, className }) {
 			<Button
 				ref={buttonRef}
 				active
-				className={classNames('!p-2', {
+				className={classNames('!p-2 flex', {
 					'border-primary bg-primary text-white shadow-lg shadow-primary/25': open,
 				})}
 				onClick={() => setOpen(!open)}
